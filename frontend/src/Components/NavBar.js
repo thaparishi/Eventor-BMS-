@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import './NavBar.css';
-import { FaHome, FaInfoCircle, FaConciergeBell, FaUserPlus, FaSignInAlt } from 'react-icons/fa';
+import { FaHome, FaInfoCircle, FaConciergeBell, FaUserPlus, FaSignInAlt, FaBars, FaTimes } from 'react-icons/fa';
 
 function NavBar() {
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isNavOpen, setIsNavOpen] = useState(false); // State for toggling nav
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,10 +28,20 @@ function NavBar() {
     };
   }, [lastScrollY]);
 
+  // Toggle Navbar visibility in mobile view
+  const toggleNav = () => setIsNavOpen(!isNavOpen);
+
   return (
     <nav className={`navbar ${isHidden ? 'hidden' : ''}`}>
       <div className="navbar-brand">EVENTOR</div>
-      <ul className="navbar-links">
+
+      {/* Hamburger Icon for Mobile */}
+      <div className="navbar-toggle" onClick={toggleNav}>
+        {isNavOpen ? <FaTimes className="navbar-icon" /> : <FaBars className="navbar-icon" />}
+      </div>
+
+      {/* Navbar Links */}
+      <ul className={`navbar-links ${isNavOpen ? 'active' : ''}`}>
         <li>
           <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaHome className="navbar-icon" />
@@ -47,6 +58,18 @@ function NavBar() {
           <NavLink to="/banquets" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaConciergeBell className="navbar-icon" />
             Banquets
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/gallery" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <FaConciergeBell className="navbar-icon" />
+            Gallery
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/contact" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <FaConciergeBell className="navbar-icon" />
+            Contact Us
           </NavLink>
         </li>
         <li>

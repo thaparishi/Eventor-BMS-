@@ -50,61 +50,155 @@ body {
   margin-top: 10px;
 }
 
+.header-buttons {
+  margin-top: 20px;
+}
+
+.header-buttons .btn-primary,
+.header-buttons .btn-secondary {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.header-buttons .btn-primary {
+  background-color: #FF2E63;
+  color: white;
+}
+
+.header-buttons .btn-secondary {
+  background-color: #08D9D6;
+  color: white;
+}
+
+.header-buttons .btn-primary:hover {
+  background-color: #D72645;
+}
+
+.header-buttons .btn-secondary:hover {
+  background-color: #06B3A3;
+}
+
 /* About Us Section */
 .about-us {
-  height: 100vh;
-  background-image: url('../Images/22.jpg'); /* Add background image */
-  background-size: cover;
-  background-position: center;
-  color: white;
-  text-align: center;
+  background-color: #f5f5f5;
   padding: 60px 20px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.about-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .about-us h2 {
   font-size: 2.5rem;
   margin-bottom: 20px;
+  color: #333;
 }
 
 .about-us p {
   font-size: 1.2rem;
   margin-bottom: 30px;
-  max-width: 800px;
+  color: #555;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.about-us .about-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  margin-bottom: 30px;
 }
 
 /* Client Reviews Section */
 .client-reviews {
-  height: 100vh;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   padding: 60px 20px;
+  background-color: #08D9D6;
+  color: white;
+  text-align: center;
+  height: auto; /* Ensure content doesn't overflow */
+  animation: fadeIn 2s ease-in-out;
+  overflow: hidden;
 }
 
-.client-reviews h2 {
+.reviews-text h2 {
   font-size: 2.5rem;
+  color: #000;
   margin-bottom: 20px;
 }
 
-.client-reviews p {
+.reviews-text p {
   font-size: 1.2rem;
   margin-bottom: 30px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-/* Footer Section */
-.footer {
-  background-color: #252A34; /* Dark Charcoal */
-  color: white;
-  text-align: center;
-  padding: 20px 0;
+/* Review Container */
+.review-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap; /* Allow reviews to wrap onto the next line */
+  max-width: 100%; /* Ensure it does not overflow */
+  width: 100%;
 }
 
-.footer p {
+/* Review Card */
+.review-card {
+  background-color: white;
+  color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 280px; /* Limit the width */
+  flex: 1 1 280px; /* Allow cards to grow and shrink */
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.review-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.review-content p {
   font-size: 1rem;
-  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.review-content strong {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+  color: #333;
+}
+
+.review-rating {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+/* Star Rating */
+.review-rating svg {
+  color: #FFD700;
+  font-size: 1.5rem;
 }
 
 /* Responsive Design */
@@ -117,12 +211,26 @@ body {
     font-size: 1.2rem;
   }
 
+  .header-buttons .btn-primary,
+  .header-buttons .btn-secondary {
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+
   .about-us h2, .client-reviews h2 {
     font-size: 2rem;
   }
 
   .about-us p, .client-reviews p {
     font-size: 1rem;
+  }
+
+  .reviews-text, .reviews-gallery {
+    width: 100%;
+  }
+
+  .reviews-gallery {
+    gap: 20px;
   }
 }
 
@@ -133,5 +241,29 @@ body {
 
   .home-header p {
     font-size: 1rem;
+  }
+
+  .header-buttons .btn-primary,
+  .header-buttons .btn-secondary {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+
+  /* Adjust review card size for small screens */
+  .review-card {
+    max-width: 90%; /* Make cards larger on small screens */
+    margin-bottom: 20px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

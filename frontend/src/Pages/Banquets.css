@@ -1,0 +1,75 @@
+.banquetMenu-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .menu-section input {
+    height: 30px;
+    margin: 20px;
+    padding: 20px;
+  }
+  .menu-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .menu-section label {
+    display: block;
+    color: #e9b947;
+    font-size: 60px;
+    font-family: "Tangerine", "cursive";
+    text-transform: uppercase;
+    text-align: center;
+  }
+  
+  .menu-section .addMenu-btn {
+    display: block;
+    color: white;
+    width: 200px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0px auto;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: #e9b947;
+  }
+  
+  .menu-section .menu-close-btn {
+    font-size: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .submit-menu-section .submit-menu {
+    display: block;
+    color: white;
+    width: 200px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 20px auto;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: red;
+  }
+  
+  .banquet-menu-display-flex {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+  }
+  
+  @media screen and (max-width: 950px) {
+    .banquet-menu-display-flex {
+      flex-direction: column;
+    }
+  }
+  

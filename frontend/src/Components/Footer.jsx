@@ -172,10 +172,10 @@ function Footer() {
         <section className="footer-right">
           <section className="footer-links">
             <a href="/">Home </a>
-            <a href="about">About Us </a>
-            <a href="blog">Blog </a>
-            <a href="gallery">Our Gallery </a>
-            <a href="contact">Contact </a>
+            <a href="About">About Us </a>
+            <a href="Login">Log in </a>
+            <a href="Gallery">Our Gallery </a>
+            <a href="Contact">Contact </a>
             <br />
           </section>
           <section className="footer-text">

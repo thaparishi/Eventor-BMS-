@@ -217,6 +217,22 @@ body {
   color: white;
 }
 
+.banquet-owner-option {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.banquet-owner-option a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.banquet-owner-option a:hover {
+  text-decoration: underline;
+}
+
+
 /**
 *End of main section
 */

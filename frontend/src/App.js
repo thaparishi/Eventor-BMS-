@@ -7,6 +7,7 @@ import Register from './Pages/Register';
 import Login from './Pages/Login';  
 import NavBar from './Components/NavBar';
 import Footer from './Components/Footer';
+import BanquetRegistration from './Pages/Banquetregistration';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/banquets" element={<Banquets />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/banquetregistration" element={<BanquetRegistration />} />
         <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />

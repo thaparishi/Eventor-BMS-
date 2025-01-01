@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-
-import { useNagivate } from "react-router-dom";
-
 import axios from "axios";
-
 import "./Register.css";
 
 const Register = () => {
@@ -18,8 +13,8 @@ const Register = () => {
 
   const [responseMessage, setResponseMessage] = useState({
     msg: "",
-    sucess: false,
-    unSucess: false,
+    success: false,
+    unsuccess: false,
   });
 
   const handleChange = (e) => {
@@ -32,19 +27,19 @@ const Register = () => {
     e.preventDefault();
     const response = await axios.post("/api/register", user);
     console.log(response);
-    if (response.data === "UnSucessfull") {
-      setResponseMessage({ msg: "Cannot Register", unSucess: true });
-    } else if (response.data === "Sucess") {
+    if (response.data === "Unsuccessful") {
+      setResponseMessage({ msg: "Cannot Register", unsuccess: true });
+    } else if (response.data === "Successful") {
       setResponseMessage({
-        msg: "Sucessfull, Please Check your Email For Verification",
-        sucess: true,
+        msg: "Successful, Please Check your Email For Verification",
+        success: true,
       });
     }
   };
 
   useEffect(() => {
     const Timer = setTimeout(() => {
-      setResponseMessage({ msg: "", unSucess: false, sucess: false });
+      setResponseMessage({ msg: "", unsuccess: false, success: false });
     }, 2000);
 
     return () => {
@@ -76,9 +71,7 @@ const Register = () => {
                     name="name"
                     placeholder="Username"
                     value={user.name}
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -92,9 +85,7 @@ const Register = () => {
                     name="email"
                     value={user.email}
                     placeholder="Email"
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -108,9 +99,7 @@ const Register = () => {
                     name="number"
                     placeholder="Number"
                     value={user.number}
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                     pattern="[0-9]{10,}"
                     title="Phone number must contain at least 10 digits."
                     required
@@ -127,11 +116,9 @@ const Register = () => {
                     name="password"
                     placeholder="Password"
                     value={user.password}
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                     pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
-                    title="Password must contain at least one uppercase letter, one number and special character."
+                    title="Password must contain at least one uppercase letter, one number, and a special character."
                   />
                 </div>
 
@@ -140,41 +127,43 @@ const Register = () => {
                     Register Account
                   </button>
                 </div>
+
+                {/* Links for Sign-in and Banquet Owner */}
                 <div className="forget-pass">
-                  <a href="login">Already have an account. Sign in?</a>
+                  <a href="login">Already have an account? Sign in.</a>
+                </div>
+                <div className="banquet-owner-option">
+                  <p>
+                    Are you a banquet owner?{" "}
+                    <a href="Banquetregistration">List your service here</a>.
+                  </p>
                 </div>
               </form>
-              {/* <!--End of form section--> */}
             </section>
-            {responseMessage.sucess && (
-              <>
-                <article className="pop-up">
-                  <AiFillCheckCircle size={100} color="lime" />
-                  <h2>{responseMessage.msg}.</h2>
-                </article>
-              </>
+            {responseMessage.success && (
+              <article className="pop-up">
+                <AiFillCheckCircle size={100} color="lime" />
+                <h2>{responseMessage.msg}.</h2>
+              </article>
             )}
-            {responseMessage.unSucess && (
-              <>
-                <article
-                  className="pop-up"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "2rem",
-                    flexDirection: "column",
-                  }}
-                >
-                  <AiOutlineCloseCircle size={100} color="red" />
-                  <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
-                </article>
-              </>
+            {responseMessage.unsuccess && (
+              <article
+                className="pop-up"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "2rem",
+                  flexDirection: "column",
+                }}
+              >
+                <AiOutlineCloseCircle size={100} color="red" />
+                <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
+              </article>
             )}
           </section>
         </div>
       </main>
-      {/* <Footer /> */}
     </>
   );
 };

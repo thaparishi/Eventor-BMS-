@@ -1,0 +1,80 @@
+body{
+    margin-top: 9px;
+    padding-top: 20px;
+    
+}
+
+.fullb{
+    background: rgb(241, 150, 90);
+  background: linear-gradient(
+    140deg,
+    rgba(241, 150, 90, 1) 23%,
+    rgba(255, 105, 155, 1) 52%,
+    rgba(214, 117, 181, 1) 66%,
+    rgba(149, 62, 223, 1) 100%
+  );
+}
+.banquet-registration-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 15px;
+    background: rgb(226, 214, 160);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .banquet-registration-container h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .banquet-registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .form-field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-field label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .form-field input,
+  .form-field textarea {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .btn-submit {
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .btn-submit:hover {
+    background-color: #0056b3;
+  }
+  
+  .success-message {
+    color: green;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  

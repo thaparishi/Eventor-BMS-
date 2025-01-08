@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import axios from "axios";
-
 import "./Login.css";
-
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,22 +17,31 @@ const Login = () => {
 
   const handleChange = (e) => {
     const name = e.target.name;
-    const password = e.target.value;
-    setUserAuth({ ...userAuth, [name]: password });
+    const value = e.target.value;
+    setUserAuth({ ...userAuth, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/api/login", userAuth);
-    const data = await response.data;
-    if (data === "Unsucessfull") {
-      console.log(data);
-      setResponseMessage({ msg: "Invalid Credentails", unSucess: true });
-    } else if (data === "Sucess") {
-      setResponseMessage({ msg: "Sucessfully Logged In", sucess: true });
-      setTimeout(() => {
-        window.location.reload(navigate("/"));
-      }, 2000);
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/login", userAuth);
+
+
+      const data = response.data;
+      if (data === "Unsucessfull") {
+        setResponseMessage({ msg: "Invalid Credentials", unSucess: true });
+      } else if (data === "Sucess") {
+        setResponseMessage({ msg: "Successfully Logged In", sucess: true });
+        
+        // Directly navigate to the home page after successful login
+        setTimeout(() => {
+          navigate("/"); // Redirect to the desired page after login
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setResponseMessage({ msg: "An error occurred. Please try again.", unSucess: true });
     }
   };
 
@@ -74,9 +78,7 @@ const Login = () => {
                     id="email"
                     name="email"
                     placeholder="Email Address"
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="password-field">
@@ -88,9 +90,7 @@ const Login = () => {
                     id="password"
                     name="password"
                     placeholder="Password"
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="btn-pass">
@@ -105,43 +105,33 @@ const Login = () => {
                   </a>
                 </div>
               </form>
-              {/* {
-        error && (
-         <article className="error-message">
-          <p>Sorry! Email or Password did not match</p>
-         </article>
-        )
-       } */}
             </section>
           </section>
+
           {responseMessage.sucess && (
-            <>
-              <article className="pop-up">
-                <AiFillCheckCircle size={100} color="lime" />
-                <h2>{responseMessage.msg}.</h2>
-              </article>
-            </>
+            <article className="pop-up">
+              <AiFillCheckCircle size={100} color="lime" />
+              <h2>{responseMessage.msg}</h2>
+            </article>
           )}
+
           {responseMessage.unSucess && (
-            <>
-              <article
-                className="pop-up"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "2rem",
-                  flexDirection: "column",
-                }}
-              >
-                <AiOutlineCloseCircle size={100} color="red" />
-                <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
-              </article>
-            </>
+            <article
+              className="pop-up"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "2rem",
+                flexDirection: "column",
+              }}
+            >
+              <AiOutlineCloseCircle size={100} color="red" />
+              <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
+            </article>
           )}
         </div>
       </main>
-      {/* <Footer /> */}
     </>
   );
 };

@@ -27,7 +27,8 @@ const BanquetRegistration = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/banquet/register", banquet);
+      const response = await axios.post("http://localhost:5000/api/banquet/register", banquet);
+      
       if (response.data.success) {
         setResponseMessage({
           msg: "Banquet registered successfully!",

@@ -25,17 +25,30 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/api/register", user);
-    console.log(response);
-    if (response.data === "Unsuccessful") {
-      setResponseMessage({ msg: "Cannot Register", unsuccess: true });
-    } else if (response.data === "Successful") {
+    try {
+      const response = await axios.post("http://localhost:5000/api/register", user);
+  
+      // Check the response from the backend
+      if (response.data === "User already exists") {
+        setResponseMessage({
+          msg: "Email already used. Please try with a different email address.",
+          unsuccess: true,
+        });
+      } else if (response.data === "User registered successfully") {
+        setResponseMessage({
+          msg: "Registration successful! Please check your email for verification.",
+          success: true,
+        });
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
       setResponseMessage({
-        msg: "Successful, Please Check your Email For Verification",
-        success: true,
+        msg: "An error occurred during registration. Please try again.",
+        unsuccess: true,
       });
     }
   };
+
 
   useEffect(() => {
     const Timer = setTimeout(() => {

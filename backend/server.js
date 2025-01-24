@@ -1,30 +1,156 @@
+//Importing express from package.json.
 const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-require("dotenv").config(); // Load .env variables
-
-const authRoutes = require("./routes/authRoutes");
-
+//Initializing the express functions to app variable.
 const app = express();
 
-// Middleware
-app.use(cors({ origin: "http://localhost:3000" })); // Allow frontend to access the backend
-app.use(bodyParser.json()); // Parse JSON request body
+const cors = require("cors");
 
-// Database Connection
-const MONGO_URI = process.env.MONGO_URI;
-mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-    process.exit(1); // Exit the process if DB connection fails
-  });
+const path = require("path");
 
-// Routes
-app.use("/api", authRoutes); // Register routes for user authentication
+const multer = require("multer");
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const cokkieParser = require("cookie-parser");
+
+app.use(cokkieParser("signed-cookie"));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "../app-frontend/src/components/banquet-Images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+//Importing auth.js file from routes folder.
+const auth = require("./routes/auth");
+
+//Acceping the incomming request object as a json object.
+app.use(express.json());
+
+app.use(cors());
+
+//Acceping the incomming request object as  String or arrays.
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static("./public"));
+
+//Initializing all the routes from auth as a middleware in the server.
+app.use("/", auth);
+
+
+//Importing connectDB function from db folder.
+const connectDB = require("./db/connect");
+
+//Importing dotenv and configuring the dotenv in the project.
+require("dotenv").config();
+
+const AdminBro = require("admin-bro");
+const AdminBroExpress = require("@admin-bro/express");
+const AdminBroMongoose = require("@admin-bro/mongoose");
+const mongoose = require("mongoose");
+
+const authentication = require("express-authentication");
+const adminSchema = require("./models/admin");
+
+////////////////// To add new admin user in MongoDb /////////////////////////
+
+// const newUser = new adminSchema({
+//   email: "nimesh@gmail.com",
+//   password: "nimesh",
+//   role: "admin",
+// });
+// newUser.save((err) => {
+//   if (err) {
+//     console.error(err);
+//   } else {
+//     console.log("User added successfully");
+//   }
+// });
+
+AdminBro.registerAdapter(AdminBroMongoose);
+
+//Initializing the port value.
+const port = 8000 || process.env.PORT;
+
+let setTrue = false;
+
+//Connecting to database and starting the server.
+const start = async () => {
+  try {
+    //Connecting to the server.
+    mongoose.set("strictQuery", false);
+
+    const mongooseDb = await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+    });
+
+    await connectDB(process.env.MONGO_URL);
+
+    const adminBro = new AdminBro({
+      databases: [mongooseDb],
+      rootPath: "/admin",
+    });
+
+    const router = AdminBroExpress.buildRouter(adminBro);
+
+    const isLoggedIn = async (req, res, next) => {
+      const { email, password } = req.body;
+      if (!email && !password) {
+        const err = new Error("Please Provide passwor d and email");
+        err.status = 401;
+        next(err);
+      }
+      const adminData = await adminSchema.findOne({ email: email });
+      if (adminData) {
+        if (adminData.password === password) {
+          req.isAdmin = true;
+          return next();
+        }
+      }
+      const err = new Error("Invaild email or password");
+      err.status = 401;
+      next(err);
+    };
+
+    const redirectToAdmin = (req, res, next) => {
+      if (req.isAdmin) {
+        setTrue = true;
+        // next();
+        return res.redirect("/admin");
+      }
+      const err = new Error("Invaild email or password");
+      err.status = 401;
+      next(err);
+    };
+
+    app.use("/login", isLoggedIn, redirectToAdmin);
+
+    app.use(
+      adminBro.options.rootPath,
+      (req, res, next) => {
+        console.log(setTrue);
+        if (setTrue) {
+          // setTrue = false;
+          return next();
+        }
+        const err = new Error("Please Provide email or password");
+        err.status = 401;
+        next(err);
+      },
+      router
+    );
+
+    //Starting the server on port 8000.
+    app.listen(port, () => {
+      console.log(`Listening to ${port}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//Calling the start function and starting the server.
+start();

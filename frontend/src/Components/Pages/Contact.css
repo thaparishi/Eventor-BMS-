@@ -1,0 +1,115 @@
+.contact-page-container {
+    height: 100vh;
+    background-image: url("../Images/contact.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .contact-page-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 50px 40px;
+    position: relative;
+  }
+  
+  .contact-page-heading h2 {
+    font-size: 40px;
+    color: white;
+  }
+  
+  .contact-page-social-links {
+    font-size: 50px;
+    color: white;
+    text-align: center;
+  }
+  
+  .contact-page-form {
+    margin: 50px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .contact-page-form input {
+    color: white;
+    width: 300px;
+    font-weight: 600;
+    margin: 20px 20px;
+    padding: 20px;
+    border: none;
+    text-align: center;
+    border-bottom: 3px solid rgb(164, 164, 164);
+    background-color: transparent;
+  }
+  
+  .contact-page-form textarea {
+    color: white;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+    text-align: center;
+  
+    border-bottom: 3px solid rgb(164, 164, 164);
+  }
+  
+  .contact-page-form select {
+    margin: 10px 0px;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  .contact-page-form select option {
+    color: black;
+  }
+  
+  .contact-page-btn {
+    display: block;
+    color: white;
+    width: 200px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 20px auto;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: red;
+  }
+  
+  .sucess-popUp {
+    background-color: rgb(117, 255, 117);
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+  }
+  
+  .pop-up-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 10px 0px;
+    font-size: 15px;
+    font-weight: 900;
+  }
+  .pop-up-message button {
+    font-size: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .sucess-popUp {
+    position: absolute;
+    bottom: 5%;
+    right: 50%;
+  }
+  

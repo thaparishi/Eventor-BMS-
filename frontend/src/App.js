@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import axios from "axios";
 import NavBar from "./Components/navBar/NavBar";
 import Footer from "./Components/navBar/Footer";
@@ -14,11 +14,12 @@ import ForgetPass from "./Components/login-register/ForgetPass";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
+
   const [userId, setUserid] = useState(null);
 
   const getCookies = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/checkLoginCookie");
+      const response = await axios.get("/api/checkLoginCookie");
       setCheckLogin(response.data.success);
       setUserid(response.data.userId);
     } catch (error) {
@@ -28,7 +29,7 @@ function App() {
 
   const deleteLoginCookie = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/deleteLoginCookies");
+      const response = await axios.get("/api/deleteLoginCookies");
       setCheckLogin(response.data.success);
     } catch (error) {
       console.log(error);
@@ -40,8 +41,8 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div>
+    <BrowserRouter>
+      <div className="App">
         <NavBar checkLogin={checkLogin} deleteFun={deleteLoginCookie} />
         <Routes>
           <Route path="/" element={<Home checkLogin={checkLogin} />} />
@@ -52,9 +53,13 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
-          {/* If user is logged in */}
+          {/* if user is loged in then only this route exists*/}
           {checkLogin && (
             <>
+              <Route
+                path="/"
+                element={<Home userId={userId} />}
+              ></Route>
             </>
           )}
 
@@ -67,7 +72,7 @@ function App() {
         </Routes>
         <Footer />
       </div>
-    </Router>
+      </BrowserRouter>
   );
 }
 

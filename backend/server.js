@@ -40,7 +40,6 @@ app.use(express.static("./public"));
 //Initializing all the routes from auth as a middleware in the server.
 app.use("/", auth);
 
-
 //Importing connectDB function from db folder.
 const connectDB = require("./db/connect");
 

@@ -77,10 +77,10 @@ function Home({ checkLogin }) {
             <div className="image-slider">
               <div className="image-content ">
                 <h2 className="animate__animated animate__pulse">
-                  Best Banquets
+                Perfect Venues
                 </h2>
                 <p className="animate__animated animate__lightSpeedInLeft">
-                  Book without Any Hustle
+                Fast, Easy, and Stress-Free
                 </p>
               </div>
 

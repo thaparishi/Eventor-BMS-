@@ -29,13 +29,6 @@ body {
   font-family: "Public Sans", sans-serif;
 }
 
-/**
-*Start of main section
-*/
-/**
-*Start of second section
-*/
-
 .image-content {
   min-width: 900px;
   position: absolute;
@@ -186,8 +179,6 @@ body {
   width: 300px;
   position: relative;
   margin-left: 50px;
-  /* color: #e9b947;
-  font-family: "Tangerine", "cursive"; */
 }
 
 .banquet-item h2 i {
@@ -321,13 +312,7 @@ body {
   opacity: 0.8;
 }
 
-/**
-*End of second section
-*/
 
-/**
-*Start of third section
-*/
 
 .third-section {
   height: 600px;
@@ -389,13 +374,7 @@ body {
   background-repeat: no-repeat;
 }
 
-/**
-*End of third section
-*/
 
-/**
-*Start of fourth section
-*/
 
 .section {
   width: 90vw;
@@ -506,14 +485,6 @@ body {
   transform: translateX(-100%);
 }
 
-/**
-*End of fourth section
-*/
-
-/**
-*Start of fifth section
-*/
-
 .fifth-section {
   background-color: #f8f9fb;
   height: 600px;
@@ -596,13 +567,7 @@ iframe {
   width: inherit;
 }
 
-/**
-*End of fifth section
-*/
 
-/**
-*End of main section
-*/
 @media screen and (max-width: 870px) {
   .image-content {
     display: none;

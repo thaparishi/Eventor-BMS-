@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
-import { useNagivate } from "react-router-dom";
 
 import axios from "axios";
 

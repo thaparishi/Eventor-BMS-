@@ -11,6 +11,7 @@ import Contact from "./Components/Pages/Contact";
 import Register from "./Components/login-register/Register";
 import Login from "./Components/login-register/Login";
 import ForgetPass from "./Components/login-register/ForgetPass";
+import Pagenf from "./Components/Pages/Pagenf";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
@@ -69,6 +70,7 @@ function App() {
               <Route path="/forgetPass" element={<ForgetPass />} />
             </>
           )}
+          <Route path="*" element={<Pagenf />}></Route>
         </Routes>
         <Footer />
       </div>

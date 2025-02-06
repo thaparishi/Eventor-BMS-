@@ -11,7 +11,7 @@ import clientImage2 from '../Images/22.jpg';
 import clientImage3 from '../Images/33.jpg';
 
 // Star Icons
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { FaStar, FaRegStar } from 'react-icons/fa';
 
 function Banquets() {
   const [currentImage, setCurrentImage] = useState(0);

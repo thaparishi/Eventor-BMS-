@@ -18,7 +18,6 @@ import review from "./review";
 
 import CountUp from "react-countup";
 
-// import blog from "./blog-data"
 
 const image = [silderImage03, silderImage01, silderImage02];
 
@@ -141,7 +140,7 @@ function Home({ checkLogin }) {
 
               <div className="text-medal ">
                 <p>
-                  <CountUp end={15} duration={3} />+
+                  <CountUp end={4} duration={2} />+
                 </p>
                 <p id="changeColor">Years of Excellence</p>
               </div>
@@ -393,7 +392,6 @@ function Home({ checkLogin }) {
           {/* End of fifth section*/}
         </div>
       </main>
-
     </>
   );
 }

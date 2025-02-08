@@ -49,12 +49,6 @@ function NavBar() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>
-            <FaInfoCircle className="navbar-icon" />
-            About Us
-          </NavLink>
-        </li>
-        <li>
           <NavLink to="/banquets" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaConciergeBell className="navbar-icon" />
             Banquets
@@ -64,6 +58,12 @@ function NavBar() {
           <NavLink to="/gallery" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaConciergeBell className="navbar-icon" />
             Gallery
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <FaInfoCircle className="navbar-icon" />
+            About Us
           </NavLink>
         </li>
         <li>

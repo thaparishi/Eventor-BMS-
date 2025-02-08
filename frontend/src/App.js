@@ -5,13 +5,17 @@ import NavBar from "./Components/navBar/NavBar";
 import Footer from "./Components/navBar/Footer";
 import Home from "./Components/Pages/Home";
 import About from "./Components/Pages/About";
-import Banquet from "./Components/Pages/Banquets";
 import Gallery from "./Components/Pages/Gallery";
 import Contact from "./Components/Pages/Contact";
 import Register from "./Components/login-register/Register";
 import Login from "./Components/login-register/Login";
 import ForgetPass from "./Components/login-register/ForgetPass";
 import Pagenf from "./Components/Pages/Pagenf";
+import Menu from "./Components/Pages/Menu";
+import DisplayBanquet from "./Components/Banquet/displayBanquet";
+import Banquet from "./Components/Banquet/createBanquet";
+import { CreateBanquet } from "./Components";
+import { ChangePassword } from "./Components";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
@@ -57,18 +61,25 @@ function App() {
           {/* if user is loged in then only this route exists*/}
           {checkLogin && (
             <>
-              <Route
-                path="/"
-                element={<Home userId={userId} />}
-              ></Route>
-            </>
+            <Route
+              path="/banquet/:token"
+              element={<DisplayBanquet userId={userId} />}
+            ></Route>
+            <Route path="/createBanquet" element={<CreateBanquet />}></Route>
+            <Route path="/menu/:token" element={<Menu />}></Route>
+          </>
           )}
 
           {/* If user is NOT logged in */}
           {!checkLogin && (
             <>
-              <Route path="/forgetPass" element={<ForgetPass />} />
-            </>
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="/forgetPass" element={<ForgetPass />}></Route>
+            <Route
+              path="/changePassword/:id"
+              element={<ChangePassword />}
+            ></Route>
+          </>
           )}
           <Route path="*" element={<Pagenf />}></Route>
         </Routes>

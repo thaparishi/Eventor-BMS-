@@ -37,7 +37,7 @@ const register = async (req, res) => {
       //Creating a medium to send email.
       let transporter = nodemailer.createTransport({
         //Domain name.
-        service: "gmail",
+        service: "hotmail",
         auth: {
           //Your email
           user: `${process.env.EMAIL}`,
@@ -154,7 +154,7 @@ const sendResetPasswordLink = async (req, res) => {
     //Creating a medium to send email.
     let transporter = nodemailer.createTransport({
       //Domain name.
-      service: "gmail",
+      service: "hotmail",
       auth: {
         //Your email
         user: `${process.env.EMAIL}`,

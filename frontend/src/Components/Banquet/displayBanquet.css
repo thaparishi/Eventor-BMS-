@@ -1,0 +1,177 @@
+.boddy{
+    margin-top: 85px;
+}
+
+.banquet-heading-content {
+    height: 120px;
+    background-color: rgb(107, 113, 113);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .banquet-heading-content img {
+    margin-left: 20px;
+  }
+  
+  .booking-description {
+    flex-grow: 1;
+    color: #e9b947;
+  }
+  
+  .booking-description h2 {
+    font-size: 50px;
+    font-family: "Tangerine", "cursive";
+  }
+  
+  .booking-description p {
+    font-size: 30px;
+    font-family: "Tangerine", "cursive";
+  }
+  
+  .banquet-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  .banquet-container h2 {
+    font-size: 40px;
+  }
+  
+  .select-hall {
+    margin: 55px 0px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .select-hall h2 {
+    color: black;
+    text-align: start;
+  }
+  
+  .hall-icon {
+    color: black;
+    font-size: 45px;
+  }
+  
+  .banquet-container .banquet-content {
+    color: black;
+    max-width: 600px;
+    flex-basis: 30%;
+  }
+  
+  .banquet-content h2 {
+    color: #e9b947;
+    font-size: 60px;
+    font-family: "Tangerine", "cursive";
+    text-transform: uppercase;
+  }
+  
+  .banquet-container img {
+    max-width: 400px;
+  }
+  
+  .banquet-menu-btn {
+    background-color: #e9b947;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  
+  .banquet-image {
+    margin-bottom: 20px;
+    display: block;
+    height: 100px;
+    background: url("http://wahabali.com/work/pearl-demo/images/heading-dark.png")
+      no-repeat center;
+    color: black;
+  }
+  
+  .display-banquet-container .search-banquet-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .display-banquet-container .button-asc-desc {
+    display: flex;
+    justify-content: center; /* centers the buttons horizontally */
+    align-items: center; /* centers the buttons vertically */
+    gap: 2rem;
+    margin: 20px 0px;
+  }
+  
+  .display-banquet-container .button-asc-desc button {
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative; /* position the pseudo-elements relative to the button */
+    background-color: transparent; /* set the background color to transparent */
+    color: #007bff; /* set the text color to blue */
+    border: none; /* remove the button border */
+    border-radius: 5px; /* add a slight border radius */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); /* add a subtle box shadow */
+    transition: all 0.3s ease-in-out; /* add a smooth transition effect */
+  }
+  
+  .display-banquet-container .button-asc-desc button::before {
+    content: "";
+    position: absolute;
+    left: -15px; /* position the arrow left of the button */
+    border: 8px solid transparent;
+    border-bottom-color: #007bff; /* set the arrow color to blue */
+  }
+  
+  .display-banquet-container .button-asc-desc button::after {
+    content: "";
+    position: absolute;
+    right: -15px; /* position the arrow right of the button */
+    border: 8px solid transparent;
+    border-top-color: #007bff; /* set the arrow color to blue */
+  }
+  
+  .display-banquet-container .button-asc-desc button:hover {
+    background-color: #007bff; /* darken the background color on hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25); /* increase the box shadow on hover */
+    color: #fff; /* change the text color to white on hover */
+  }
+  
+  .display-banquet-container .button-asc-desc button:hover::before {
+    border-bottom-color: #fff; /* change the arrow color to white on hover */
+  }
+  
+  .display-banquet-container .button-asc-desc button:hover::after {
+    border-top-color: #fff; /* change the arrow color to white on hover */
+  }
+  
+  .display-banquet-container .button-asc-desc button.active {
+    color: #fff; /* set the text color to white when button is active */
+    background-color: #007bff; /* set the background color to blue when button is active */
+  }
+  
+  .display-banquet-container .button-asc-desc button.active::before {
+    border-bottom-color: #fff; /* set the arrow color to white when button is active */
+  }
+  
+  .display-banquet-container .button-asc-desc button.active.desc::after {
+    border-top-color: #fff; /* set the arrow color to white and rotate 180 degrees when button is active and descending */
+    transform: rotate(180deg);
+  }
+  
+  @media screen and (max-width: 1000px) {
+    .search-banquet-form {
+      flex-direction: column;
+    }
+  }
+  

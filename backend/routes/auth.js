@@ -28,7 +28,7 @@ router.route("/api/deleteLoginCookies").get(deleteLoginCookie);
 router.route("/api/sendResetPasswordLink").post(sendResetPasswordLink);
 
 router.route("/api/verifyEmail/:id").get(verifyEmail);
-
+  
 router.route("/api/changePassword").post(changePassword);
 
 //Exporting router.

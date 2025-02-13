@@ -18,6 +18,7 @@ import review from "./review";
 
 import CountUp from "react-countup";
 
+// import blog from "./blog-data"
 
 const image = [silderImage03, silderImage01, silderImage02];
 
@@ -76,10 +77,10 @@ function Home({ checkLogin }) {
             <div className="image-slider">
               <div className="image-content ">
                 <h2 className="animate__animated animate__pulse">
-                Perfect Venues
+                  Best Banquets
                 </h2>
                 <p className="animate__animated animate__lightSpeedInLeft">
-                Fast, Easy, and Stress-Free
+                  Book without Any Hustle
                 </p>
               </div>
 
@@ -121,12 +122,12 @@ function Home({ checkLogin }) {
               <div className="bottom-middle-banquet">
                 <a href="CreateBanquet">
                   <button className="bottom-banquet-btn create-banquet-btn">
-                    Create Banquet
+                    Register Your Banquet
                   </button>
                 </a>
                 <a href="bookBanquet">
                   <button className="bottom-banquet-btn show-banquet-btn">
-                    Book Banquet
+                    Book Banquet for events
                   </button>
                 </a>
               </div>
@@ -140,7 +141,7 @@ function Home({ checkLogin }) {
 
               <div className="text-medal ">
                 <p>
-                  <CountUp end={4} duration={2} />+
+                  <CountUp end={4} duration={3} />+
                 </p>
                 <p id="changeColor">Years of Excellence</p>
               </div>
@@ -325,7 +326,7 @@ function Home({ checkLogin }) {
                   <div className="contact-text">
                     <h2>address</h2>
                     <p>
-                      ThapaMarg, Kalanki <br />
+                      Kalanki, Baba Petrol pump <br />
                       Kathmandu,
                       <br />
                       Nepal
@@ -343,7 +344,7 @@ function Home({ checkLogin }) {
                   </div>
                   <div className="contact-text">
                     <h2>telephone</h2>
-                    <p>9861192430</p>
+                    <p>9813444724</p>
                   </div>
                 </div>
                 <div

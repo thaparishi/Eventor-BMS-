@@ -27,7 +27,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post("http://localhost:8000/api/login", userAuth);
+    const response = await axios.post("/api/login", userAuth);
     const data = await response.data;
     if (data === "Unsucessfull") {
       console.log(data);

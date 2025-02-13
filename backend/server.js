@@ -15,7 +15,7 @@ app.use(cokkieParser("signed-cookie"));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../app-frontend/src/components/banquet-Images");
+    cb(null, "../frontend/src/Components/banquet-Images");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -26,6 +26,13 @@ const upload = multer({ storage: storage });
 
 //Importing auth.js file from routes folder.
 const auth = require("./routes/auth");
+
+//Importing banquet.js file from routes folder.
+const banquet = require("./routes/banquet");
+
+//Importing book.js file from routes folder.
+const book = require("./routes/book");
+
 
 //Acceping the incomming request object as a json object.
 app.use(express.json());
@@ -39,6 +46,13 @@ app.use(express.static("./public"));
 
 //Initializing all the routes from auth as a middleware in the server.
 app.use("/", auth);
+
+//Initializing all the routes from book.js as a midddleware in the server.
+app.use("/", book);
+
+
+//Initializing all the routes from banquet.js as a midddleware in the server.
+app.use("/", upload.single("image"), banquet);
 
 //Importing connectDB function from db folder.
 const connectDB = require("./db/connect");

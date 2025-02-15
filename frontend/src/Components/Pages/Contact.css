@@ -1,115 +1,161 @@
+.boddy{
+  margin: 100px;
+  background-color: #ffffff;
+}
 .contact-page-container {
-    height: 100vh;
-    background-image: url("../Images/contact.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  padding: 50px;
+  background-color: #000000; /* Black background */
+  border-radius: 15px;
+}
+
+/* Left Side (Social Links and Heading) */
+.left-side-contact-page {
+  width: 40%;
+}
+
+.contact-page-heading h2 {
+  font-size: 2rem;
+  color: #ffffff; /* White text */
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.contact-page-social-links {
+  display: flex;
+  gap: 20px;
+  font-size: 2.5rem;
+  color: #f39c12; /* Golden color for icons */
+}
+
+.contact-page-social-links svg {
+  transition: transform 0.3s ease;
+}
+
+.contact-page-social-links svg:hover {
+  transform: scale(1.2);
+}
+
+/* Right Side (Form Section) */
+.right-side-contact-page {
+  width: 55%;
+}
+
+.contact-page-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #141313; /* Dark blue-gray background for form */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-page-form input,
+.contact-page-form select,
+.contact-page-form textarea {
+  font-size: 1rem;
+  padding: 12px;
+  margin: 5px 0;
+  border: 1px solid #7f8c8d; /* Light gray border */
+  border-radius: 5px;
+  outline: none;
+  transition: border 0.3s ease;
+  background-color: #252525; /* Dark background for form fields */
+  color: #ecf0f1; /* Light text for readability */
+}
+
+.contact-page-form input:focus,
+.contact-page-form select:focus,
+.contact-page-form textarea:focus {
+  border-color: #f39c12; /* Golden color on focus */
+}
+
+.contact-page-form textarea {
+  resize: vertical;
+}
+
+.contact-page-btn {
+  padding: 12px 20px;
+  background-color: #f39c12; /* Golden button */
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-page-btn:hover {
+  background-color: #e67e22; /* Slightly darker golden color on hover */
+}
+
+/* Success Popup */
+.sucess-popUp {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pop-up-message {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pop-up-message p {
+  font-size: 1.2rem;
+  color: #2c3e50; /* Dark text */
+  margin-bottom: 20px;
+}
+
+.X {
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.X:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .contact-page-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 50px 40px;
-    position: relative;
-  }
-  
-  .contact-page-heading h2 {
-    font-size: 40px;
-    color: white;
-  }
-  
-  .contact-page-social-links {
-    font-size: 50px;
-    color: white;
-    text-align: center;
-  }
-  
-  .contact-page-form {
-    margin: 50px 0px;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .contact-page-form input {
-    color: white;
-    width: 300px;
-    font-weight: 600;
-    margin: 20px 20px;
     padding: 20px;
-    border: none;
-    text-align: center;
-    border-bottom: 3px solid rgb(164, 164, 164);
-    background-color: transparent;
   }
-  
-  .contact-page-form textarea {
-    color: white;
-    font-weight: 600;
-    background-color: transparent;
-    border: none;
-    text-align: center;
-  
-    border-bottom: 3px solid rgb(164, 164, 164);
-  }
-  
-  .contact-page-form select {
-    margin: 10px 0px;
-    color: white;
-    text-align: center;
-    padding: 10px;
+
+  .left-side-contact-page,
+  .right-side-contact-page {
     width: 100%;
-    background-color: transparent;
   }
-  
-  .contact-page-form select option {
-    color: black;
+
+  .contact-page-form {
+    padding: 20px;
   }
-  
+
   .contact-page-btn {
-    display: block;
-    color: white;
-    width: 200px;
-    height: 40px;
-    font-size: 15px;
-    font-weight: 600;
-    margin: 20px auto;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-    background-color: red;
+    font-size: 1rem;
   }
-  
-  .sucess-popUp {
-    background-color: rgb(117, 255, 117);
-    border-radius: 20px;
-    text-align: center;
-    color: rgb(0, 0, 0);
+
+  .contact-page-social-links {
+    font-size: 2rem;
   }
-  
-  .pop-up-message {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    padding: 10px 0px;
-    font-size: 15px;
-    font-weight: 900;
-  }
-  .pop-up-message button {
-    font-size: 30px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .sucess-popUp {
-    position: absolute;
-    bottom: 5%;
-    right: 50%;
-  }
-  
+}

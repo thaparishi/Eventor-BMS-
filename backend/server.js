@@ -68,21 +68,6 @@ const mongoose = require("mongoose");
 const authentication = require("express-authentication");
 const adminSchema = require("./models/admin");
 
-////////////////// To add new admin user in MongoDb /////////////////////////
-
-// const newUser = new adminSchema({
-//   email: "nimesh@gmail.com",
-//   password: "nimesh",
-//   role: "admin",
-// });
-// newUser.save((err) => {
-//   if (err) {
-//     console.error(err);
-//   } else {
-//     console.log("User added successfully");
-//   }
-// });
-
 AdminBro.registerAdapter(AdminBroMongoose);
 
 //Initializing the port value.

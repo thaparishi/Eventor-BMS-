@@ -37,7 +37,7 @@ const register = async (req, res) => {
       //Creating a medium to send email.
       let transporter = nodemailer.createTransport({
         //Domain name.
-        service: "hotmail",
+        service: "gmail",
         auth: {
           //Your email
           user: `${process.env.EMAIL}`,
@@ -51,10 +51,11 @@ const register = async (req, res) => {
         from: `${process.env.EMAIL}`,
         to: `${email}`,
         subject: "Email verifications",
-        html: `<h3>Hi! There, You have recently visited
-      our website and entered your email.
+        html: `<h3>Hi! Thank you for creating your account on our website.
+      <br>
       Please follow the given link to verify your email
       http://localhost:8000/api/verify/${token}
+      <br>
       Thanks and Kind Regards, Banquet Reservation Team</h3>`,
       });
 
@@ -69,7 +70,7 @@ const register = async (req, res) => {
 
         return res.json("Sucessfull");
       });
-      return res.json("Sucess");
+      return res.json("Success");
     }
     res.json("UnSucessfull");
   } catch (error) {
@@ -154,7 +155,7 @@ const sendResetPasswordLink = async (req, res) => {
     //Creating a medium to send email.
     let transporter = nodemailer.createTransport({
       //Domain name.
-      service: "hotmail",
+      service: "gmail",
       auth: {
         //Your email
         user: `${process.env.EMAIL}`,
@@ -168,11 +169,12 @@ const sendResetPasswordLink = async (req, res) => {
       from: `${process.env.EMAIL}`,
       to: `${email}`,
       subject: "Password Reset ",
-      html: `<h3>Hi! There, You have recently visited
-    	our website and entered your email.
-    	Please follow the given link to verify your email to reset the password
+      html: `<h3>Hi! In order to change Password please click on link bellow
+      <br>
+    	Please follow the given link to reset the password
     	http://localhost:8000/api/verifyEmail/${token}
-    	Thank you and Kind Regards, Banquet Reservation Team</h3>`,
+      <br>
+    	Thank you and Kind Regards, Eventor Team</h3>`,
     });
 
     //Sending message to user email for verification.

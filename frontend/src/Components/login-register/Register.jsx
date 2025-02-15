@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
 import "./login-register.css";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -38,6 +40,9 @@ const Register = () => {
         msg: "Sucessfull, Please Check your Email For Verification",
         sucess: true,
       });
+      setTimeout(() => {
+        window.location.reload(navigate("/login"));
+      }, 2000);
     }
   };
 

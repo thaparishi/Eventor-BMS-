@@ -5,10 +5,10 @@
 }
 
 :root {
-  --Primary-Strong-Cyan: hsl(171, 66%, 44%);
-  --Primary-Light-Blue: hsl(233, 100%, 69%);
-  --Secondary-Dark-Grayish-Blue: hsl(210, 10%, 33%);
-  --Secondary-Grayish-Blue: hsl(201, 11%, 66%);
+  --Primary-Gold: hsl(44, 100%, 57%); /* Gold */
+  --Primary-White: hsl(0, 0%, 100%); /* White */
+  --Secondary-Dark-Gray: hsl(0, 0%, 11%); /* Very Dark Gray */
+  --Secondary-Gray: hsl(0, 0%, 50%); /* Medium Gray */
   --light-weight: 400;
   --heavy-weight: 500;
   --transition: 0.3s ease-in-out all;
@@ -17,15 +17,13 @@
 h1 {
   font-size: 30px;
   font-weight: 400;
+  color: var(--Primary-White); /* White color for heading */
 }
 
 p {
   font-weight: 100;
 }
 
-body {
-  font-family: "Public Sans", sans-serif;
-}
 
 /**
 *Start of main section
@@ -35,21 +33,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(241, 150, 90);
-  background: linear-gradient(
-    140deg,
-    rgba(241, 150, 90, 1) 23%,
-    rgba(255, 105, 155, 1) 52%,
-    rgba(214, 117, 181, 1) 66%,
-    rgba(149, 62, 223, 1) 100%
-  );
+  background-color: var(--Secondary-Dark-Gray); /* Black background */
 }
 
 .auth-first-section {
   width: 800px;
   height: 500px;
   border-radius: 20px;
-  background-color: white;
+  background-color: #111111; /* Dark Gray background for the form */
   display: flex;
 }
 
@@ -62,11 +53,13 @@ body {
 .register-form h1 {
   margin-left: 50px;
   margin-bottom: 10px;
+  color: var(--Primary-Gold); /* Gold color for heading */
 }
 
 #register-text {
   margin-left: 10px;
   margin-bottom: 20px;
+  color: var(--Primary-White); /* White text for register text */
 }
 
 .card-design {
@@ -78,9 +71,10 @@ body {
   height: 40px;
   margin-top: 5px;
   padding-left: 50px;
-  background-color: #e9e9e9;
+  background-color: #333333; /* Darker Gray for input */
   border-radius: 10px;
-  border: 1px solid #e9e9e9;
+  border: 1px solid var(--Primary-White); /* White border */
+  color: var(--Primary-White); /* White text inside input */
 }
 
 .email-field,
@@ -95,6 +89,7 @@ body {
   position: absolute;
   top: 30%;
   left: 5%;
+  color: var(--Primary-White); /* White icons */
 }
 
 .login-icon i {
@@ -104,20 +99,13 @@ body {
 .register .btn {
   width: 250px;
   height: 40px;
-  color: white;
+  color: var(--Primary-White); /* White text */
   font-size: 18px;
   font-weight: 500;
   margin: 10px 0px;
   border: none;
   border-radius: 10px;
-  background: rgb(241, 150, 90);
-  background: linear-gradient(
-    90deg,
-    rgba(241, 150, 90, 1) 23%,
-    rgba(255, 105, 155, 1) 52%,
-    rgba(214, 117, 181, 1) 73%,
-    rgba(149, 62, 223, 1) 100%
-  );
+  background: linear-gradient(90deg, #f4a261 20%, #e76f51 50%, #d7263d 100%); /* Gradient with orange and red */
   cursor: pointer;
 }
 
@@ -132,7 +120,7 @@ body {
 .forget-pass a {
   font-size: 12px;
   text-decoration: none;
-  color: var(--Secondary-Dark-Grayish-Blue);
+  color: var(--Secondary-Gray); /* Gray color for links */
 }
 
 .register-form #reset-pass {
@@ -150,12 +138,7 @@ body {
 }
 
 .u-shaped {
-  background: rgb(213, 19, 129);
-  background: linear-gradient(
-    180deg,
-    rgba(213, 19, 129, 1) 33%,
-    rgba(102, 45, 140, 1) 82%
-  );
+  background: linear-gradient(180deg, #f39c12 33%, #e67e22 82%); /* Gold to orange gradient */
   border-radius: 10px;
   border-bottom-left-radius: 300px;
   border-bottom-right-radius: 300px;
@@ -168,7 +151,7 @@ body {
   position: absolute;
   top: -8%;
   left: -8%;
-  box-shadow: inset 0 -5px 0px 15px #ffd3ec;
+  box-shadow: inset 0 -5px 0px 15px #ffd3ec; /* Soft pink shadow */
 }
 
 .card-02 {
@@ -212,9 +195,10 @@ body {
   border-radius: 20px;
   z-index: 1;
 }
+
 .pop-up h2 {
   text-align: center;
-  color: white;
+  color: var(--Primary-White); /* White color for popup title */
 }
 
 /**

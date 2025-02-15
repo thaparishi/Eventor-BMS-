@@ -1,217 +1,250 @@
-.footer-short-info * p {
-    font-size: 15px;
+footer {
+  background-color: #111;
+  color: white;
+}
+
+.mainn{
+    padding: 40px 10%;
+}
+
+.footer-short-info {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 10%;
+}
+
+.short-info-text {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.short-info-text h2 {
+  font-size: 30px;
+  color: #e9b947;
+  font-weight: bold;
+}
+
+.short-info-text p {
+  color: #ddd;
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.short-info-text img {
+  width: 150px;
+  margin-top: 20px;
+}
+
+.get-touch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.contact-us,
+.opening-hour,
+.about-banquet {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.contact-us .heading,
+.opening-hour .heading,
+.about-banquet .heading {
+  margin-bottom: 15px;
+}
+
+.heading{
+  margin-top: 20px;
+}
+
+.heading h3{
+  text-align: center;
+  font-size: 30px;
+  color: #e9b947;
+  font-weight: bold;
+}
+.contact-us h2,
+.opening-hour h2,
+.about-banquet h2 {
+  font-size: 25px;
+  color: #e9b947;
+  font-weight: bold;
+}
+
+
+
+.footer-content p {
+  color: #ddd;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.footer-content p i {
+  margin-right: 10px;
+  color: #e9b947;
+}
+
+.opening-hour-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.opening-hour-content .days,
+.opening-hour-content .time {
+  flex: 1;
+}
+
+.opening-hour-content .days h2,
+.opening-hour-content .time p {
+  color: #ddd;
+  font-size: 1rem;
+}
+
+.opening-hour-content .time p {
+  margin-bottom: 5px;
+}
+
+.about-banquet .footer-content p {
+  color: #ddd;
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.links-newsletter .social-links .heading h2 {
+  margin-top: 20px;
+  font-size: 25px;
+  color: #e9b947;
+  font-weight: bold;
+}
+
+.social-link {
+  display: flex;
+  margin-top: 0px;
+  text-align: center;
+}
+
+.social-link a {
+  color: #ddd;
+  font-size: 1.5rem;
+  transition: 0.3s;
+  padding: 10px;
+}
+
+.social-link a:hover {
+  color: #e9b947;
+}
+
+.footer-content-last {
+  color: white;
+  height: 400px;
+  background: url("../Images/Untitled.jpeg");
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  text-align: left;
+  background-color: #e9e9e9;
+}
+
+.footer-content-last .footer-left {
+  width: 300px;
+  margin-left: 100px;
+  align-self: center;
+  text-align: center;
+}
+
+.footer-content-last .footer-right {
+  width: 50%;
+  text-align: center;
+}
+
+.footer-content-last .footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.footer-content-last .footer-left > p,
+a {
+  font-weight: 400;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.footer-content-last .footer-left a img {
+  width: 50px;
+  height: 50px;
+}
+.footer-content-last .footer-left > a {
+  padding: 5px;
+}
+
+.footer-content-last .footer-right a {
+  color: white;
+}
+
+.footer-content-last .small-text {
+  font-size: 10px;
+}
+
+/**
+*End of footer sectionx
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  footer {
+    padding: 40px 5%;
   }
-  .short-info-text {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .short-info-text h2 {
-    color: #e9b947;
-    font-family: "Tangerine", "cursive";
-    font-size: 70px;
-    font-weight: 300;
-  }
-  
-  .short-info-text p {
-    font-weight: 400;
-    font-size: 30px;
-    margin-bottom: 20px;
-  }
-  
+
   .footer-short-info {
-    max-width: 1100px;
-    margin: 0px auto;
-  }
-  
-  .get-touch {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-  }
-  
-  .contact-us,
-  .opening-hour {
-    width: 33.33%;
-  }
-  
-  .heading h2 {
-    margin-bottom: 20px;
-    font-weight: 400;
-    font-size: 30px;
-    text-align: start;
-  }
-  
-  .footer-content #margin-btm {
-    margin-bottom: 20px;
-  }
-  
-  .opening-hour-content {
-    display: flex;
-    align-items: center;
-  }
-  
-  .opening-hour-content .days h2 {
-    font-weight: 400;
-    font-size: 20px;
-    padding: 2px;
-  }
-  
-  .opening-hour-content p {
-    font-weight: 300;
-    margin-left: 40px;
-  }
-  
-  .about-banquet {
-    max-width: 600px;
-    margin: 80px auto;
-    text-align: center;
-  }
-  
-  .about-banquet .heading h2 {
-    text-align: center;
-  }
-  
-  .links-newsletter {
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10rem;
-  }
-  
-  .copyright-footer {
-    height: 120px;
-    background-color: black;
-    color: white;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
   }
-  
-  .social-icon {
-    color: black;
-    font-size: xx-large;
+
+  .get-touch {
+    flex-direction: column;
+    align-items: center;
   }
-  
-  .newsletter-form input {
-    width: 200px;
-    height: 40px;
-    text-align: center;
+
+  .contact-us,
+  .opening-hour,
+  .about-banquet {
+    flex: 1;
+    margin-bottom: 20px;
   }
-  
-  @media screen and (max-width: 800px) {
-    .get-touch {
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-    }
-  
-    .contact-us,
-    .opening-hour {
-      width: 50%;
-    }
-    .links-newsletter {
-      flex-direction: column;
-      gap: 2rem;
-    }
+
+  .social-link {
+    flex-direction: column;
+    align-items: center;
   }
-  
+
   .footer-content-last {
-    color: white;
-    height: 400px;
-    background: url("../Images/Untitled.jpeg");
-    background-position: center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-    text-align: left;
-    background-color: #e9e9e9;
+    flex-direction: column;
   }
-  
-  .footer-content-last .footer-left {
-    width: 300px;
-    margin-left: 100px;
-    align-self: center;
-    text-align: center;
+
+  .footer-left,
+  .footer-right {
+    flex: 1;
+    margin-bottom: 20px;
   }
-  
-  .footer-content-last .footer-right {
-    width: 50%;
-    text-align: center;
+}
+
+@media (max-width: 768px) {
+  .footer-content-last {
+    flex-direction: column;
   }
-  
-  .footer-content-last .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+
+  .footer-links a {
+    font-size: 0.9rem;
   }
-  
-  .footer-content-last .footer-left > p,
-  a {
-    font-weight: 400;
-    font-size: 12px;
-    text-decoration: none;
+
+  .footer-text p {
+    font-size: 0.9rem;
   }
-  
-  .footer-content-last .footer-left a img {
-    width: 50px;
-    height: 50px;
-  }
-  .footer-content-last .footer-left > a {
-    padding: 5px;
-  }
-  
-  .footer-content-last .footer-right a {
-    color: white;
-  }
-  
-  .footer-content-last .small-text {
-    font-size: 10px;
-  }
-  
-  /**
-  *End of footer section
-  */
-  
-  @media screen and (max-width: 830px) {
-    /**
-    * Start of footer section
-    */
-  
-    .footer-content-last .footer-content {
-      height: 760px;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      gap: 2rem;
-      color: white;
-    } /*  */
-  
-    .footer-content-last .footer-left {
-      width: 200px;
-      margin-top: auto;
-      margin-left: 0px;
-    }
-    .hide-element {
-      display: none;
-    }
-  
-    .footer-content-last {
-      height: 700px;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-    }
-  
-    /**
-    * End of footer section
-    */
-  }
+}

@@ -16,7 +16,7 @@
   left: 0;
   width: 100%;
   height: 70px;
-  z-index: 1000;
+  z-index: 10000;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease-in-out;
 }
@@ -46,7 +46,7 @@
 }
 
 .navbar-brand:hover {
-  color: #08D9D6;
+  color: #e9b947;
 }
 
 /* Navbar Links */
@@ -79,7 +79,7 @@
 }
 
 .navbar-links a:hover {
-  color: #08D9D6;
+  color: #e9b947;
 }
 
 /* Active Link */

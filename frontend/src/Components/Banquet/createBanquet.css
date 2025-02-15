@@ -47,7 +47,7 @@
   }
   
   /* Submit Button */
-  .create-banquet-btn .btn {
+  .create-banquet-btnn .btnn {
     width: 250px;
     height: 40px;
     color: white;
@@ -67,7 +67,7 @@
   }
   
   /* Button Hover Effect */
-  .create-banquet-btn .btn:hover {
+  .create-banquet-btnn .btnn:hover {
     transform: scale(1.05);
     background: linear-gradient(
       90deg,

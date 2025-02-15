@@ -1,24 +1,17 @@
-import React, { useEffect, useState, useId } from "react";
-
-import { FaMedal } from 'react-icons/fa';
-
-import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
-
-import { FaQuoteRight } from "react-icons/fa";
-
-import "./Home.css";
-
-import silderImage01 from "../Images/home_slider/slider-img01.jpg";
-
-import silderImage02 from "../Images/home_slider/slider-img02.jpg";
-
-import silderImage03 from "../Images/home_slider/slider-img03.jpg";
-
+import React, { useEffect, useState} from "react";
+import './Home.css';
 import review from "./review";
-
+import img11 from '../Images/11.jpg';
+import img22 from '../Images/22.jpg';
+import img33 from '../Images/33.jpg';
+import { FaMedal } from 'react-icons/fa';
+import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
+import { FaQuoteRight } from "react-icons/fa";
+import silderImage01 from "../Images/home_slider/slider-img01.jpg";
+import silderImage02 from "../Images/home_slider/slider-img02.jpg";
+import silderImage03 from "../Images/home_slider/slider-img03.jpg";
 import CountUp from "react-countup";
 
-// import blog from "./blog-data"
 
 const image = [silderImage03, silderImage01, silderImage02];
 
@@ -26,8 +19,6 @@ function Home({ checkLogin }) {
   const [index, setIndex] = useState(0);
 
   const [sliderIndex, setSliderIndex] = useState(0);
-
-  const getId = useId();
 
   const [reviewData] = useState(review);
 
@@ -62,96 +53,64 @@ function Home({ checkLogin }) {
     }
   }, [sliderIndex]);
 
-  // useEffect(() => {
-  //     const timoutFunction = setInterval(() => {
-  //         setSliderIndex(sliderIndex + 1)
-  //     }, 3000)
-  //     return (() => { clearInterval(timoutFunction) })
-  // }, [sliderIndex, index])
+
+  const [currentImage, setCurrentImage] = useState(0);
+  // Using the imported images in the array
+  const images = [img11, img22, img33];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [images.length]);
+
 
   return (
-    <>
-      <main>
-        <div className="main-container">
-          <section className="first-section ">
-            <div className="image-slider">
-              <div className="image-content ">
-                <h2 className="animate__animated animate__pulse">
-                  Best Banquets
-                </h2>
-                <p className="animate__animated animate__lightSpeedInLeft">
-                  Book without Any Hustle
-                </p>
-              </div>
-
-              {image.map((item, itemIndex) => {
-                let position = "lastSlide";
-                if (itemIndex === sliderIndex) {
-                  position = "activeSlide";
-                }
-                if (
-                  itemIndex === sliderIndex - 1 ||
-                  (itemIndex === image.length - 1 && sliderIndex === 0)
-                ) {
-                  position = "nextSlide";
-                }
-                return (
-                  <article className={position} key={getId + itemIndex}>
-                    <img src={item} alt="" />
-                  </article>
-                );
-              })}
-              <button
-                className="prev-btn"
-                onClick={() => {
-                  setSliderIndex(sliderIndex - 1);
-                }}
-              >
-                <FiChevronLeft />
-              </button>
-              <button
-                className="next-btn"
-                onClick={() => {
-                  setSliderIndex(sliderIndex + 1);
-                }}
-              >
-                <FiChevronRight />
-              </button>
-            </div>
-            {checkLogin && (
+    <div className="home-container">
+      {/* Welcome Section with Sliding Images */}
+      <header className="home-header" style={{ backgroundImage: `url(${images[currentImage]})` }}>
+        <div className="header-content">
+          <h1>Welcome to Eventor</h1>
+          <p>Book your perfect banquet for any occasion with ease!</p>
+          {checkLogin && (
               <div className="bottom-middle-banquet">
                 <a href="CreateBanquet">
                   <button className="bottom-banquet-btn create-banquet-btn">
                     Register Your Banquet
                   </button>
                 </a>
-                <a href="bookBanquet">
+                <a href="banquets">
                   <button className="bottom-banquet-btn show-banquet-btn">
                     Book Banquet for events
                   </button>
                 </a>
               </div>
             )}
-            <div className="bottom-medal">
-              <div className="medal">
+        </div>
+
+        <div className="bottom-medall">
+              <div className="medall">
                 <p>
                   <FaMedal />
                 </p>
               </div>
 
-              <div className="text-medal ">
+              <div className="text-medall ">
                 <p>
-                  <CountUp end={4} duration={3} />+
+                  <CountUp end={1} duration={3} />+
                 </p>
                 <p id="changeColor">Years of Excellence</p>
               </div>
             </div>
-          </section>
-          {/* Start of second section */}
-          <section className="second-section " data-aos="fade-down">
+          </header>
+
+
+
+        {/* Start of second section */}
+        <section className="about-bqt " data-aos="fade-down">
             <section className="banquet-info ">
-              <section className="heading-info ">
-                <h1 id="heading-h1">WELCOME </h1>
+              <section className="heading-bqt">
+                <h1 id="h-h1">WELCOME </h1>
                 <p>
                   Beyond the hustle and bustle of the city, we provide our one
                   stop party venue services in a serene family location,
@@ -162,11 +121,11 @@ function Home({ checkLogin }) {
                 </p>
 
                 <section
-                  className="banquet-flex"
+                  className="bqt-flx"
                   data-aos="fade-right"
                   data-aos-delay="600"
                 >
-                  <section className="about-item banquet-item">
+                  <section className="about-bqt-items">
                     <h2>
                       <i className="fa-solid fa-hands-holding-circle"></i>
                       ABOUT OUR BANQUET SYSTEM
@@ -223,39 +182,8 @@ function Home({ checkLogin }) {
           </section>
           {/* End of second section */}
 
-          {/* Start of third section */}
-          <section
-            className="third-section "
-            data-aos="flip-left"
-            data-aos-easing="ease-out-cubic"
-            data-aos-duration="2000"
-          >
-            <div className="flex-amentities">
-              <div className="ametities-fixed-width">
-                <div className="amentities-items">
-                  <i className="fa-solid fa-utensils amenities-icons"></i>
-                  <p>Dining / reception hall</p>
-                </div>
-                <div className="amentities-items">
-                  <i className="fa-solid fa-martini-glass-citrus amenities-icons"></i>
-                  <p>Bar / launge</p>
-                </div>
-                <div className="amentities-items">
-                  <i className="fa-solid fa-spa amenities-icons"></i>
-                  <p>Wedding ceremony</p>
-                </div>
-                <div className="amentities-items">
-                  <i className="fa-solid fa-handshake amenities-icons"></i>
-                  <p>Events / Seminar hall</p>
-                </div>
-              </div>
-            </div>
-            <div className="wine-img"></div>
-          </section>
-          {/* End of fourth section*/}
-
-          {/* Start of fourth section*/}
-          <section className="fourth-section" data-aos="fade-up">
+       {/* Start of third section*/}
+       <section className="third-sec" data-aos="fade-up">
             <div className="section">
               <div className="title">
                 <h2>
@@ -309,92 +237,8 @@ function Home({ checkLogin }) {
               </div>
             </div>
           </section>
-          {/* End of fourth section*/}
-          {/* Start of fifth section  */}
-          <section className="fifth-section" data-aos="fade-up">
-            <section className="banquet-contact">
-              <div className="banquet-left">
-                <div
-                  className="contact-item"
-                  data-aos="fade-down"
-                  data-aos-anchor-placement="top-bottom"
-                  data-aos-delay="500"
-                >
-                  <div className="contact-icon">
-                    <i className="fa-solid fa-address-book"></i>
-                  </div>
-                  <div className="contact-text">
-                    <h2>address</h2>
-                    <p>
-                      Kalanki, Baba Petrol pump <br />
-                      Kathmandu,
-                      <br />
-                      Nepal
-                    </p>
-                  </div>
-                </div>
-                <div
-                  className="contact-item"
-                  data-aos="fade-down"
-                  data-aos-anchor-placement="top-bottom"
-                  data-aos-delay="1000"
-                >
-                  <div className="contact-icon">
-                    <i className="fa-solid fa-phone"></i>
-                  </div>
-                  <div className="contact-text">
-                    <h2>telephone</h2>
-                    <p>9813444724</p>
-                  </div>
-                </div>
-                <div
-                  className="contact-item"
-                  data-aos="fade-down"
-                  data-aos-anchor-placement="top-bottom"
-                  data-aos-delay="1500"
-                >
-                  <div className="contact-icon">
-                    <i className="fa-solid fa-at"></i>
-                  </div>
-                  <div className="contact-text">
-                    <h2>email / website</h2>
-                    <p>
-                      <i className="fa-solid fa-at"></i>
-                      <br />
-                      rishithpa@gmail.com
-                    </p>
-                    <p>
-                      <i className="fa-solid fa-globe"></i>
-                      <br />
-                      www.rishithapa.com.np
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <section
-                className="banquet-right"
-                data-aos="fade-down"
-                data-aos-anchor-placement="top-bottom"
-                data-aos-delay="2500"
-              >
-                <p>
-                  <iframe
-                    title="myFrame"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.1823503578307!2d85.31790641557545!3d27.711655582790193!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19042204f6a1%3A0xa7af95e7f7d75e66!2sHotel%20Yak%20%26%20Yeti!5e0!3m2!1sen!2snp!4v1675318298177!5m2!1sen!2snp"
-                    style={{ border: "0" }}
-                    width="1250"
-                    height="490"
-                    loading="lazy"
-                  ></iframe>
-                </p>
-              </section>
-            </section>
-          </section>
-          {/* End of fifth section*/}
-        </div>
-      </main>
-    </>
+          {/* End of third section*/}
+    </div>
   );
 }
-
 export default Home;

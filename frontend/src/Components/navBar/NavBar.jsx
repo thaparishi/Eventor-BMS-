@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./NavBar.css";
-import { FaHome, FaInfoCircle, FaConciergeBell, FaUserPlus, FaSignInAlt, FaBars, FaTimes } from "react-icons/fa";
+import { FaHome, FaInfoCircle, FaConciergeBell, FaSignInAlt, FaBars, FaTimes } from "react-icons/fa";
+import { GrGallery } from "react-icons/gr";
+import { IoPeopleCircleOutline } from "react-icons/io5";
+import { BiLogIn, BiLogOut } from "react-icons/bi";
 
 function NavBar({ checkLogin, deleteFun }) {
   const [isHidden, setIsHidden] = useState(false);
@@ -35,18 +38,18 @@ function NavBar({ checkLogin, deleteFun }) {
 
       <ul className={`navbar-links ${isNavOpen ? "active" : ""}`}>
         <li><NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}><FaHome className="navbar-icon" /> Home</NavLink></li>
-        <li><NavLink to="/banquets" className={({ isActive }) => (isActive ? "active" : "")}><FaConciergeBell className="navbar-icon" /> Banquets</NavLink></li>
-        <li><NavLink to="/gallery" className={({ isActive }) => (isActive ? "active" : "")}><FaConciergeBell className="navbar-icon" /> Gallery</NavLink></li>
+        <li><NavLink to="/banquets" className={({ isActive }) => (isActive ? "active" : "")}><IoPeopleCircleOutline className="navbar-icon" /> Banquets</NavLink></li>
+        <li><NavLink to="/gallery" className={({ isActive }) => (isActive ? "active" : "")}><GrGallery className="navbar-icon" /> Gallery</NavLink></li>
         <li><NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}><FaInfoCircle className="navbar-icon" /> About Us</NavLink></li>
         <li><NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}><FaConciergeBell className="navbar-icon" /> Contact Us</NavLink></li>
 
         {!checkLogin ? (
           <>
-            <li><NavLink to="/register"><FaUserPlus className="navbar-icon" /> Register</NavLink></li>
+            <li><NavLink to="/register"><BiLogIn className="navbar-icon" /> Register</NavLink></li>
             <li><NavLink to="/login"><FaSignInAlt className="navbar-icon" /> Login</NavLink></li>
           </>
         ) : (
-          <li><button className="link btn-logout" onClick={handleLogout}><i className="fa fa-sign-out" aria-hidden="true"></i> Logout</button></li>
+          <li><NavLink className="link btn-logout" onClick={handleLogout}><BiLogOut className="fa fa-sign-out" aria-hidden="true"></BiLogOut> Logout</NavLink></li>
         )}
       </ul>
     </nav>

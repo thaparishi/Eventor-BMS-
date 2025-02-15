@@ -81,8 +81,8 @@ function Banquet() {
                   />
                 </div>
 
-                <div className="create-banquet-btn">
-                  <button type="submit" className="btn">
+                <div className="create-banquet-btnn">
+                  <button type="submit" className="btnn">
                     Create Banquet
                   </button>
                 </div>

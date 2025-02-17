@@ -228,3 +228,32 @@ p {
     margin-bottom: 0px;
   }
 }
+
+.success-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* Space between buttons */
+  margin-top: 1rem;
+}
+
+.success-buttons .btn {
+  background-color: rgb(49, 62, 236); /* Green color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.success-buttons .btn:hover {
+  background-color: lime; /* Darker green */
+  transform: scale(1.05); /* Slight scale effect */
+}
+
+.success-buttons .btn:active {
+  background-color: lime;
+  transform: scale(0.98);
+}

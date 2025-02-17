@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState} from "react";
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-
 import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
-
 import "./login-register.css";
 
 const Register = () => {
@@ -19,42 +15,35 @@ const Register = () => {
 
   const [responseMessage, setResponseMessage] = useState({
     msg: "",
-    sucess: false,
-    unSucess: false,
+    success: false,
+    unSuccess: false,
   });
 
+  // Handle input changes
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setUser({ ...user, [name]: value });
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post("http://localhost:8000/api/register", user);
-    console.log(response);
-    if (response.data === "UnSucessfull") {
-      setResponseMessage({ msg: "Cannot Register", unSucess: true });
-    } else if (response.data === "Sucess") {
-      setResponseMessage({
-        msg: "Sucessfull, Please Check your Email For Verification",
-        sucess: true,
-      });
-      setTimeout(() => {
-        window.location.reload(navigate("/login"));
-      }, 2000);
+    try {
+      const response = await axios.post("http://localhost:8000/api/register", user);
+
+      if (response.data === "UnSuccessful") {
+        setResponseMessage({ msg: "Cannot Register", unSuccess: true });
+      } else if (response.data === "Success") {
+        setResponseMessage({
+          msg: "Registration Successful! Choose where to go next:",
+          success: true,
+        });
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setResponseMessage({ msg: "Error occurred", unSuccess: true });
     }
   };
-
-  useEffect(() => {
-    const Timer = setTimeout(() => {
-      setResponseMessage({ msg: "", unSucess: false, sucess: false });
-    }, 2000);
-
-    return () => {
-      clearTimeout(Timer);
-    };
-  }, [responseMessage]);
 
   return (
     <>
@@ -67,6 +56,7 @@ const Register = () => {
               <section className="u-shaped card-03"></section>
               <section className="u-shaped card-04"></section>
             </section>
+
             <section className="register-form">
               <h1 id="register-text">Register Account</h1>
               <form className="register" onSubmit={handleSubmit}>
@@ -80,9 +70,8 @@ const Register = () => {
                     name="name"
                     placeholder="Username"
                     value={user.name}
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
 
@@ -96,9 +85,8 @@ const Register = () => {
                     name="email"
                     value={user.email}
                     placeholder="Email"
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
 
@@ -110,11 +98,9 @@ const Register = () => {
                     type="tel"
                     id="number"
                     name="number"
-                    placeholder="Number"
+                    placeholder="Phone Number"
                     value={user.number}
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                     pattern="[0-9]{10,}"
                     title="Phone number must contain at least 10 digits."
                     required
@@ -131,11 +117,10 @@ const Register = () => {
                     name="password"
                     placeholder="Password"
                     value={user.password}
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                     pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
-                    title="Password must contain at least one uppercase letter, one number and special character."
+                    title="Password must contain at least one uppercase letter, one number, and one special character."
+                    required
                   />
                 </div>
 
@@ -145,40 +130,31 @@ const Register = () => {
                   </button>
                 </div>
                 <div className="forget-pass">
-                  <a href="login">Already have an account. Sign in?</a>
+                  <a href="/login">Already have an account? Sign in</a>
                 </div>
               </form>
-              {/* <!--End of form section--> */}
             </section>
-            {responseMessage.sucess && (
-              <>
-                <article className="pop-up">
-                  <AiFillCheckCircle size={100} color="lime" />
-                  <h2>{responseMessage.msg}.</h2>
-                </article>
-              </>
+
+            {responseMessage.success && (
+              <article className="pop-up">
+                <AiFillCheckCircle size={100} color="lime" />
+                <h2>{responseMessage.msg}</h2>
+                <div className="success-buttons">
+                  <button className="btn" onClick={() => navigate("/")}>🏠 Home</button>
+                  <button className="btn" onClick={() => navigate("/login")}>🔐 Login</button>
+                </div>
+              </article>
             )}
-            {responseMessage.unSucess && (
-              <>
-                <article
-                  className="pop-up"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "2rem",
-                    flexDirection: "column",
-                  }}
-                >
-                  <AiOutlineCloseCircle size={100} color="red" />
-                  <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
-                </article>
-              </>
+
+            {responseMessage.unSuccess && (
+              <article className="pop-up" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem", flexDirection: "column" }}>
+                <AiOutlineCloseCircle size={100} color="red" />
+                <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
+              </article>
             )}
           </section>
         </div>
       </main>
-      {/* <Footer /> */}
     </>
   );
 };

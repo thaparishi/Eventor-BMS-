@@ -33,6 +33,8 @@ const banquet = require("./routes/banquet");
 //Importing book.js file from routes folder.
 const book = require("./routes/book");
 
+const contact = require("./routes/contact");
+
 
 //Acceping the incomming request object as a json object.
 app.use(express.json());
@@ -49,6 +51,8 @@ app.use("/", auth);
 
 //Initializing all the routes from book.js as a midddleware in the server.
 app.use("/", book);
+
+app.use("/", contact);
 
 
 //Initializing all the routes from banquet.js as a midddleware in the server.

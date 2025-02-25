@@ -5,7 +5,7 @@
 .contact-page-container {
   display: flex;
   justify-content: space-between;
-  padding: 50px;
+  padding: 40px;
   background-color: #000000; /* Black background */
   border-radius: 15px;
 }

@@ -13,7 +13,7 @@ function About() {
         <div className="about-content">
           <h2>About Us</h2>
           <div className="image-container">
-            <img src={img11} alt="Eventor Overview" className="about-image" />
+            <img src={img33} alt="Eventor Overview" className="about-image" />
           </div>
           <p>
             Eventor is your one-stop solution for managing banquets. Whether it's a wedding, a birthday party, or a corporate event, 
@@ -46,11 +46,11 @@ function About() {
             <div className="card">
               <div className="front">
                 <img src={img22} alt="Team Member 1" />
-                <h3>John Doe</h3>
+                <h3>Rishi Thapa</h3>
                 <p>Founder & CEO</p>
               </div>
               <div className="back">
-                <p>John leads the vision of Eventor, ensuring we provide exceptional event solutions for all our clients.</p>
+                <p>Rishi leads the vision of Eventor, ensuring we provide exceptional event solutions for all our clients.</p>
               </div>
             </div>
           </div>
@@ -58,11 +58,11 @@ function About() {
             <div className="card">
               <div className="front">
                 <img src={img33} alt="Team Member 2" />
-                <h3>Jane Smith</h3>
+                <h3>Sital Aryal</h3>
                 <p>Event Specialist</p>
               </div>
               <div className="back">
-                <p>Jane helps design memorable events by selecting the best venues and services for our clients.</p>
+                <p>Sital helps design memorable events by selecting the best venues and services for our clients.</p>
               </div>
             </div>
           </div>
@@ -70,11 +70,11 @@ function About() {
             <div className="card">
               <div className="front">
                 <img src={img11} alt="Team Member 3" />
-                <h3>Alex Johnson</h3>
+                <h3>Prashant Adk</h3>
                 <p>Technical Lead</p>
               </div>
               <div className="back">
-                <p>Alex ensures the platform runs smoothly, always innovating for a better user experience.</p>
+                <p>Prashant ensures the platform runs smoothly, always innovating for a better user experience.</p>
               </div>
             </div>
           </div>

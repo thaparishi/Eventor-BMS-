@@ -35,6 +35,7 @@ const book = require("./routes/book");
 
 const contact = require("./routes/contact");
 
+const menu = require("./routes/menu");
 
 //Acceping the incomming request object as a json object.
 app.use(express.json());
@@ -53,6 +54,8 @@ app.use("/", auth);
 app.use("/", book);
 
 app.use("/", contact);
+
+app.use("/", menu);
 
 
 //Initializing all the routes from banquet.js as a midddleware in the server.

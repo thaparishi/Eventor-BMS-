@@ -1,0 +1,59 @@
+.book-banquets-container {
+  height: 100vh;
+  background-image: url("https://taajpalace.com/wp-content/uploads/2022/04/Best-banquet-in-kathmandu-1.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.book-banquet-heading h2 {
+  padding: 20px;
+  display: block;
+  text-align: center;
+  color: rgb(166, 145, 110);
+  font-size: 40px;
+  text-transform: uppercase;
+}
+
+.book-banquet-content {
+  padding: 40px;
+  background-color: white;
+  box-shadow: 0px 2px 2px 2px white;
+  position: absolute;
+  right: 5%;
+  top: 30%;
+}
+
+.book-banquet-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.book-banquet-form input {
+  width: 300px;
+  height: 50px;
+  text-align: center;
+  background-color: transparent;
+  border: 1px solid #a6916e;
+}
+
+.book-banquet-form select {
+  width: 300px;
+  height: 50px;
+  text-align: center;
+  background-color: transparent;
+  border: 1px solid #a6916e;
+}
+
+.book-banquet-form .online-booking-btn {
+  color: white;
+  width: 180px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: rgb(166, 145, 110);
+}

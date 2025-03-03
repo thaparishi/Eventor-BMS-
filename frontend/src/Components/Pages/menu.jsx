@@ -129,7 +129,6 @@ const Menu = () => {
     <>
       <div className="boddy">
         <div className="img-section">
-          {/* <img src={require("../images/sub-banner.jpg")} alt="" /> */}
           <div className="img-content">
             <h2 className="animate__animated animate__pulse">
               Please Costumize your Available Menu Below

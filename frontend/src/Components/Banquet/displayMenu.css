@@ -1,0 +1,159 @@
+.menu-price {
+  text-align: center;
+  font-size: 20px;
+  margin: 30px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.menu-price h2 {
+  font-size: 60px;
+}
+
+.menu-underline {
+  width: 140px;
+  height: 3px;
+  background-color: red;
+}
+
+.form-menus {
+  align-self: stretch;
+  /* max-width: 60%; */
+  /* margin: 0px auto; */
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.menu-items {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgb(166, 145, 110);
+  box-shadow: 0px 0px 12px 2px rgb(166, 145, 110);
+  padding: 50px;
+}
+
+.heading-menu h2 {
+  margin: 20px 0px;
+  color: #e9b947;
+  font-size: 60px;
+  font-family: "Tangerine", "cursive";
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.menu-items img {
+  text-align: center;
+  display: block;
+  width: 500px;
+}
+
+.display-all-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.underline-dotted {
+  border: 1px dotted black;
+  width: 100%;
+}
+
+.menu-content-form {
+  margin: 0px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.menu-content-form .breakfast-image img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.menu-content-form label {
+  display: inline-block;
+  padding: 10px 3px;
+  color: #ffff;
+}
+
+.submit-menu-btn {
+  display: block;
+  color: white;
+  width: 200px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 80px auto;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  background-color: red;
+}
+.display-menu-section {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.display-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 20px;
+  background-color: rgb(208, 208, 208);
+}
+
+.display-modal {
+  padding: 70px 50px;
+}
+
+.display-modal .Calculated-Price {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.menu {
+  padding: 0px 20px;
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  flex-basis: row;
+  gap: 2rem;
+}
+
+.display-none {
+  display: none;
+}
+
+@media screen and (max-width: 1400px) {
+  .menu {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .menu-items {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .menu-content-form {
+    margin: 20px 0px;
+  }
+  .menu-items img {
+    margin: 0px auto;
+    width: 80%;
+  }
+}

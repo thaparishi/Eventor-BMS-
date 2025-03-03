@@ -12,6 +12,7 @@ import Login from "./Components/login-register/Login";
 import ForgetPass from "./Components/login-register/ForgetPass";
 import Pagenf from "./Components/Pages/Pagenf";
 import DisplayBanquet from "./Components/Banquet/displayBanquet";
+import DisplayMenu from "./Components/Banquet/displayMenu";
 import Banquet from "./Components/Banquet/createBanquet";
 import Menu from "./Components/Pages/menu";
 import { CreateBanquet } from "./Components";
@@ -86,6 +87,10 @@ function App() {
               ></Route>
             </>
           )}
+            <Route
+            path="/DisplayMenu/:userId/:token/:banquetName/:banquetPrice"
+            element={<DisplayMenu/>}
+          ></Route>
           <Route path="*" element={<Pagenf />} />
         </Routes>
         <Footer />

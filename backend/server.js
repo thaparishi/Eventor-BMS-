@@ -1,161 +1,155 @@
-//Importing express from package.json.
-const express = require("express");
-//Initializing the express functions to app variable.
+import express from "express";
 const app = express();
+import cors from "cors";
+import path from "path";
+import multer from "multer";
+import cookieParser from "cookie-parser";
+import expressSession from "express-session";
+import mongoose from "mongoose";
+import AdminJS from "adminjs";
+import AdminJSExpress from "@adminjs/express";
+import * as AdminJSMongoose from "@adminjs/mongoose";
+import dotenv from "dotenv";
 
-const cors = require("cors");
+// Import routes and models
+import authRouter from "./routes/auth.js";
+import banquetRouter from "./routes/banquet.js";
+import bookRouter from "./routes/book.js";
+import contactRouter from "./routes/contact.js";
+import menuRouter from "./routes/menu.js";
+import AdminModel from "./models/admin.js";
 
-const path = require("path");
+dotenv.config();
 
-const multer = require("multer");
+// Initial middleware
+app.use(cors({
+  origin: "http://localhost:3000", // Replace with your frontend URL
+  credentials: true, // Allow cookies to be sent
+}));
+app.use(cookieParser("signed-cookie"));
+app.use(cors());
+app.use(express.static("./public"));
+app.use(expressSession({
+  secret: process.env.SESSION_SECRET || 'default-secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
 
-const cokkieParser = require("cookie-parser");
-
-app.use(cokkieParser("signed-cookie"));
-
+// Multer configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../frontend/src/Components/banquet-Images");
+    cb(null, path.resolve("../frontend/src/Components/banquet-Images"));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
+const upload = multer({ storage });
 
-const upload = multer({ storage: storage });
-
-//Importing auth.js file from routes folder.
-const auth = require("./routes/auth");
-
-//Importing banquet.js file from routes folder.
-const banquet = require("./routes/banquet");
-
-//Importing book.js file from routes folder.
-const book = require("./routes/book");
-
-const contact = require("./routes/contact");
-
-const menu = require("./routes/menu");
-
-//Acceping the incomming request object as a json object.
-app.use(express.json());
-
-app.use(cors());
-
-//Acceping the incomming request object as  String or arrays.
-app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static("./public"));
-
-//Initializing all the routes from auth as a middleware in the server.
-app.use("/", auth);
-
-//Initializing all the routes from book.js as a midddleware in the server.
-app.use("/", book);
-
-app.use("/", contact);
-
-app.use("/", menu);
-
-
-//Initializing all the routes from banquet.js as a midddleware in the server.
-app.use("/", upload.single("image"), banquet);
-
-//Importing connectDB function from db folder.
-const connectDB = require("./db/connect");
-
-//Importing dotenv and configuring the dotenv in the project.
-require("dotenv").config();
-
-const AdminBro = require("admin-bro");
-const AdminBroExpress = require("@admin-bro/express");
-const AdminBroMongoose = require("@admin-bro/mongoose");
-const mongoose = require("mongoose");
-
-const authentication = require("express-authentication");
-const adminSchema = require("./models/admin");
-
-AdminBro.registerAdapter(AdminBroMongoose);
-
-//Initializing the port value.
-const port = 8000 || process.env.PORT;
-
-let setTrue = false;
-
-//Connecting to database and starting the server.
-const start = async () => {
+// Database connection
+const connectDB = async (mongoUrl) => {
   try {
-    //Connecting to the server.
-    mongoose.set("strictQuery", false);
-
-    const mongooseDb = await mongoose.connect(process.env.MONGO_URL, {
+    await mongoose.connect(mongoUrl, {
       useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-
-    await connectDB(process.env.MONGO_URL);
-
-    const adminBro = new AdminBro({
-      databases: [mongooseDb],
-      rootPath: "/admin",
-    });
-
-    const router = AdminBroExpress.buildRouter(adminBro);
-
-    const isLoggedIn = async (req, res, next) => {
-      const { email, password } = req.body;
-      if (!email && !password) {
-        const err = new Error("Please Provide passwor d and email");
-        err.status = 401;
-        next(err);
-      }
-      const adminData = await adminSchema.findOne({ email: email });
-      if (adminData) {
-        if (adminData.password === password) {
-          req.isAdmin = true;
-          return next();
-        }
-      }
-      const err = new Error("Invaild email or password");
-      err.status = 401;
-      next(err);
-    };
-
-    const redirectToAdmin = (req, res, next) => {
-      if (req.isAdmin) {
-        setTrue = true;
-        // next();
-        return res.redirect("/admin");
-      }
-      const err = new Error("Invaild email or password");
-      err.status = 401;
-      next(err);
-    };
-
-    app.use("/login", isLoggedIn, redirectToAdmin);
-
-    app.use(
-      adminBro.options.rootPath,
-      (req, res, next) => {
-        console.log(setTrue);
-        if (setTrue) {
-          // setTrue = false;
-          return next();
-        }
-        const err = new Error("Please Provide email or password");
-        err.status = 401;
-        next(err);
-      },
-      router
-    );
-
-    //Starting the server on port 8000.
-    app.listen(port, () => {
-      console.log(`Listening to ${port}`);
-    });
+    console.log("MongoDB connected");
   } catch (error) {
-    console.log(error);
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
   }
 };
 
-//Calling the start function and starting the server.
+// AdminJS setup
+AdminJS.registerAdapter({
+  Resource: AdminJSMongoose.Resource,
+  Database: AdminJSMongoose.Database,
+});
+
+const setupAdminJS = () => {
+  const adminJs = new AdminJS({
+    databases: [mongoose],
+    rootPath: "/admin",
+    branding: {
+      companyName: "Eventor - BMS",
+      logo: "/images/logo.png",
+      favicon: "/favicon.ico",
+    },
+    resources: [{
+      resource: AdminModel,
+      options: {
+        properties: {
+          password: {
+            type: 'password',
+            isVisible: {
+              list: false,
+              edit: true,
+              filter: false,
+              show: false,
+            },
+          },
+        },
+      }
+    }],
+  });
+
+  // Authentication logic
+  const authenticate = async (email, password) => {
+    const admin = await AdminModel.findOne({ email });
+    if (admin && admin.password === password) {
+      return admin;
+    }
+    return null;
+  };
+
+  const router = AdminJSExpress.buildAuthenticatedRouter(
+    adminJs,
+    {
+      authenticate,
+      cookieName: 'adminjs',
+      cookiePassword: process.env.SESSION_SECRET || 'default-secret',
+    },
+    null,
+    {
+      resave: false,
+      saveUninitialized: true,
+    }
+  );
+
+  return { adminJs, router };
+};
+
+// Server startup
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URL);
+    
+    // 1. Setup AdminJS first
+    const { adminJs, router } = setupAdminJS();
+    app.use(adminJs.options.rootPath, router);
+
+    // 2. Add body-parser middleware after AdminJS
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+
+    // 3. Add routes that need body-parser
+    app.use("/", authRouter);
+    app.use("/", bookRouter);
+    app.use("/", contactRouter);
+    app.use("/", menuRouter);
+    app.use("/", upload.single("image"), banquetRouter);
+    app.use("/images", express.static("image"));
+
+    const port = process.env.PORT || 8000;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+      console.log(`AdminJS dashboard at http://localhost:${port}/admin`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
 start();

@@ -1,13 +1,19 @@
-//Importing mongoose from package.json.
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-//Connecting to the cloud mongoDB.
-const connectDB = (url) => {
-  mongoose.set("strictQuery", true);
-  mongoose.connect(url, {
-    useNewUrlParser: true,
-  });
+// Connecting to the cloud MongoDB
+const connectDB = async (url) => {
+  try {
+    mongoose.set("strictQuery", true);
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true, // Add this for better compatibility
+    });
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    throw error; // Rethrow the error to handle it in the calling function
+  }
 };
 
-//Exporting the connectDB function.
-module.exports = connectDB;
+// Exporting the connectDB function as default
+export default connectDB;

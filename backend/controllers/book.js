@@ -1,15 +1,15 @@
 //Importing models
-const bookedSchema = require("../models/book");
-const registerModel = require("../models/register");
+import bookedSchema from "../models/book.js";
+import registerModel from "../models/register.js";
 
 //Importing bcrypt to hash the password.
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
 //Importing nodemailer for sending mail.
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
 //Importing jwt to create a token.
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const filterBanquet = async (req, res) => {
   try {
@@ -136,4 +136,4 @@ const bookBanquet = async (req, res) => {
   }
 };
 
-module.exports = { filterBanquet, bookBanquet, createReservation };
+export { filterBanquet, bookBanquet, createReservation };

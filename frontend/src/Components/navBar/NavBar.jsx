@@ -25,8 +25,10 @@ function NavBar({ checkLogin, deleteFun }) {
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
   const handleLogout = () => {
-    deleteFun();  // Call the delete function passed from parent to clear cookies
+    deleteFun(); // Call the delete function passed from parent to clear cookies
   };
+
+  console.log("checkLogin in NavBar:", checkLogin); // Debugging
 
   return (
     <nav className={`navbar ${isHidden ? "hidden" : ""}`}>
@@ -49,7 +51,11 @@ function NavBar({ checkLogin, deleteFun }) {
             <li><NavLink to="/login"><FaSignInAlt className="navbar-icon" /> Login</NavLink></li>
           </>
         ) : (
-          <li><NavLink className="link btn-logout" onClick={handleLogout}><BiLogOut className="fa fa-sign-out" aria-hidden="true"></BiLogOut> Logout</NavLink></li>
+          <li>
+            <NavLink to="#" className="link btn-logout" onClick={handleLogout}>
+              <BiLogOut className="fa fa-sign-out" aria-hidden="true" /> Logout
+            </NavLink>
+          </li>
         )}
       </ul>
     </nav>

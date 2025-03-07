@@ -1,19 +1,16 @@
-const express = require("express");
-
-const router = express.Router();
-
-const {
+import express from "express";
+import {
   filterBanquet,
   bookBanquet,
   createReservation,
-} = require("../controllers/book");
+} from "../controllers/book.js";
+
+const router = express.Router();
 
 router.route("/api/filterBanquet").post(filterBanquet);
-
 router
   .route("/api/bookBanquet/:token/:banquetName/:adminUserId/:price")
   .post(bookBanquet);
-
 router.route("/api/createReservation").post(createReservation);
 
-module.exports = router;
+export default router;

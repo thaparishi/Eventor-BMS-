@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const menuSchema = mongoose.Schema({
   userId: {
@@ -44,4 +44,4 @@ const menuSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Create Menu", menuSchema);
+export default mongoose.model("Create Menu", menuSchema);

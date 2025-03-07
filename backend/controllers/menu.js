@@ -1,25 +1,20 @@
-const banquetModel = require("../models/banquet");
-const registerModel = require("../models/register");
-//Importing nodemailer for sending mail.
-const nodemailer = require("nodemailer");
-const menuSchema = require("../models/menu");
+import banquetModel from "../models/banquet.js";
+import registerModel from "../models/register.js";
+import nodemailer from "nodemailer";
+import menuSchema from "../models/menu.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-//Importing bcrypt to hash the password.
-const bcrypt = require("bcryptjs");
-
-//Importing jwt to create a token.
-const jwt = require("jsonwebtoken");
-
-const createMenu = async (req, res) => {
+export const createMenu = async (req, res) => {
   try {
-    //Destructing array.
+    // Destructuring array.
     const [breakfast, dinner, desert, price] = req.body.menu;
     const { token } = req.params;
-    //Decoding the token with secret key and token.
+    // Decoding the token with secret key and token.
     let decoded = await jwt.verify(token, "jwtsecret");
     console.log(decoded);
     if (breakfast && dinner && desert && price) {
-      //createing banquet.
+      // Creating banquet.
       const {
         banquet_name,
         banquet_description,
@@ -29,7 +24,7 @@ const createMenu = async (req, res) => {
       const createBanquet = await banquetModel.create({
         ...decoded,
       });
-      //Creating menu.
+      // Creating menu.
       await menuSchema.create({
         userId: req.signedCookies.userId,
         banquetId: createBanquet._id,
@@ -42,21 +37,21 @@ const createMenu = async (req, res) => {
         userId: req.signedCookies.userId,
       });
 
-      // //Sending email to created banquet person.
+      // // Sending email to created banquet person.
 
-      // //Creating a medium to send email.
+      // // Creating a medium to send email.
       // let transporter = nodemailer.createTransport({
-      //   //Domain name.
+      //   // Domain name.
       //   service: "hotmail",
       //   auth: {
-      //     //Your email
+      //     // Your email
       //     user: `${process.env.EMAIL}`,
-      //     //Your password
+      //     // Your password
       //     pass: `${process.env.PASSWORD}`,
       //   },
       // });
 
-      // //Contents of email.
+      // // Contents of email.
       // let mailConfiguration = await transporter.sendMail({
       //   from: `${process.env.EMAIL}`,
       //   to: `${adminData.email}`,
@@ -80,13 +75,13 @@ const createMenu = async (req, res) => {
       //   </p>`,
       // });
 
-      // //Sending message to user email for verification.
+      // // Sending message to user email for verification.
       // transporter.sendMail(mailConfiguration, function (error, info) {
-      //   //If not successful.
+      //   // If not successful.
       //   if (error) {
       //     throw new CustomAPIError("Email not send");
       //   }
-      //   //If successful.
+      //   // If successful.
       //   console.log("Sent: " + info.response);
       // });
       return res.status(200).json("Sucess");
@@ -97,11 +92,11 @@ const createMenu = async (req, res) => {
   }
 };
 
-const getMenu = async (req, res) => {
+export const getMenu = async (req, res) => {
   try {
     const { banquetId, token } = req.params;
 
-    //Decoding the token with secret key and token.
+    // Decoding the token with secret key and token.
     let decoded = await jwt.verify(token, "jwtsecret");
 
     const { guest } = decoded;
@@ -115,5 +110,3 @@ const getMenu = async (req, res) => {
     console.log(error);
   }
 };
-
-module.exports = { createMenu, getMenu };

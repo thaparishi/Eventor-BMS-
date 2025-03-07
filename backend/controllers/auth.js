@@ -1,31 +1,32 @@
-//Importing register schema from models folder.
-const registerModel = require("../models/register");
+// Importing register schema from models folder.
+import registerModel from "../models/register.js";
 
-const { v4: uuidv4 } = require("uuid");
+// Importing uuid for generating unique IDs.
+import { v4 as uuidv4 } from "uuid";
 
-//Importing bcrypt to hash the password.
-const bcrypt = require("bcryptjs");
+// Importing bcrypt to hash the password.
+import bcrypt from "bcryptjs";
 
-//Importing jwt to create a token.
-const jwt = require("jsonwebtoken");
+// Importing jwt to create a token.
+import jwt from "jsonwebtoken";
 
-//Importing nodemailer for sending mail.
-const nodemailer = require("nodemailer");
+// Importing nodemailer for sending mail.
+import nodemailer from "nodemailer";
 
 const register = async (req, res) => {
   try {
-    //Destructuring the object.
+    // Destructuring the object.
     const { name, email, number, password } = req.body;
 
-    //Creating user id.
+    // Creating user id.
     const uid = uuidv4();
 
     if (name && email && number && password && uid) {
-      //Hashing the password.
+      // Hashing the password.
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(password, salt);
 
-      //Creating a token.
+      // Creating a token.
       const token = jwt.sign(
         { userId: uid, name, email, number, password: hash },
         "jwtsecret",
@@ -34,19 +35,19 @@ const register = async (req, res) => {
         }
       );
 
-      //Creating a medium to send email.
+      // Creating a medium to send email.
       let transporter = nodemailer.createTransport({
-        //Domain name.
+        // Domain name.
         service: "gmail",
         auth: {
-          //Your email
+          // Your email
           user: `${process.env.EMAIL}`,
-          //Your password
+          // Your password
           pass: `${process.env.PASSWORD}`,
         },
       });
 
-      //Contents of email.
+      // Contents of email.
       let mailConfiguration = await transporter.sendMail({
         from: `${process.env.EMAIL}`,
         to: `${email}`,
@@ -59,20 +60,20 @@ const register = async (req, res) => {
       Thanks and Kind Regards, Banquet Reservation Team</h3>`,
       });
 
-      //Sending message to user email for verification.
+      // Sending message to user email for verification.
       transporter.sendMail(mailConfiguration, function (error, info) {
-        //If not successful.
+        // If not successful.
         if (error) {
-          throw new CustomAPIError("Email not send");
+          throw new Error("Email not sent");
         }
-        //If successful.
+        // If successful.
         console.log("Sent: " + info.response);
 
-        return res.json("Sucessfull");
+        return res.json("Successful");
       });
       return res.json("Success");
     }
-    res.json("UnSucessfull");
+    res.json("Unsuccessful");
   } catch (error) {
     console.log(error);
   }
@@ -80,12 +81,12 @@ const register = async (req, res) => {
 
 const verify = async (req, res) => {
   try {
-    //Decoding the token with secret key and token.
+    // Decoding the token with secret key and token.
     let decoded = await jwt.verify(req.params.id, "jwtsecret");
 
     res.cookie("signedIn", true);
 
-    //Storing decoded value in database.
+    // Storing decoded value in database.
     await registerModel.create({ ...decoded });
 
     res.redirect(`http://localhost:3000/login`);
@@ -98,34 +99,34 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    //Check if user email exist in database.
+    // Check if user email exists in database.
     const checkEmail = await registerModel.findOne({ email });
 
     if (!checkEmail) {
-      return res.json("UnSucessfull");
+      return res.json("Unsuccessful");
     }
 
-    //Checking if password matches with database password.
+    // Checking if password matches with database password.
     const checkIfPassMatch = await bcrypt.compare(
       password,
       checkEmail.password
     );
 
-    //If password matches.
+    // If password matches.
     if (checkIfPassMatch) {
       const checkEmail = await registerModel.findOne({ email });
 
-      //Destructuring the userId from database.
+      // Destructuring the userId from database.
       const { userId } = checkEmail;
 
       res.cookie("signedIn", true, { maxAge: 150000000, signed: true });
 
       res.cookie("userId", userId, { maxAge: 150000000, signed: true });
 
-      return res.json("Sucess");
+      return res.json("Success");
     }
-    //If not.
-    res.json("Unsucessfull");
+    // If not.
+    res.json("Unsuccessful");
   } catch (error) {
     console.log(error);
   }
@@ -133,43 +134,43 @@ const login = async (req, res) => {
 
 const sendResetPasswordLink = async (req, res) => {
   try {
-    //Destructuring the object.
+    // Destructuring the object.
     const { email } = req.body;
 
     console.log(req.body);
 
-    //Searching for email in the database.
+    // Searching for email in the database.
     const checkEmail = await registerModel.findOne({ email });
 
-    //Checking if email exists in the database.
+    // Checking if email exists in the database.
     if (!checkEmail) {
       console.log(checkEmail);
-      return res.json("UnSucessfull");
+      return res.json("Unsuccessful");
     }
 
-    //Creating a token using json web token.
+    // Creating a token using json web token.
     const token = jwt.sign({ email }, "jwtsecret", {
       expiresIn: "120s",
     });
 
-    //Creating a medium to send email.
+    // Creating a medium to send email.
     let transporter = nodemailer.createTransport({
-      //Domain name.
+      // Domain name.
       service: "gmail",
       auth: {
-        //Your email
+        // Your email
         user: `${process.env.EMAIL}`,
-        //Your password
+        // Your password
         pass: `${process.env.PASSWORD}`,
       },
     });
 
-    //Contents of email.
+    // Contents of email.
     let mailConfiguration = await transporter.sendMail({
       from: `${process.env.EMAIL}`,
       to: `${email}`,
       subject: "Password Reset ",
-      html: `<h3>Hi! In order to change Password please click on link bellow
+      html: `<h3>Hi! In order to change Password please click on link below
       <br>
     	Please follow the given link to reset the password
     	http://localhost:8000/api/verifyEmail/${token}
@@ -177,16 +178,16 @@ const sendResetPasswordLink = async (req, res) => {
     	Thank you and Kind Regards, Eventor Team</h3>`,
     });
 
-    //Sending message to user email for verification.
+    // Sending message to user email for verification.
     transporter.sendMail(mailConfiguration, function (error, info) {
-      //If not successful.
+      // If not successful.
       if (error) {
         console.log("ERROR" + error);
       }
-      //If successful.
+      // If successful.
       console.log("Sent: " + info.response);
     });
-    res.json("Sucess");
+    res.json("Success");
   } catch (error) {
     console.log(error);
   }
@@ -218,16 +219,16 @@ const deleteLoginCookie = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   try {
-    //Destructuring the object.
+    // Destructuring the object.
     const { id } = req.params;
 
-    //Decoding the email.
+    // Decoding the email.
     const { email } = await jwt.verify(id, "jwtsecret");
 
-    //Searching for email in the database.
+    // Searching for email in the database.
     const checkEmail = await registerModel.findOne({ email });
 
-    //Checking if email exists in the database.
+    // Checking if email exists in the database.
     if (!checkEmail) {
       return res.send("Sorry no email found");
     }
@@ -239,15 +240,15 @@ const verifyEmail = async (req, res) => {
 
 const changePassword = async (req, res) => {
   try {
-    //Decoding the email recieved from req.params.
+    // Decoding the email received from req.params.
     let { email } = await jwt.verify(req.body.email, "jwtsecret");
-    //Finding the email.
+    // Finding the email.
     const getUserData = await registerModel.findOne({ email });
 
     if (getUserData) {
-      //Generating the salt.
+      // Generating the salt.
       const salt = await bcrypt.genSalt(10);
-      //Hashing the password.
+      // Hashing the password.
       const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
       await registerModel.findOneAndUpdate(
@@ -265,7 +266,8 @@ const changePassword = async (req, res) => {
   }
 };
 
-module.exports = {
+// Exporting all functions
+export {
   register,
   verify,
   login,

@@ -8,7 +8,7 @@ import axios from "axios";
 
 import "./login-register.css";
 
-const Login = () => {
+const Login = ({onLogin}) => {
   const navigate = useNavigate();
 
   const [responseMessage, setResponseMessage] = useState({
@@ -27,18 +27,24 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/api/login", userAuth);
-    const data = await response.data;
-    if (data === "Unsucessfull") {
-      console.log(data);
-      setResponseMessage({ msg: "Invalid Credentails", unSucess: true });
-    } else if (data === "Sucess") {
-      setResponseMessage({ msg: "Sucessfully Logged In", sucess: true });
-      setTimeout(() => {
-        window.location.reload(navigate("/"));
-      }, 2000);
+    try {
+      const response = await axios.post("http://localhost:8000/api/login", userAuth);
+      const data = await response.data;
+      if (data === "Unsuccessful") {
+        setResponseMessage({ msg: "Invalid Credentials", unSucess: true });
+      } else if (data === "Success") {
+        setResponseMessage({ msg: "Successfully Logged In", sucess: true });
+        setTimeout(() => {
+          onLogin(); // Call onLogin to update checkLogin in App.js
+          navigate("/"); // Navigate to the home page
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setResponseMessage({ msg: "An error occurred. Please try again.", unSucess: true });
     }
   };
+  
 
   useEffect(() => {
     const Timer = setTimeout(() => {

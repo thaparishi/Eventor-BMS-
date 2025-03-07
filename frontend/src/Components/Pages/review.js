@@ -1,7 +1,9 @@
+import rabiImage from "../Images/rabi.png"; // Import the image
+
 const people = [
   {
     id: 1,
-    image: require("../Images//rabi.png"),
+    image: rabiImage, // Use the imported image
     name: "Ananya Rai",
     title: "Event Planner",
     quote:
@@ -9,7 +11,7 @@ const people = [
   },
   {
     id: 2,
-    image: require("../Images//rabi.png"),
+    image: rabiImage, // Use the imported image
     name: "Sanjay Kumar",
     title: "Videographer",
     quote:
@@ -17,7 +19,7 @@ const people = [
   },
   {
     id: 3,
-    image: require("../Images//rabi.png"),
+    image: rabiImage, // Use the imported image
     name: "Priya Thapa",
     title: "Interior Designer",
     quote:
@@ -25,7 +27,7 @@ const people = [
   },
   {
     id: 4,
-    image: require("../Images//rabi.png"),
+    image: rabiImage, // Use the imported image
     name: "Rohit Verma",
     title: "Chef",
     quote:

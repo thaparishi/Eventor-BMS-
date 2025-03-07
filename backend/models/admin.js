@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -17,4 +17,10 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("admin", UserSchema);
+// Add password matching method
+adminSchema.methods.matchPassword = async function (enteredPassword) {
+  return enteredPassword === this.password;
+};
+
+const Admin = mongoose.model("Admin", adminSchema);
+export default Admin;

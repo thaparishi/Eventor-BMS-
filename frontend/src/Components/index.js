@@ -1,2 +1,3 @@
-export { default as CreateBanquet } from "./Banquet/createBanquet";
-export { default as ChangePassword } from "./login-register/password";
+export { default as CreateBanquet } from "./Banquet/createBanquet.jsx";
+export { default as ChangePassword } from "./login-register/password.jsx";
+export { default as BookBanquet } from "./Banquet/bookBanquet.jsx";

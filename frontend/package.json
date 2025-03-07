@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "Rishi_BMS_Frontend",
   "version": "0.1.0",
   "private": true,

@@ -1,5 +1,5 @@
-import React, { useEffect, useState} from "react";
-import './Home.css';
+import React, { useEffect, useState } from "react";
+import "./Home.css";
 import review from "./review";
 import img11 from '../Images/11.jpg';
 import img22 from '../Images/22.jpg';
@@ -11,7 +11,7 @@ import silderImage01 from "../Images/home_slider/slider-img01.jpg";
 import silderImage02 from "../Images/home_slider/slider-img02.jpg";
 import silderImage03 from "../Images/home_slider/slider-img03.jpg";
 import CountUp from "react-countup";
-
+import { Link } from "react-router-dom";
 
 const image = [silderImage03, silderImage01, silderImage02];
 
@@ -64,123 +64,117 @@ function Home({ checkLogin }) {
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [images.length]);
 
-
   return (
     <div className="home-container">
-      {/* Welcome Section with Sliding Images */}
       <header className="home-header" style={{ backgroundImage: `url(${images[currentImage]})` }}>
         <div className="header-content">
           <h1>Welcome to Eventor</h1>
           <p>Book your perfect banquet for any occasion with ease!</p>
           {checkLogin && (
               <div className="bottom-middle-banquet">
-                <a href="CreateBanquet">
+                <Link to="/createBanquet">
                   <button className="bottom-banquet-btn create-banquet-btn">
                     Register Your Banquet
                   </button>
-                </a>
-                <a href="banquets">
+                </Link>
+                <Link to="/BookBanquet">
                   <button className="bottom-banquet-btn show-banquet-btn">
                     Book Banquet for events
                   </button>
-                </a>
+                </Link>
               </div>
             )}
         </div>
 
         <div className="bottom-medall">
-              <div className="medall">
+          <div className="medall">
+            <p>
+              <FaMedal />
+            </p>
+          </div>
+
+          <div className="text-medall ">
+            <p>
+              <CountUp end={1} duration={3} />+
+            </p>
+            <p id="changeColor">Years of Excellence</p>
+          </div>
+        </div>
+      </header>
+
+      <section className="about-bqt " data-aos="fade-down">
+        <section className="banquet-info ">
+          <section className="heading-bqt">
+            <h1 id="h-h1">WELCOME </h1>
+            <p>
+              Beyond the hustle and bustle of the city, we provide our one
+              stop party venue services in a serene family location,
+              furnished and attained to make your celebrations eternally
+              memorable.Spread in a compound of over four rapani of land, a
+              traditional newari house offers you a homely enviornment;
+              state of art auditorium of 5500 sq.feet...
+            </p>
+
+            <section
+              className="bqt-flx"
+              data-aos="fade-right"
+              data-aos-delay="600"
+            >
+              <section className="about-bqt-items">
+                <h2>
+                  <i className="fa-solid fa-hands-holding-circle"></i>
+                  ABOUT OUR BANQUET SYSTEM
+                </h2>
                 <p>
-                  <FaMedal />
+                  At Our Banquet System, we plan to make your event, worry
+                  free and fun. Take the stress of planning your special
+                  event off your shoulders by selecting the level of
+                  assistance you want. When it comes to managing and
+                  catering your own event, our team of expertise...
                 </p>
-              </div>
-
-              <div className="text-medall ">
+                <div className="about-link">
+                  <a href="about">
+                    <button type="submit" className="read-more-btn">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      READ MORE
+                    </button>
+                  </a>
+                </div>
+              </section>
+              <section className="choose-item banquet-item">
+                <h2>
+                  <i className="fa-solid fa-clipboard"></i>
+                  WHY CHOOSE OUR BANQUET SYSTEM
+                </h2>
                 <p>
-                  <CountUp end={1} duration={3} />+
+                  At Our Banquet System, we plan to make your event, worry
+                  free and fun. Take the stress of planning your special
+                  event off your shoulders by selecting the level of
+                  assistance you want. When it comes to managing and
+                  catering your own event,our team of expertise...
                 </p>
-                <p id="changeColor">Years of Excellence</p>
-              </div>
-            </div>
-          </header>
-
-
-
-        {/* Start of second section */}
-        <section className="about-bqt " data-aos="fade-down">
-            <section className="banquet-info ">
-              <section className="heading-bqt">
-                <h1 id="h-h1">WELCOME </h1>
-                <p>
-                  Beyond the hustle and bustle of the city, we provide our one
-                  stop party venue services in a serene family location,
-                  furnished and attained to make your celebrations eternally
-                  memorable.Spread in a compound of over four rapani of land, a
-                  traditional newari house offers you a homely enviornment;
-                  state of art auditorium of 5500 sq.feet...
-                </p>
-
-                <section
-                  className="bqt-flx"
-                  data-aos="fade-right"
-                  data-aos-delay="600"
-                >
-                  <section className="about-bqt-items">
-                    <h2>
-                      <i className="fa-solid fa-hands-holding-circle"></i>
-                      ABOUT OUR BANQUET SYSTEM
-                    </h2>
-                    <p>
-                      At Our Banquet System, we plan to make your event, worry
-                      free and fun. Take the stress of planning your special
-                      event off your shoulders by selecting the level of
-                      assistance you want. When it comes to managing and
-                      catering your own event, our team of expertise...
-                    </p>
-                    <div className="about-link">
-                      <a href="about">
-                        <button type="submit" className="read-more-btn">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          READ MORE
-                        </button>
-                      </a>
-                    </div>
-                  </section>
-                  <section className="choose-item banquet-item">
-                    <h2>
-                      <i className="fa-solid fa-clipboard"></i>
-                      WHY CHOOSE OUR BANQUET SYSTEM
-                    </h2>
-                    <p>
-                      At Our Banquet System, we plan to make your event, worry
-                      free and fun. Take the stress of planning your special
-                      event off your shoulders by selecting the level of
-                      assistance you want. When it comes to managing and
-                      catering your own event,our team of expertise...
-                    </p>
-                    <div className="about-link">
-                      <a href="about">
-                        <button type="submit" className="read-more-btn">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          READ MORE
-                        </button>
-                      </a>
-                    </div>
-                  </section>
-                </section>
+                <div className="about-link">
+                  <a href="about">
+                    <button type="submit" className="read-more-btn">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      READ MORE
+                    </button>
+                  </a>
+                </div>
               </section>
             </section>
-            <section className="heading-img">
-              <img src={require("../Images/s3.jpg")} alt="buddha " />
-            </section>
           </section>
-          {/* End of second section */}
+        </section>
+        <section className="heading-img">
+          <img src={require("../Images/s3.jpg")} alt="buddha " />
+        </section>
+      </section>
 
        {/* Start of third section*/}
        <section className="third-sec" data-aos="fade-up">

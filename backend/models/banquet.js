@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const banquetSchema = new mongoose.Schema({
   userId: {
@@ -34,4 +34,4 @@ const banquetSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("banquet", banquetSchema);
+export default mongoose.model("banquet", banquetSchema);

@@ -1,6 +1,6 @@
-const contactSchema = require("../models/contact");
+import contactSchema from "../models/contact.js";
 
-const createContact = async (req, res) => {
+export const createContact = async (req, res) => {
   try {
     console.log(req.body);
     await contactSchema.create({ ...req.body });
@@ -9,5 +9,3 @@ const createContact = async (req, res) => {
     console.log(error);
   }
 };
-
-module.exports = { createContact };

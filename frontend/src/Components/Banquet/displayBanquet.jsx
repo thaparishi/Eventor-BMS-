@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Slider from "@mui/material/Slider";
-import { GiIndianPalace } from "react-icons/gi";
-import { AiFillExclamationCircle, AiOutlineSearch } from "react-icons/ai";
+import {GiIndianPalace } from "react-icons/gi";
+import {AiOutlineSearch } from "react-icons/ai";
 import axios from "axios";
 import "./displayBanquet.css";
 
-const DisplayBanquet = ({ userId }) => {
+const DisplayBanquet = () => {
   const [banquetData, setBanquetData] = useState([]);
   const [searchBanquetValue, setSearchBanquetValue] = useState("");
   const { token } = useParams();
-  const [createdUserId, setCreatedUserId] = useState("");
-  const [searchBanquetByLocation, setSearchBanquetByLocation] = useState("");
   const [noDataFound, setNoDataFound] = useState(false);
   const [range, setRange] = useState([100, 1000]);
 
@@ -27,7 +25,7 @@ const DisplayBanquet = ({ userId }) => {
   }
 
   const fetchData = async () => {
-    fetch(`http://localhost:8000/api/getBanquet/${token}`)
+    fetch(`http://localhost:9000/api/getBanquet/${token}`)
       .then((response) => response.json())
       .then((data) => {
         setBanquetData(data);
@@ -199,7 +197,6 @@ const DisplayBanquet = ({ userId }) => {
               banquetData.map((item) => {
                 const {
                   _id,
-                  userId,
                   banquet_name,
                   banquet_description,
                   image_location,

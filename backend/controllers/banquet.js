@@ -1,10 +1,11 @@
-const banquetModel = require("../models/banquet");
-const bookedSchema = require("../models/book");
+// Importing models
+import banquetModel from "../models/banquet.js";
+import bookedSchema from "../models/book.js";
 
-//Importing jwt to create a token.
-const jwt = require("jsonwebtoken");
+// Importing jwt to create a token.
+import jwt from "jsonwebtoken";
 
-const getBanquet = async (req, res) => {
+export const getBanquet = async (req, res) => {
   try {
     const { token } = req.params;
     let decoded = await jwt.verify(token, "jwtsecret");
@@ -26,9 +27,9 @@ const getBanquet = async (req, res) => {
   }
 };
 
-const createBanquet = async (req, res) => {
+export const createBanquet = async (req, res) => {
   try {
-    //Destructing the objects.
+    // Destructing the objects.
     const { name, desc, location, price } = req.body;
     const newName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
     const { path } = req.file;
@@ -39,7 +40,7 @@ const createBanquet = async (req, res) => {
       const newPath = splitedData[5];
       console.log(newPath);
       if (name && desc) {
-        //Creating a token.
+        // Creating a token.
         const token = jwt.sign(
           {
             userId: req.signedCookies.userId,
@@ -63,7 +64,7 @@ const createBanquet = async (req, res) => {
   }
 };
 
-const filterBanquetName = async (req, res) => {
+export const filterBanquetName = async (req, res) => {
   try {
     const { name } = req.params;
     const searchTerm = name.toLowerCase();
@@ -89,9 +90,9 @@ const filterBanquetName = async (req, res) => {
   }
 };
 
-const filterBanquetLocation = async (req, res) => {
+export const filterBanquetLocation = async (req, res) => {
   try {
-    //Destructing the objects.
+    // Destructing the objects.
     const { name } = req.params;
     console.log(name);
     const getBanquetLocation = await banquetModel.find({
@@ -106,7 +107,7 @@ const filterBanquetLocation = async (req, res) => {
   }
 };
 
-const filterBanquetPrice = async (req, res) => {
+export const filterBanquetPrice = async (req, res) => {
   try {
     const { range } = req.params;
     console.log(range);
@@ -123,7 +124,8 @@ const filterBanquetPrice = async (req, res) => {
     console.log(error);
   }
 };
-const filterBanquetAscending = async (req, res) => {
+
+export const filterBanquetAscending = async (req, res) => {
   try {
     const getBanquetRange = await banquetModel.aggregate([
       { $sort: { banquet_price: 1 } },
@@ -138,7 +140,7 @@ const filterBanquetAscending = async (req, res) => {
   }
 };
 
-const filterBanquetDescending = async (req, res) => {
+export const filterBanquetDescending = async (req, res) => {
   try {
     const getBanquetRange = await banquetModel.aggregate([
       { $sort: { banquet_price: -1 } },
@@ -151,14 +153,4 @@ const filterBanquetDescending = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-};
-
-module.exports = {
-  getBanquet,
-  createBanquet,
-  filterBanquetName,
-  filterBanquetLocation,
-  filterBanquetPrice,
-  filterBanquetAscending,
-  filterBanquetDescending,
 };

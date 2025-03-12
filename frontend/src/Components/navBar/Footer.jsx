@@ -9,6 +9,9 @@ import {
 } from "react-icons/ai";
 
 import "./Footer.css";
+import facebookLogo from'../Images/Facebook_Logo.png.webp';
+import instagramLogo from '../Images/Instagram_logo_2016.svg.webp';
+import twitterLogo from '../Images/twitter.png';
 
 
 function Footer() {
@@ -20,8 +23,8 @@ function Footer() {
             <h2>Short Info</h2>
             <p>Get in Touch</p>
             <img
-              src={"http://wahabali.com/work/pearl-demo/images/heading-dark.png"}
-              alt=""
+              src={""}
+              alt="img"
             />
           </div>
           <div className="get-touch" data-aos="zoom-in">
@@ -147,11 +150,11 @@ function Footer() {
           </p>
           <article className="hide-element">
             <a href="www.facebook.com">
-              <img src="../Images/Facebook_Logo.png.webp" alt="a" width="100" />
+              <img src={facebookLogo} alt="a" width="100" />
             </a>
             <a href="www.instagram.com">
               <img
-                src="../Images/Instagram_logo_2016.svg.webp"
+                src={instagramLogo}
                 alt=""
                 width="100"
               />
@@ -159,7 +162,7 @@ function Footer() {
             <a href="www.twitter.com">
               <img
                 class="twitter"
-                src="../Images/twitter.png"
+                src={twitterLogo}
                 alt=""
                 width="100"
               />

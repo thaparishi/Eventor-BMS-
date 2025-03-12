@@ -20,11 +20,14 @@ import { CreateBanquet, ChangePassword } from "./Components/index.js";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
+
   const [userId, setUserid] = useState(null);
 
   const getCookies = async () => {
     try {
-      const response = await axios.get("/api/checkLoginCookie");
+      const response = await axios.get("http://localhost:8000/api/checkLoginCookie", {
+        withCredentials: true,
+      });
       setCheckLogin(response.data.success);
       setUserid(response.data.userId);
     } catch (error) {
@@ -32,53 +35,56 @@ function App() {
     }
   };
 
-  const deleteLoginCookie = async () => {
-    try {
-      await axios.get("/api/deleteLoginCookies");
-      setCheckLogin(false); // Immediately set checkLogin to false
-      console.log("checkLogin updated to false in App.js"); // Debugging
-    } catch (error) {
-      console.log(error);
-    }
+const deleteLoginCookie = async () => {
+  try {
+    const response = await axios.get("/api/deleteLoginCookies", {
+      withCredentials: true // Crucial for cookie deletion
+    });
+    setCheckLogin(false);
+    setUserid(null);
+    window.location.reload(); // Force refresh to clear state
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  const handleLogin = () => {
+    setCheckLogin(true);
   };
 
-
   useEffect(() => {
-    if (!checkLogin) { // Only call getCookies if checkLogin is false
-      getCookies();
-    }
-  }, [checkLogin]); // Re-run when checkLogin changes
+    getCookies();
+  }, []);
+
+
   return (
     <BrowserRouter>
       <div className="App">
         <NavBar checkLogin={checkLogin} deleteFun={deleteLoginCookie} />
         <Routes>
           <Route path="/" element={<Home checkLogin={checkLogin} />} />
-          <Route path="/about" element={<About />} /> 
+          <Route path="/about" element={<About />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} /> {/* Pass onLogin prop */}
           <Route path="/forgetPass" element={<ForgetPass />} />
           <Route path="/changePassword/:id" element={<ChangePassword />} />
 
-          {/* if user is loged in then only this route exists*/}
+          {/* if user is logged in then only this route exists */}
           {checkLogin && (
             <>
-              <Route
-                path="/banquet/:token"
-                element={<DisplayBanquet userId={userId} />}
-              ></Route>
+              <Route path="/banquet/:token"element={<DisplayBanquet userId={userId} />}></Route>
               <Route path="/createBanquet" element={<CreateBanquet />} />
-              <Route path="/bookBanquet" element={<BookBanquet />} />  
+              <Route path="/bookBanquet" element={<BookBanquet />} />
               <Route path="/menu/:token" element={<Menu />}></Route>
             </>
           )}
 
-          {/* If user is not loged in then only this route exists */}
+          {/* If user is not logged in then only this route exists */}
           {!checkLogin && (
-            <> 
-            <Route path="/banquets" element={<DBanquet />} /> 
+            <>
+              <Route path="/banquets" element={<DBanquet />} />
               <Route path="/register" element={<Register />}></Route>
               <Route path="/forgetPass" element={<ForgetPass />}></Route>
               <Route
@@ -90,10 +96,10 @@ function App() {
 
           <Route
             path="/DisplayMenu/:userId/:token/:banquetName/:banquetPrice"
-            element={<DisplayMenu/>}
+            element={<DisplayMenu />}
           ></Route>
-          <Route path="*" element={<Pagenf />}/>
-          </Routes>
+          <Route path="*" element={<Pagenf />} />
+        </Routes>
         <Footer />
       </div>
     </BrowserRouter>

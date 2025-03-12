@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, } from "react";
 import { useParams } from "react-router-dom";
 import Slider from "@mui/material/Slider";
 import {GiIndianPalace } from "react-icons/gi";
@@ -25,7 +25,7 @@ const DisplayBanquet = () => {
   }
 
   const fetchData = async () => {
-    fetch(`http://localhost:9000/api/getBanquet/${token}`)
+    fetch(`http://localhost:8000/api/getBanquet/${token}`)
       .then((response) => response.json())
       .then((data) => {
         setBanquetData(data);
@@ -205,7 +205,7 @@ const DisplayBanquet = () => {
                 } = item;
                 return (
                   <div key={_id} className="banquet-container">
-                    <img src={`/banquet-Images/${image_location}`} alt="Banquet" />
+                    <img src={`../Components/banquet-Images/${image_location}`} alt="Banquet" />
                     <div className="banquet-content">
                       <h2>{banquet_name}</h2>
                       <p>

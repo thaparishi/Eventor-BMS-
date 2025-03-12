@@ -92,47 +92,46 @@
 }
 
 /* Success Popup */
-.sucess-popUp {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.success-popUp {
+  position: fixed; /* Makes it relative to the viewport */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centers the popup */
+  background: green;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000; /* Ensures it appears above other elements */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .pop-up-message {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
   align-items: center;
-}
-
-.pop-up-message p {
-  font-size: 1.2rem;
-  color: #2c3e50; /* Dark text */
-  margin-bottom: 20px;
+  gap: 15px;
+  position: relative;
 }
 
 .X {
-  background-color: #e74c3c;
-  color: #ffffff;
+  background: rgb(181, 37, 37);
   border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
-  font-size: 1rem;
+  color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  top: -10px;
+  right: -10px;
 }
 
-.X:hover {
-  background-color: #c0392b;
+.success-popUp::before {
+  padding: 10px;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-dark overlay */
+  z-index: -1; /* Places it behind the popup */
 }
 
 /* Responsive Design */

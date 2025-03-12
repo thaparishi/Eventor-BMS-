@@ -15,7 +15,7 @@ import nodemailer from "nodemailer";
 
 const register = async (req, res) => {
   try {
-    // Destructuring the object.
+    // Destructuring the object.check
     const { name, email, number, password } = req.body;
 
     // Creating user id.
@@ -99,33 +99,36 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user email exists in database.
     const checkEmail = await registerModel.findOne({ email });
 
     if (!checkEmail) {
       return res.json("Unsuccessful");
     }
 
-    // Checking if password matches with database password.
-    const checkIfPassMatch = await bcrypt.compare(
-      password,
-      checkEmail.password
-    );
+    const checkIfPassMatch = await bcrypt.compare(password, checkEmail.password);
 
-    // If password matches.
     if (checkIfPassMatch) {
-      const checkEmail = await registerModel.findOne({ email });
-
-      // Destructuring the userId from database.
       const { userId } = checkEmail;
 
-      res.cookie("signedIn", true, { maxAge: 150000000, signed: true });
+      // In the login controller, modify cookie settings:
+      res.cookie("signedIn", true, {
+        maxAge: 150000000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax", // Change from 'strict' to 'lax'
+        signed: true
+      });
 
-      res.cookie("userId", userId, { maxAge: 150000000, signed: true });
+      res.cookie("userId", userId, {
+        maxAge: 150000000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax", // Change from 'strict' to 'lax'
+        signed: true
+      });
 
       return res.json("Success");
     }
-    // If not.
     res.json("Unsuccessful");
   } catch (error) {
     console.log(error);
@@ -209,14 +212,28 @@ const checkLoginCookie = async (req, res) => {
 
 const deleteLoginCookie = async (req, res) => {
   try {
-    res.clearCookie("signedIn");
-    res.clearCookie("userId");
-    res.json({ success: false });
+    res.clearCookie("signedIn", {
+      path: '/',
+      domain: 'localhost',
+      httpOnly: true,
+      secure: false, // Match cookie creation settings
+      sameSite: 'lax'
+    });
+    
+    res.clearCookie("userId", {
+      path: '/',
+      domain: 'localhost',
+      httpOnly: true,
+      secure: false, // Match cookie creation settings
+      sameSite: 'lax'
+    });
+
+    res.json({ success: true });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ success: false });
   }
 };
-
 const verifyEmail = async (req, res) => {
   try {
     // Destructuring the object.

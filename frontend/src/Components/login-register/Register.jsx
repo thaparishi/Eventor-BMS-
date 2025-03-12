@@ -35,7 +35,7 @@ const Register = () => {
         setResponseMessage({ msg: "Cannot Register", unSuccess: true });
       } else if (response.data === "Success") {
         setResponseMessage({
-          msg: "Registration Successful! Choose where to go next:",
+          msg: "Registration Successful! Please check your email to confirm.",
           success: true,
         });
       }

@@ -28,15 +28,17 @@ const Login = ({onLogin}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/api/login", userAuth);
+      const response = await axios.post("http://localhost:8000/api/login", userAuth, {
+        withCredentials: true, // Include credentials (cookies)
+      });
       const data = await response.data;
       if (data === "Unsuccessful") {
         setResponseMessage({ msg: "Invalid Credentials", unSucess: true });
       } else if (data === "Success") {
         setResponseMessage({ msg: "Successfully Logged In", sucess: true });
         setTimeout(() => {
-          onLogin(); // Call onLogin to update checkLogin in App.js
-          navigate("/"); // Navigate to the home page
+          onLogin();
+          navigate("/");
         }, 2000);
       }
     } catch (error) {

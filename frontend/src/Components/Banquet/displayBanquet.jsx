@@ -86,34 +86,23 @@ const DisplayBanquet = () => {
 
   return (
     <>
-    <div className="boddy">
-        <div className="img-section">
-          <div className="img-content">
-            <h2 className="animate__animated animate__pulse">All Banquets</h2>
-            <p className="animate__animated animate__lightSpeedInLeft">
-              Booking a banquet hall through a booking system can be a convenient
-              and hassle-free experience. With just a few clicks, you can browse
-              through a variety of venues, check availability, and make
-              reservations for your desired date and time.
-            </p>
-          </div>
-        </div>
-
+    <div className="bodddy">
         <div className="book-banquet-container">
           <div className="display-banquet-container">
             <div className="select-hall">
               <GiIndianPalace className="hall-icon" />
-              <h2>Select Hall</h2>
+              <h2>Select Banquet Hall</h2>
             </div>
             <div className="search-banquet-form">
-              <div className="location-field" style={{ margin: "20px 50px" }}>
+              <div className="location-field">
                 <select
                   name="location"
+                  value={searchBanquetValue} // Control the value
                   onChange={(e) => {
                     handleSearchByLocationInput(e);
                   }}
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Location
                   </option>
                   <option value="Kathmandu">Kathmandu</option>
@@ -133,15 +122,6 @@ const DisplayBanquet = () => {
               </div>
 
               <form onSubmit={handleSearchBanquet}>
-                <div
-                  style={{
-                    textAlign: "center",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "40px",
-                  }}
-                >
                   <input
                     type="search"
                     id="gsearch"
@@ -151,22 +131,15 @@ const DisplayBanquet = () => {
                     onChange={(e) => {
                       handleInput(e);
                     }}
-                    style={{
-                      width: "300px",
-                      height: "40px",
-                    }}
+
+                    
                   />
-                  <button
-                    className="btn"
-                    type="submit"
-                    style={{ cursor: "pointer" }}
-                  >
-                    <AiOutlineSearch size={"33px"} />
+                  <button className="btnn" type="submit">
+                    <AiOutlineSearch />
                   </button>
-                </div>
               </form>
 
-              <div style={{ maxWidth: "32rem", padding: "20px" }}>
+              <div className="sliderr">
                 <h3>Please Select Range</h3>
                 <Slider
                   value={range}
@@ -205,7 +178,7 @@ const DisplayBanquet = () => {
                 } = item;
                 return (
                   <div key={_id} className="banquet-container">
-                    <img src={`../Components/banquet-Images/${image_location}`} alt="Banquet" />
+                  <img src={`http://localhost:3000/banquet-Images/${image_location}`} alt="Banquet" />    
                     <div className="banquet-content">
                       <h2>{banquet_name}</h2>
                       <p>
@@ -243,7 +216,7 @@ const DisplayBanquet = () => {
             )}
           </div>
         </div>
-      </div>
+    </div>
     </>
   );
 };

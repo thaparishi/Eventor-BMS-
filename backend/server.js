@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
+import { fileURLToPath } from "url";
 
 // Importing custom modules
 import connectDB from "./db/connect.js";
@@ -18,13 +19,20 @@ import contactRoutes from "./routes/contact.js";
 import menuRoutes from "./routes/menu.js";
 import adminSchema from "./models/admin.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 dotenv.config();
 
 const app = express();
 app.use(cookieParser("signed-cookie"));
+
+// Multer configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../frontend/src/Components/banquet-Images");
+    const uploadPath = path.join(__dirname, "../frontend/src/Components/banquet-Images");
+    fs.mkdirSync(uploadPath, { recursive: true }); // Create the directory if it doesn't exist
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -43,7 +51,7 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("./public"));
+app.use("/banquet-Images", express.static(path.join(__dirname, "../frontend/src/Components/banquet-Images")));
 
 // Initializing all routes as middleware
 app.use("/", authRoutes);

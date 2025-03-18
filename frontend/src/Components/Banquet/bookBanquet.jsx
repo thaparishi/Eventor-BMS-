@@ -64,19 +64,11 @@ const BookBanquet = () => {
           </section>
 
           <form className="book-banquet-form" onSubmit={handleSubmit}>
-            <select
-              name="shift"
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              required
-            >
-              <option value="" disabled selected>
-                Shift
-              </option>
-              <option value="whole day">Whole day</option>
-              <option value="whole day">Evening </option>
-            </select>
+          <select name="shift" value={reservationData.shift} onChange={handleChange} required>
+            <option value="" disabled>Shift</option>
+            <option value="whole day">Whole day</option>
+            <option value="evening">Evening</option>
+          </select>
 
             <input
               type="date"
@@ -106,17 +98,10 @@ const BookBanquet = () => {
               required
             />
 
-            <select
-              name="type"
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              required
-            >
-              <option value="" disabled selected>
-                Type
-              </option>
-              <option value="weeding">Weeding</option>
+
+            <select name="type" value={reservationData.type} onChange={handleChange} required>
+              <option value="" disabled>Type</option>
+              <option value="wedding">Wedding</option>
               <option value="anniversary">Anniversary</option>
               <option value="corporate event">Corporate Event</option>
               <option value="other">Other</option>

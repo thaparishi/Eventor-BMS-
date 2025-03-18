@@ -161,7 +161,7 @@ function Footer() {
             </a>
             <a href="www.twitter.com">
               <img
-                class="twitter"
+                className="twitter"
                 src={twitterLogo}
                 alt=""
                 width="100"

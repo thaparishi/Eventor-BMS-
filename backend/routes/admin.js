@@ -10,4 +10,4 @@ const adminjs = new AdminJS({
 
 const router = AdminJSExpress.buildRouter(adminjs);
 
-export default router;
+export default router; 

@@ -1,69 +1,69 @@
-import mongoose from "mongoose";
+  import mongoose from "mongoose";
 
-const bookedSchema = mongoose.Schema({
-  bookUserId: {
-    type: String,
-    trim: true,
-    required: [true, "Please provide user id"],
-  },
-  banquetName: {
-    type: String,
-    trim: true,
-    required: [true, "Please provide user id"],
-  },
-  shift: {
-    type: String,
-    trim: true,
-    required: [true, "Please provide shift"],
-  },
-
-  date: [
-    {
+  const bookedSchema = mongoose.Schema({
+    bookUserId: {
       type: String,
       trim: true,
-      required: [true, "Please provide date"],
+      required: [true, "Please provide user id"],
     },
-  ],
-
-  guest: [
-    {
+    banquetName: {
       type: String,
       trim: true,
-      required: [true, "Please provide guest"],
+      required: [true, "Please provide user id"],
     },
-  ],
-
-  type: [
-    {
+    shift: {
       type: String,
       trim: true,
-      required: [true, "Please provide type of wedding"],
+      required: [true, "Please provide shift"],
     },
-  ],
 
-  starters: [
-    {
-      type: String,
-      trim: true,
-      required: [true, "Please provide break fast"],
-    },
-  ],
+    date: [
+      {
+        type: String,
+        trim: true,
+        required: [true, "Please provide date"],
+      },
+    ],
 
-  mainCourse: [
-    {
-      type: String,
-      trim: true,
-      required: [true, "Please provide dinner"],
-    },
-  ],
+    guest: [
+      {
+        type: String,
+        trim: true,
+        required: [true, "Please provide guest"],
+      },
+    ],
 
-  desert: [
-    {
-      type: String,
-      trim: true,
-      required: [true, "Please provide desert"],
-    },
-  ],
-});
+    type: [
+      {
+        type: String,
+        trim: true,
+        required: [true, "Please provide type of wedding"],
+      },
+    ],
 
-export default mongoose.model("bookDetail", bookedSchema);
+    starters: [
+      {
+        type: String,
+        trim: true,
+        required: [true, "Please provide break fast"],
+      },
+    ],
+
+    mainCourse: [
+      {
+        type: String,
+        trim: true,
+        required: [true, "Please provide dinner"],
+      },
+    ],
+
+    desert: [
+      {
+        type: String,
+        trim: true,
+        required: [true, "Please provide desert"],
+      },
+    ],
+  });
+
+  export default mongoose.model("bookDetail", bookedSchema);

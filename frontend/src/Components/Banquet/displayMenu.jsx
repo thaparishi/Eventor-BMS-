@@ -114,236 +114,223 @@ const DisplayMenu = () => {
   }, [responseMessage]);
 
   return (
-    <div className="display-menu-section">
-      <div className="img-section">
-        {/* <img src={require("../images/sub-banner.jpg")} alt="" /> */}
-        <div className="img-content">
-          <h2 className="animate__animated animate__pulse">
-            List of Banquet and their Blogs
-          </h2>
-          <p className="animate__animated animate__lightSpeedInLeft">
-            Are you looking for the perfect venue for your upcoming banquet, but
-            feeling overwhelmed by the endless options? Look no further! Our
-            blog has everything you need to know about planning the perfect
-            banquet, from choosing the ideal venue to creating a mouthwatering
-            menu that will leave your guests wanting more.
-          </p>
-        </div>
-      </div>
-      <form onSubmit={handleSubmit}>
-        {menuData.map((item) => {
-          const { userId, breakfast, desert, dinner, price } = item;
-          adminUserId = userId;
-          return (
-            <>
-              <div className="menu-price">
-                <div>
-                  <h2>Our Menu</h2>
-                </div>
-
-                <div className="menu-underline"></div>
-                <div>
-                  <p>Maximum Capacity {price}</p>
-                </div>
-              </div>
-              <div className="menu" key={userId}>
-                <div className="form-menus">
-                  <div className="heading-menu">
-                    <h2>STARTERS</h2>
+    <div className="boody">
+      <div className="display-menu-section">
+        <form onSubmit={handleSubmit}>
+          {menuData.map((item) => {
+            const { userId, breakfast, desert, dinner, price } = item;
+            adminUserId = userId;
+            return (
+              <>
+                <div className="menu-price">
+                  <div>
+                    <h2>Our Menu</h2>
                   </div>
 
-                  <div className="menu-items">
-                    <div className="menu-content-form">
-                      {breakfast.map((item, index) => {
-                        return (
-                          <div key={index} className="display-all-menu">
-                            <div className="breakfast-image">
-                              <img
-                                src={require("../Images/menu/breakfast.jpg")}
-                                alt=""
-                              />
-                            </div>
-                            <div>
-                              <div>
-                                <input
-                                  type="checkbox"
-                                  id={item}
-                                  name="breakfast"
-                                  value={item}
-                                  onChange={(e) => {
-                                    handleChange(e);
-                                  }}
+                  <div className="menu-underline"></div>
+                  <div>
+                    <p>Maximum Capacity {price}</p>
+                  </div>
+                </div>
+                <div className="menu" key={userId}>
+                  <div className="form-menus">
+                    <div className="heading-menu">
+                      <h2>STARTERS</h2>
+                    </div>
+
+                    <div className="menu-items">
+                      <div className="menu-content-form">
+                        {breakfast.map((item, index) => {
+                          return (
+                            <div key={index} className="display-all-menu">
+                              <div className="breakfast-image">
+                                <img
+                                  src={require("../Images/menu/breakfast.jpg")}
+                                  alt=""
                                 />
-                                <label htmlFor="breakfast">{item}</label>
-                                <br />
                               </div>
-                              <div className="underline-dotted"></div>
-                              <div className="menu-text">
-                                <p>
-                                  The starter, also known as the appetizer, is a
-                                  small dish served before the main course to
-                                  stimulate the appetite.
-                                </p>
+                              <div>
+                                <div>
+                                  <input
+                                    type="checkbox"
+                                    id={item}
+                                    name="breakfast"
+                                    value={item}
+                                    onChange={(e) => {
+                                      handleChange(e);
+                                    }}
+                                  />
+                                  <label htmlFor="breakfast">{item}</label>
+                                  <br />
+                                </div>
+                                <div className="underline-dotted"></div>
+                                <div className="menu-text">
+                                  <p>
+                                    The starter, also known as the appetizer, is a
+                                    small dish served before the main course to
+                                    stimulate the appetite.
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-menus">
+                    <div className="heading-menu">
+                      <h2>MAINCOURSE</h2>
+                    </div>
+                    <div className="menu-items">
+                      <div className="menu-content-form">
+                        {dinner.map((item, index) => {
+                          return (
+                            <div key={index} className="display-all-menu">
+                              <div className="breakfast-image">
+                                <img
+                                  src={require("../Images/menu/dinner.jpg")}
+                                  alt=""
+                                  width="500"
+                                />
+                              </div>
+                              <div>
+                                <div>
+                                  <input
+                                    type="checkbox"
+                                    id={item}
+                                    name="dinner"
+                                    value={item}
+                                    onChange={(e) => {
+                                      handleChange(e);
+                                    }}
+                                  />
+                                  <label htmlFor="dinner">{item}</label>
+                                  <br />
+                                </div>
+                                <div className="underline-dotted"></div>
+                                <div className="menu-text">
+                                  <p>
+                                    The main course, also known as the entree, is
+                                    the central dish of the meal, usually
+                                    consisting of a protein source.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-menus">
+                    <div className="heading-menu">
+                      <h2>DESSERT</h2>
+                    </div>
+
+                    <div className="menu-items">
+                      <div className="menu-content-form">
+                        {desert.map((item, index) => {
+                          return (
+                            <div key={index} className="display-all-menu">
+                              <div className="breakfast-image">
+                                <img
+                                  src={require("../Images/menu/dinner.jpg")}
+                                  alt=""
+                                  width="500"
+                                />
+                              </div>
+                              <div>
+                                <div>
+                                  <input
+                                    type="checkbox"
+                                    id={item}
+                                    name="desert"
+                                    value={item}
+                                    onChange={(e) => {
+                                      handleChange(e);
+                                    }}
+                                  />
+                                  <label htmlFor="desert">{item}</label>
+                                  <br />
+                                </div>
+                                <div className="underline-dotted"></div>
+                                <div className="menu-text">
+                                  <p>
+                                    Dessert is a sweet dish, often served at the
+                                    end of the meal, which may include fruit,
+                                    cakes, pastries, ice cream.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="form-menus">
-                  <div className="heading-menu">
-                    <h2>MAINCOURSE</h2>
-                  </div>
-                  <div className="menu-items">
-                    <div className="menu-content-form">
-                      {dinner.map((item, index) => {
-                        return (
-                          <div key={index} className="display-all-menu">
-                            <div className="breakfast-image">
-                              <img
-                                src={require("../Images/menu/dinner.jpg")}
-                                alt=""
-                                width="500"
-                              />
-                            </div>
-                            <div>
-                              <div>
-                                <input
-                                  type="checkbox"
-                                  id={item}
-                                  name="dinner"
-                                  value={item}
-                                  onChange={(e) => {
-                                    handleChange(e);
-                                  }}
-                                />
-                                <label htmlFor="dinner">{item}</label>
-                                <br />
-                              </div>
-                              <div className="underline-dotted"></div>
-                              <div className="menu-text">
-                                <p>
-                                  The main course, also known as the entree, is
-                                  the central dish of the meal, usually
-                                  consisting of a protein source.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="form-menus">
-                  <div className="heading-menu">
-                    <h2>DESSERT</h2>
-                  </div>
-
-                  <div className="menu-items">
-                    <div className="menu-content-form">
-                      {desert.map((item, index) => {
-                        return (
-                          <div key={index} className="display-all-menu">
-                            <div className="breakfast-image">
-                              <img
-                                src={require("../Images/menu/dinner.jpg")}
-                                alt=""
-                                width="500"
-                              />
-                            </div>
-                            <div>
-                              <div>
-                                <input
-                                  type="checkbox"
-                                  id={item}
-                                  name="desert"
-                                  value={item}
-                                  onChange={(e) => {
-                                    handleChange(e);
-                                  }}
-                                />
-                                <label htmlFor="desert">{item}</label>
-                                <br />
-                              </div>
-                              <div className="underline-dotted"></div>
-                              <div className="menu-text">
-                                <p>
-                                  Dessert is a sweet dish, often served at the
-                                  end of the meal, which may include fruit,
-                                  cakes, pastries, ice cream.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          );
-        })}
-        <button
-          className={
-            isOpen ? "submit-menu-btn display-none" : "submit-menu-btn"
-          }
-          type="submit"
-        >
-          Submit Menu
-        </button>
-      </form>
-      {isOpen && (
-        <div className="display-menu-modal">
-          <div className="display-modal">
-            <article className="Calculated-Price">
-              <p>
-                <b>Total Cost: </b>Rs. {price}
-              </p>
-            </article>
-            <article className="PayNow">
-              
-            </article>
-            <article className="back-to-home-pg">
-              <a href="/" style={{ fontSize: "15px" }}>
-                {" "}
-                Back to Home
-              </a>
-            </article>
-          </div>
-        </div>
-      )}
-
-      {responseMessage.sucess && (
-        <>
-          <article className="pop-up">
-            <AiFillCheckCircle size={100} color="lime" />
-            <h2>{responseMessage.msg}.</h2>
-          </article>
-        </>
-      )}
-      {responseMessage.unSucess && (
-        <>
-          <article
-            className="pop-up"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "2rem",
-              flexDirection: "column",
-            }}
+              </>
+            );
+          })}
+          <button
+            className={
+              isOpen ? "submit-menu-btn display-none" : "submit-menu-btn"
+            }
+            type="submit"
           >
-            <AiOutlineCloseCircle size={100} color="red" />
-            <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
-          </article>
-        </>
-      )}
+            Submit Menu
+          </button>
+        </form>
+        {isOpen && (
+          <div className="display-menu-modal">
+            <div className="display-modal">
+              <article className="Calculated-Price">
+                <p>
+                  <b>Total Cost: </b>Rs. {price}
+                </p>
+              </article>
+              <article className="PayNow">
+                
+              </article>
+              <article className="back-to-home-pg">
+                <a href="/" style={{ fontSize: "15px" }}>
+                  {" "}
+                  Back to Home
+                </a>
+              </article>
+            </div>
+          </div>
+        )}
+
+        {responseMessage.sucess && (
+          <>
+            <article className="pop-up">
+              <AiFillCheckCircle size={100} color="lime" />
+              <h2>{responseMessage.msg}.</h2>
+            </article>
+          </>
+        )}
+        {responseMessage.unSucess && (
+          <>
+            <article
+              className="pop-up"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "2rem",
+                flexDirection: "column",
+              }}
+            >
+              <AiOutlineCloseCircle size={100} color="red" />
+              <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
+            </article>
+          </>
+        )}
+      </div>
     </div>
   );
 };

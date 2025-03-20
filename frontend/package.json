@@ -1,7 +1,7 @@
 {
-  "type": "module",
   "name": "Rishi_BMS_Frontend",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "proxy": "http://localhost:8000",
   "dependencies": {

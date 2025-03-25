@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useState, fetchData} from "react";
 import { useParams } from "react-router-dom";
 import Slider from "@mui/material/Slider";
 import {GiIndianPalace } from "react-icons/gi";

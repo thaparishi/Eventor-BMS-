@@ -52,7 +52,6 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <div className="boddy">
       <div className="contact-page-container">
         {/* Left Section */}
         <section className="left-side-contact-page">
@@ -141,7 +140,6 @@ const handleSubmit = async (e) => {
           </div>
         )}
       </div>
-    </div>
   );
 };
 

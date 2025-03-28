@@ -2,11 +2,10 @@ import mongoose from "mongoose";
 
 const banquetSchema = new mongoose.Schema({
   userId: {
-    type: String,
-    trim: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Admin',
     required: [true, "Please provide user id"],
   },
-
   banquet_name: {
     type: String,
     trim: true,
@@ -15,7 +14,7 @@ const banquetSchema = new mongoose.Schema({
   banquet_description: {
     type: String,
     trim: true,
-    required: [true, "Please provide email"],
+    required: [true, "Please provide description"],
   },
   banquet_location: {
     type: String,
@@ -23,8 +22,7 @@ const banquetSchema = new mongoose.Schema({
     required: [true, "Please provide banquet location"],
   },
   banquet_price: {
-    type: String,
-    trim: true,
+    type: Number,
     required: [true, "Please provide banquet price"],
   },
   image_location: {
@@ -32,6 +30,6 @@ const banquetSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please provide image"],
   },
-});
+}, { timestamps: true });
 
-export default mongoose.model("banquet", banquetSchema);
+export default mongoose.model("Banquet", banquetSchema);

@@ -4,10 +4,7 @@ import "./createBanquet.css";
 
 function Banquet() {
   return (
-    <>
-      <div className="container">
         <div className="auth-container">
-          <section className="auth-first-section">
             <section id="create-banquet">
               <h1>Create Banquet</h1>
               <form
@@ -88,10 +85,7 @@ function Banquet() {
                 </div>
               </form>
             </section>
-          </section>
         </div>
-      </div>
-    </>
   );
 }
 

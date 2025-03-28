@@ -1,79 +1,133 @@
+
 #create-banquet {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  #create-banquet h1 {
-    margin-top: 40px;
-    font-weight: 800;
-    font-size: 70px;
-    font-family: "Tangerine", cursive;
-    color: #f4a261; /* Updated Gold to Warm Orange */
-  }
-  
-  /* File Input Styling */
-  #image-field {
-    width: fit-content;
-    border-radius: 0px;
-    border: none;
-    background-color: white;
-    cursor: pointer;
-    text-align: center;
-  }
-  
-  /* Description Textarea */
-  #desc {
-    width: 400px;
-    height: 100px;
-    background-color: #f0f0f0; /* Softer Light Gray */
-    border-radius: 10px;
-    padding-left: 50px;
-    padding-top: 30px;
-    margin-top: 5px;
-  }
-  
-  /* Input Fields */
-  .create-banquet-form input {
-    width: 250px;
-    height: 40px;
-    background-color: #f0f0f0; /* Softer Light Gray */
-    border-radius: 10px;
-    padding-left: 50px;
-    border: 1px solid #ccc; /* Subtle border */
-    outline: none;
-  }
-  
-  /* Submit Button */
-  .create-banquet-btnn .btnn {
-    width: 250px;
-    height: 40px;
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
-    margin: 10px 0px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(
-      90deg,
-      #f4a261 20%,  /* Warm Orange */
-      #e76f51 50%,  /* Soft Red */
-      #d7263d 100%   /* Deep Red */
-    );
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-  }
-  
-  /* Button Hover Effect */
-  .create-banquet-btnn .btnn:hover {
-    transform: scale(1.05);
-    background: linear-gradient(
-      90deg,
-      #e76f51 20%,
-      #d7263d 50%,
-      #9d0208 100%  /* Dark Red */
-    );
-  }
-  
+  height: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px;
+  box-sizing: border-box;
+}
+
+#create-banquet h1 {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  font-weight: 800;
+  font-size: 70px;
+  font-family: "Tangerine", cursive;
+  color: #f4a261;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Form container styling */
+.create-banquet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+  background-color: #1e1e1e;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* File Input Styling */
+#image-field {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px dashed #f4a261;
+  background-color: #1e1e1e;
+  cursor: pointer;
+  text-align: center;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+#image-field:hover {
+  border-color: #e76f51;
+  background-color: #1e1e1e;
+}
+
+/* Description Textarea */
+#desc {
+  width: 100%;
+  height: 120px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Input Fields */
+.create-banquet-form input {
+  width: 100%;
+  height: 45px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 0 15px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+  transition: border 0.3s ease;
+}
+
+.create-banquet-form input:focus {
+  border-color: #f4a261;
+}
+
+/* Input container */
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: white;
+  font-weight: 500;
+}
+
+/* Submit Button */
+.create-banquet-btnn .btnn {
+  width: 100%;
+  height: 45px;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 20px 0 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    #f4a261 20%,
+    #e76f51 50%,
+    #d7263d 100%
+  );
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Button Hover Effect */
+.create-banquet-btnn .btnn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    90deg,
+    #e76f51 20%,
+    #d7263d 50%,
+    #9d0208 100%
+  );
+}
+
+.create-banquet-btnn .btnn:active {
+  transform: translateY(0);
+}

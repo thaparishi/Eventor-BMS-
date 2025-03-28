@@ -17,6 +17,7 @@ import BookBanquet from "./Components/Banquet/bookBanquet.jsx";
 import Menu from "./Components/Pages/menu.jsx";
 import Dbanquet from "./Components/Pages/Dbanquet.jsx";
 import { CreateBanquet, ChangePassword } from "./Components/index.js";
+import Booking from "./Components/Pages/Booking.jsx";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
@@ -65,6 +66,7 @@ const deleteLoginCookie = async () => {
           <Route path="/" element={<Home checkLogin={checkLogin} />} />
           <Route path="/banquets" element={<Dbanquet/>}/>
           <Route path="/about" element={<About />} />
+          <Route path="/booking" element={<Booking />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />

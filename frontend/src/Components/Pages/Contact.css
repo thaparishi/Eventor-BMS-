@@ -1,23 +1,20 @@
-.boddy{
-  margin: 100px;
-  background-color: #ffffff;
-}
+
 .contact-page-container {
+  margin-top: 70px;
+  height: 90vh;
   display: flex;
   justify-content: space-between;
   padding: 40px;
-  background-color: #000000; /* Black background */
-  border-radius: 15px;
+  background-color: #000000;
 }
 
-/* Left Side (Social Links and Heading) */
 .left-side-contact-page {
   width: 40%;
 }
 
 .contact-page-heading h2 {
   font-size: 2rem;
-  color: #ffffff; /* White text */
+  color: #ffffff;
   margin-bottom: 20px;
   text-align: left;
 }
@@ -26,7 +23,7 @@
   display: flex;
   gap: 20px;
   font-size: 2.5rem;
-  color: #f39c12; /* Golden color for icons */
+  color: #f39c12;
 }
 
 .contact-page-social-links svg {
@@ -37,7 +34,6 @@
   transform: scale(1.2);
 }
 
-/* Right Side (Form Section) */
 .right-side-contact-page {
   width: 55%;
 }
@@ -46,7 +42,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: #141313; /* Dark blue-gray background for form */
+  background-color: #141313; 
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
@@ -58,18 +54,18 @@
   font-size: 1rem;
   padding: 12px;
   margin: 5px 0;
-  border: 1px solid #7f8c8d; /* Light gray border */
+  border: 1px solid #7f8c8d; 
   border-radius: 5px;
   outline: none;
   transition: border 0.3s ease;
-  background-color: #252525; /* Dark background for form fields */
-  color: #ecf0f1; /* Light text for readability */
+  background-color: #252525;
+  color: #ecf0f1; 
 }
 
 .contact-page-form input:focus,
 .contact-page-form select:focus,
 .contact-page-form textarea:focus {
-  border-color: #f39c12; /* Golden color on focus */
+  border-color: #f39c12;
 }
 
 .contact-page-form textarea {
@@ -78,7 +74,7 @@
 
 .contact-page-btn {
   padding: 12px 20px;
-  background-color: #f39c12; /* Golden button */
+  background-color: #f39c12; 
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -88,20 +84,19 @@
 }
 
 .contact-page-btn:hover {
-  background-color: #e67e22; /* Slightly darker golden color on hover */
+  background-color: #e67e22; 
 }
 
-/* Success Popup */
 .success-popUp {
-  position: fixed; /* Makes it relative to the viewport */
+  position: fixed; 
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centers the popup */
+  transform: translate(-50%, -50%); 
   background: green;
   color: white;
   padding: 20px;
   border-radius: 8px;
-  z-index: 1000; /* Ensures it appears above other elements */
+  z-index: 1000; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -130,8 +125,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5); /* Semi-dark overlay */
-  z-index: -1; /* Places it behind the popup */
+  background: rgba(0, 0, 0, 0.5); 
+  z-index: -1;
 }
 
 /* Responsive Design */

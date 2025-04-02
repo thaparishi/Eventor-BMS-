@@ -1,69 +1,69 @@
-  import mongoose from "mongoose";
+import mongoose from "mongoose";
 
-  const bookedSchema = mongoose.Schema({
-    bookUserId: {
+const bookedSchema = mongoose.Schema({
+  bookUserId: {
+    type: String,
+    trim: true,
+    required: [true, "Please provide user id"],
+  },
+  banquetName: {
+    type: String,
+    trim: true,
+    required: [true, "Please provide user id"],
+  },
+  shift: {
+    type: String,
+    trim: true,
+    required: [true, "Please provide shift"],
+  },
+
+  date: [
+    {
       type: String,
       trim: true,
-      required: [true, "Please provide user id"],
+      required: [true, "Please provide date"],
     },
-    banquetName: {
+  ],
+
+  guest: [
+    {
       type: String,
       trim: true,
-      required: [true, "Please provide user id"],
+      required: [true, "Please provide guest"],
     },
-    shift: {
+  ],
+
+  type: [
+    {
       type: String,
       trim: true,
-      required: [true, "Please provide shift"],
+      required: [true, "Please provide type of wedding"],
     },
+  ],
 
-    date: [
-      {
-        type: String,
-        trim: true,
-        required: [true, "Please provide date"],
-      },
-    ],
+  starters: [
+    {
+      type: String,
+      trim: true,
+      required: [true, "Please provide break fast"],
+    },
+  ],
 
-    guest: [
-      {
-        type: String,
-        trim: true,
-        required: [true, "Please provide guest"],
-      },
-    ],
+  mainCourse: [
+    {
+      type: String,
+      trim: true,
+      required: [true, "Please provide dinner"],
+    },
+  ],
 
-    type: [
-      {
-        type: String,
-        trim: true,
-        required: [true, "Please provide type of wedding"],
-      },
-    ],
+  desert: [
+    {
+      type: String,
+      trim: true,
+      required: [true, "Please provide desert"],
+    },
+  ],
+});
 
-    starters: [
-      {
-        type: String,
-        trim: true,
-        required: [true, "Please provide break fast"],
-      },
-    ],
-
-    mainCourse: [
-      {
-        type: String,
-        trim: true,
-        required: [true, "Please provide dinner"],
-      },
-    ],
-
-    desert: [
-      {
-        type: String,
-        trim: true,
-        required: [true, "Please provide desert"],
-      },
-    ],
-  });
-
-  export default mongoose.model("bookDetail", bookedSchema);
+export default mongoose.model("bookDetail", bookedSchema);

@@ -191,14 +191,14 @@ p {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(to top, #eecda3, #ef629f);
+  background: linear-gradient(to top, #000000, #3a3333);
   border-radius: 20px;
   z-index: 1;
 }
 
 .pop-up h2 {
   text-align: center;
-  color: var(--Primary-White); /* White color for popup title */
+  color: var(--Primary-White); 
 }
 
 /**

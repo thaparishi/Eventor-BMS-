@@ -41,8 +41,8 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  color: white  ;
   background-color: rgb(79, 72, 61);
-  box-shadow: 0px 0px 12px 2px rgb(95, 87, 74);
   padding: 50px;
 }
 

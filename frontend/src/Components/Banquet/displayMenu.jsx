@@ -288,11 +288,14 @@ const DisplayMenu = () => {
       {isOpen && (
         <div className="display-menu-modal">
           <div className="display-modal">
-            <article className="Calculated-Price">
-              <p>
-                <b>Total Cost: </b>Rs. {price}
-              </p>
-            </article>
+          <article className="Calculated-Price">
+            <p>
+              <b>Total Cost: </b>Rs. {price}
+            </p>
+            <p>
+              <b>Booking Charge (15%): </b>Rs. {Math.round(price * 0.15)}
+            </p>
+          </article>
             <article className="PayNow">
               <Khalti payment={price} />
             </article>

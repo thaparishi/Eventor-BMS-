@@ -78,55 +78,55 @@ const bookBanquet = async (req, res) => {
 
       //Sending email to created banquet person.
 
-      // //Creating a medium to send email.
-      // let transporter = nodemailer.createTransport({
-      //   //Domain name.
-      //   service: "hotmail",
-      //   auth: {
-      //     //Your email
-      //     user: `${process.env.EMAIL}`,
-      //     //Your password
-      //     pass: `${process.env.PASSWORD}`,
-      //   },
-      // });
+       //Creating a medium to send email.
+       let transporter = nodemailer.createTransport({
+         //Domain name.
+         service: "gmail",
+      auth: {
+          //Your email
+          user: `${process.env.EMAIL}`,
+         //Your password
+           pass: `${process.env.PASSWORD}`,
+         },
+       });
 
-      // //Contents of email.
-      // let mailConfiguration = await transporter.sendMail({
-      //   from: `${process.env.EMAIL}`,
-      //   to: [`${adminData.email}, ${createdBanquetData.email}`],
-      //   subject: " The Banquet is Booked Succesfully",
-      //   html: `<h3>Hello sir, The  ${banquetName} is booked  on ${date}. Further Details are Below. </h3>
-      //   <p>
-      //   BanquetName: ${banquetName}
-      //   <br>
-      //   Shift: ${shift}
-      //   <br>
-      //   Date: ${date}
-      //   <br>
-      //   Guest: ${guest}
-      //   <br>
-      //   Type: ${type}
-      //   <br>
-      //   Starters: ${breakfast}
-      //   <br>
-      //   Main Course: ${lunch}
-      //   <br>
-      //   Desert: ${desert}
-      //   <br>
-      //   Total Cost of Event : ${price}
-      //   <br>
-      //   </p>`,
-      // });
+       //Contents of email.
+       let mailConfiguration = await transporter.sendMail({
+         from: `${process.env.EMAIL}`,
+        to: [`${adminData.email}, ${createdBanquetData.email}`],
+         subject: " The Banquet is Booked Succesfully",
+         html: `<h3>Hello sir, The  ${banquetName} is booked  on ${date}. Further Details are Below. </h3>
+         <p>
+        BanquetName: ${banquetName}
+         <br>
+         Shift: ${shift}
+         <br>
+         Date: ${date}
+         <br>
+         Guest: ${guest}
+         <br>
+         Type: ${type}
+         <br>
+         Starters: ${breakfast}
+         <br>
+        Main Course: ${lunch}
+        <br>
+         Desert: ${desert}
+        <br>
+         Total Cost of Event : ${price}
+        <br>
+         </p>`,
+       });
 
-      // //Sending message to user email for verification.
-      // transporter.sendMail(mailConfiguration, function (error, info) {
-      //   //If not successful.
-      //   if (error) {
-      //     throw new CustomAPIError("Email not send");
-      //   }
-      //   //If successful.
-      //   console.log("Sent: " + info.response);
-      // });
+       //Sending message to user email for verification.
+       transporter.sendMail(mailConfiguration, function (error, info) {
+        //If not successful.
+         if (error) {
+           throw new CustomAPIError("Email not send");
+         }
+         //If successful.
+         console.log("Sent: " + info.response);
+       });
 
       return res.json("Sucess");
     }

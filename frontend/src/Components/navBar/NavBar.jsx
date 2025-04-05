@@ -40,7 +40,7 @@ function NavBar({ checkLogin, deleteFun }) {
 
       <ul className={`navbar-links ${isNavOpen ? "active" : ""}`}>
         <li><NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}><FaHome className="navbar-icon" /> Home</NavLink></li>
-        <li><NavLink to="/banquets" className={({ isActive }) => (isActive ? "active" : "")}><IoPeopleCircleOutline className="navbar-icon" /> Banquets</NavLink></li>
+        <li><NavLink to="/blogs" className={({ isActive }) => (isActive ? "active" : "")}><IoPeopleCircleOutline className="navbar-icon" /> Blogs</NavLink></li>
         <li><NavLink to="/gallery" className={({ isActive }) => (isActive ? "active" : "")}><GrGallery className="navbar-icon" /> Gallery</NavLink></li>
         <li><NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}><FaInfoCircle className="navbar-icon" /> About Us</NavLink></li>
         <li><NavLink to="/contact" className={({ isActive }) => (isActive ? "active" : "")}><FaConciergeBell className="navbar-icon" /> Contact Us</NavLink></li>

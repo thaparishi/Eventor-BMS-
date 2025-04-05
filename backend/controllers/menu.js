@@ -1,9 +1,11 @@
 import banquetModel from "../models/banquet.js";
 import registerModel from "../models/register.js";
+import AdminModel from "../models/admin.js";
+import BanquetOwnerModel from "../models/banquetOwner.js";
 import nodemailer from "nodemailer";
 import menuSchema from "../models/menu.js";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { generatePassword } from "../utils/passwordGenerator.js";
 
 export const createMenu = async (req, res) => {
   try {
@@ -12,18 +14,22 @@ export const createMenu = async (req, res) => {
     const { token } = req.params;
     // Decoding the token with secret key and token.
     let decoded = await jwt.verify(token, "jwtsecret");
-    console.log(decoded);
+    
     if (breakfast && dinner && desert && price) {
       // Creating banquet.
       const {
+        userId,
         banquet_name,
         banquet_description,
         banquet_location,
         banquet_price,
+        image_location
       } = decoded;
+      
       const createBanquet = await banquetModel.create({
         ...decoded,
       });
+      
       // Creating menu.
       await menuSchema.create({
         userId: req.signedCookies.userId,
@@ -33,57 +39,68 @@ export const createMenu = async (req, res) => {
         desert,
         price,
       });
-      const adminData = await registerModel.findOne({
+      
+      const userData = await registerModel.findOne({
         userId: req.signedCookies.userId,
       });
 
-      // // Sending email to created banquet person.
+      // Generate a random password
+      const generatedPassword = generatePassword(10);
+      
+      // Create BanquetOwner account in the new BanquetOwnerModel instead of AdminModel
+      const banquetOwner = await BanquetOwnerModel.create({
+        email: userData.email,
+        password: generatedPassword, // This will be hashed by the pre-save hook
+        userId: req.signedCookies.userId,
+        name: userData.name
+      });
 
-       // Creating a medium to send email.
-       let transporter = nodemailer.createTransport({
-         // Domain name.
-         service: "gmail",
-         auth: {
-         // Your email
-           user: `${process.env.EMAIL}`,
-           // Your password
-           pass: `${process.env.PASSWORD}`,
-         },
-       });
+      // Creating a medium to send email.
+      let transporter = nodemailer.createTransport({
+        // Domain name.
+        service: "gmail",
+        auth: {
+          user: `${process.env.EMAIL}`,
+          pass: `${process.env.PASSWORD}`,
+        },
+      });
 
-       // Contents of email.
-       let mailConfiguration = await transporter.sendMail({
-         from: `${process.env.EMAIL}`,
-         to: `${adminData.email}`,
-         subject: "Banquet Created: Welcome to our Banquet System",
-         html: `<h3>Hello There, Thanks for promoting you platform with following details.</h3>
-         <p>
-         Banquet Name: ${banquet_name}
-         <br>
-         Banquet Description: ${banquet_description}
-         <br>
-         Location: ${banquet_location}
-         <br>
-         Banquet Price Per Plate: ${banquet_price}
-         <br>
-         Available Starters: ${breakfast}
-         <br>
-       Available MainCourse: ${dinner}
-         <br>
-         Availabe Desert: ${desert}
-         <br>
-         </p>`,
-       });
+      // Contents of email.
+      let mailConfiguration = await transporter.sendMail({
+        from: `${process.env.EMAIL}`,
+        to: `${userData.email}`,
+        subject: "Banquet Created: Welcome to our Banquet System",
+        html: `<h3>Hello ${userData.name}, Thanks for promoting your banquet on our platform!</h3>
+        <p>
+        <strong>Your Banquet Details:</strong><br>
+        Banquet Name: ${banquet_name}<br>
+        Banquet Description: ${banquet_description}<br>
+        Location: ${banquet_location}<br>
+        Banquet Price Per Plate: ${banquet_price}<br>
+        Available Starters: ${breakfast}<br>
+        Available MainCourse: ${dinner}<br>
+        Available Desert: ${desert}<br>
+        </p>
+        <p>
+        <strong>Your Admin Dashboard Access:</strong><br>
+        You can now access your banquet management dashboard with the following credentials:<br>
+        URL: <a href="http://localhost:8000/admin">Admin Dashboard</a><br>
+        Email: ${userData.email}<br>
+        Password: ${generatedPassword}<br>
+        </p>
+        <p><strong>Note:</strong> Please keep your credentials safe. You have limited access to manage only your banquet and menu details.</p>`,
+      });
 
-       // Sending message to user email for verification.
-       transporter.sendMail(mailConfiguration, function (error, info) {
-         // If not successful.
-      if (error) {
-           throw new CustomAPIError("Email not send");
-         }
-         // If successful.
-         console.log("Sent: " + info.response);
-       });
+      // Sending message to user email for verification.
+      transporter.sendMail(mailConfiguration, function (error, info) {
+        // If not successful.
+        if (error) {
+          console.log("Email sending failed:", error);
+        }
+        // If successful.
+        console.log("Sent: " + info.response);
+      });
+      
       return res.status(200).json("Sucess");
     }
     res.json("Unsucessfull");

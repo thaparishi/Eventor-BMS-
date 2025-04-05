@@ -6,12 +6,13 @@ import multer from "multer";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session";
 import mongoose from "mongoose";
-import AdminJS from "adminjs";
+import { AdminJS } from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 import dotenv from "dotenv";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import bcrypt from "bcryptjs";
 
 // Import routes and models
 import authRouter from "./routes/auth.js";
@@ -20,6 +21,14 @@ import bookRouter from "./routes/book.js";
 import contactRouter from "./routes/contact.js";
 import menuRouter from "./routes/menu.js";
 import AdminModel from "./models/admin.js";
+import BanquetOwnerModel from "./models/banquetOwner.js";
+import BanquetModel from "./models/banquet.js";
+import MenuModel from "./models/menu.js";
+import BookModel from "./models/book.js";
+import BlogModel from "./models/blog.js";
+import blogRouter from "./routes/blog.js";
+import contactModel from "./models/contact.js";
+import registerModel from "./models/register.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,7 +48,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-
 // Initial middleware
 app.use(cookieParser("signed-cookie"));
 app.use(
@@ -48,7 +56,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.static("./public"));
 app.use(expressSession({
   secret: process.env.SESSION_SECRET || 'default-secret',
   resave: false,
@@ -59,8 +66,9 @@ app.use(expressSession({
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   },
 }));
-app.use("/banquet-Images", express.static(path.join(__dirname, "../frontend/src/Components/banquet-Images")));
-
+app.use("/banquet-Images", express.static(path.join(__dirname, "../frontend/src/Components/banquet-Images/")));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/Images", express.static(path.join(__dirname, "Images")));
 
 
 // Database connection
@@ -89,39 +97,300 @@ const setupAdminJS = () => {
     rootPath: "/admin",
     branding: {
       companyName: "Eventor - BMS",
-      logo: "/images/logo.png",
-      favicon: "/favicon.ico",
+      logo: "/images/image.png",
     },
-    resources: [{
-      resource: AdminModel,
-      options: {
-        properties: {
-          password: {
-            type: 'password',
-            isVisible: {
-              list: false,
-              edit: true,
-              filter: false,
-              show: false,
+    resources: [
+      // Admin resource - visible only to admins
+      {
+        resource: AdminModel,
+        options: {
+          properties: {
+            password: {
+              type: 'password',
+              isVisible: {
+                list: false,
+                edit: true,
+                filter: false,
+                show: false,
+              },
             },
           },
-        },
+          actions: {
+            // Only admins can see or edit admins
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+
+      {
+        resource: contactModel,
+        options: {
+          properties: {
+            password: {
+              type: 'password',
+              isVisible: {
+                list: false,
+                edit: true,
+                filter: false,
+                show: false,
+              },
+            },
+          },
+          actions: {
+            // Only admins can see or edit admins
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+
+      {
+        resource: registerModel,
+        options: {
+          properties: {
+            password: {
+              type: 'password',
+              isVisible: {
+                list: false,
+                edit: true,
+                filter: false,
+                show: false,
+              },
+            },
+          },
+          actions: {
+            // Only admins can see or edit admins
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+      
+      // BanquetOwner resource - visible only to admins
+      {
+        resource: BanquetOwnerModel,
+        options: {
+          properties: {
+            password: {
+              type: 'password',
+              isVisible: {
+                list: false,
+                edit: true,
+                filter: false,
+                show: false,
+              },
+            },
+          },
+          actions: {
+            // Only admins can see or edit banquet owners
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+      // Banquet resource with role-based access control
+      {
+        resource: BanquetModel,
+        options: {
+          properties: {
+            // Define property visibility and options here
+          },
+          actions: {
+            // Admins can do everything
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin },
+            // For banquet owners, filter only their banquets
+            show: { 
+              isAccessible: ({ currentAdmin }) => currentAdmin,
+              before: async (request, context) => {
+                // If it's a banquet owner, filter to show only their banquets
+                if (currentAdmin.role === 'banquetOwner') {
+                  request.query = { 
+                    ...request.query,
+                    'filters.userId': currentAdmin.userId 
+                  };
+                }
+                return request;
+              }
+            },
+            edit: {
+              isAccessible: ({ currentAdmin, record }) => {
+                // Admins can edit any banquet
+                if (currentAdmin.role === 'admin') return true;
+                // Banquet owners can only edit their own banquets
+                return currentAdmin.userId === record.params.userId;
+              }
+            },
+            // Only admins can delete banquets
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            // Only admins can create new banquets directly through AdminJS
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+      // Menu resource with role-based access control
+      {
+        resource: MenuModel,
+        options: {
+          actions: {
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin },
+            show: { 
+              isAccessible: ({ currentAdmin }) => currentAdmin,
+              before: async (request, context) => {
+                // If it's a banquet owner, filter to show only their menus
+                if (currentAdmin.role === 'banquetOwner') {
+                  request.query = { 
+                    ...request.query,
+                    'filters.userId': currentAdmin.userId 
+                  };
+                }
+                return request;
+              }
+            },
+            edit: {
+              isAccessible: ({ currentAdmin, record }) => {
+                // Admins can edit any menu
+                if (currentAdmin.role === 'admin') return true;
+                // Banquet owners can only edit their own menus
+                return currentAdmin.userId === record.params.userId;
+              }
+            },
+            // Only admins can delete menus
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            // Only admins can create new menus directly through AdminJS
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+      // Book resource with role-based access control
+      {
+        resource: BookModel,
+        options: {
+          actions: {
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin },
+            show: { 
+              isAccessible: ({ currentAdmin }) => currentAdmin,
+              before: async (request, context) => {
+                if (currentAdmin.role === 'banquetOwner') {
+                  // Find the banquets owned by this owner
+                  const ownedBanquets = await BanquetModel.find({ userId: currentAdmin.userId });
+                  const banquetIds = ownedBanquets.map(b => b._id.toString());
+                  
+                  // Filter bookings to only show those for the owner's banquets
+                  request.query = { 
+                    ...request.query,
+                    'filters.banquetId': { $in: banquetIds } 
+                  };
+                }
+                return request;
+              }
+            },
+            // Only admins can edit bookings
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            // Only admins can delete bookings
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            // Only admins can create new bookings directly through AdminJS
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+      // Blog resource with role-based access control
+      {
+        resource: BlogModel,
+        options: {
+          properties: {
+            createdAt: {
+              isVisible: { list: true, filter: true, show: true, edit: false }
+            },
+            postedDate: {
+              isVisible: { list: true, filter: false, show: true, edit: false }
+            },
+            _id: { 
+              isVisible: { list: false, filter: false, show: true, edit: false }
+            },
+            text: {
+              type: 'textarea',
+              isVisible: { list: false, filter: false, show: true, edit: true }
+            },
+            image: {
+              isVisible: { list: true, filter: false, show: true, edit: true },
+            }
+          },
+          actions: {
+            // Only admins can manage blogs
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            new: { 
+              isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin',
+              before: async (request) => {
+                if (request.payload.image) {
+                  const imagePath = `Components/Images/gallery/${path.basename(request.payload.image)}`;
+                  request.payload.image = imagePath;
+                }
+                return request;
+              }
+            }
+          }
+        }
       }
-    }],
+    ]
   });
 
-  const router = AdminJSExpress.buildRouter(adminJs);
-
+  // Authenticate using both Admin and BanquetOwner models
+  const router = AdminJSExpress.buildAuthenticatedRouter(
+    adminJs,
+    {
+      authenticate: async (email, password) => {
+        // Try to find in Admin model first
+        const admin = await AdminModel.findOne({ email });
+        if (admin) {
+          const matched = await bcrypt.compare(password, admin.password);
+          if (matched) {
+            return {
+              ...admin._doc,
+              role: 'admin'  // Explicitly set role for AdminJS
+            };
+          }
+        }
+        
+        // If not found in Admin, check BanquetOwner model
+        const banquetOwner = await BanquetOwnerModel.findOne({ email });
+        if (banquetOwner) {
+          const matched = await bcrypt.compare(password, banquetOwner.password);
+          if (matched) {
+            return {
+              ...banquetOwner._doc,
+              role: 'banquetOwner'  // Explicitly set role for AdminJS
+            };
+          }
+        }
+        
+        return false;
+      },
+      cookiePassword: process.env.COOKIE_SECRET || 'some-secret-password-used-to-secure-cookie',
+    },
+    null,
+    {
+      resave: false,
+      saveUninitialized: true,
+    }
+  );
+  
   return { adminJs, router };
-};
-
-// Middleware to check authentication
-const isAuthenticated = (req, res, next) => {
-  if (req.session.admin) {
-    next();
-  } else {
-    res.redirect('/admin');
-  }
 };
 
 // Server startup
@@ -131,7 +400,7 @@ const start = async () => {
     
     // 1. Setup AdminJS first
     const { adminJs, router } = setupAdminJS();
-    app.use('/admin', isAuthenticated, router);
+    app.use(adminJs.options.rootPath, router);
 
     // 2. Add body-parser middleware after AdminJS
     app.use(express.json());
@@ -142,35 +411,9 @@ const start = async () => {
     app.use("/", bookRouter);
     app.use("/", contactRouter);
     app.use("/", menuRouter);
+    app.use("/", blogRouter);
     app.use("/", upload.single("image"), banquetRouter);
     app.use("/images", express.static("image"));
-
-    // Serve custom login page
-    app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    });
-
-    // Handle login form submission
-    app.post('/login', async (req, res) => {
-      const { email, password } = req.body;
-
-      console.log("Login request received:", { email, password });
-
-      if (!email || !password) {
-        return res.status(400).send('Email and password are required');
-      }
-
-      const admin = await AdminModel.findOne({ email });
-
-      console.log("Admin found in database:", admin);
-
-      if (admin && admin.password === password) {
-        req.session.admin = admin;
-            return res.redirect('/admin');
-      } else {
-        return res.status(401).send('Invalid credentials');
-      }
-    });
 
     const port = process.env.PORT || 8000;
     app.listen(port, () => {
@@ -179,7 +422,6 @@ const start = async () => {
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);
-
   }
 };
 

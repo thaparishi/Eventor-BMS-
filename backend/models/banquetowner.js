@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const adminSchema = new mongoose.Schema({
+const banquetOwnerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name is required"],
@@ -17,11 +17,16 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
     trim: true,
+  },
+  userId: {
+    type: String,
+    required: [true, "User ID is required"],
+    trim: true,
   }
 });
 
 // Hash password before saving
-adminSchema.pre("save", async function (next) {
+banquetOwnerSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
@@ -29,8 +34,8 @@ adminSchema.pre("save", async function (next) {
 });
 
 // Method to check password
-adminSchema.methods.comparePassword = async function (candidatePassword) {
+banquetOwnerSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-export default mongoose.model("Admin", adminSchema);
+export default mongoose.model("BanquetOwner", banquetOwnerSchema);

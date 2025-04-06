@@ -21,7 +21,11 @@ import bookRouter from "./routes/book.js";
 import contactRouter from "./routes/contact.js";
 import menuRouter from "./routes/menu.js";
 import AdminModel from "./models/admin.js";
+<<<<<<< HEAD
 import BanquetOwnerModel from "./models/banquetowner.js";
+=======
+import BanquetOwnerModel from "./models/banquetOwner.js";
+>>>>>>> 3be9879770ba63a30a1ba8b1dbd77c1dc4519686
 import BanquetModel from "./models/banquet.js";
 import MenuModel from "./models/menu.js";
 import BookModel from "./models/book.js";
@@ -97,11 +101,16 @@ const setupAdminJS = () => {
     rootPath: "/admin",
     branding: {
       companyName: "Eventor - BMS",
+<<<<<<< HEAD
       logo: "/images/logo.png",
     },
     assets: {
       styles: ['admin.css'],
     },
+=======
+      logo: "/images/image.png",
+    },
+>>>>>>> 3be9879770ba63a30a1ba8b1dbd77c1dc4519686
     resources: [
       // Admin resource - visible only to admins
       {

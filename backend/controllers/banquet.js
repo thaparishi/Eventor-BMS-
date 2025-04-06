@@ -1,9 +1,13 @@
 // Importing models
 import banquetModel from "../models/banquet.js";
 import bookedSchema from "../models/book.js";
+import AdminModel from "../models/admin.js";
+import registerModel from "../models/register.js";
+import nodemailer from "nodemailer";
 
 // Importing jwt to create a token.
 import jwt from "jsonwebtoken";
+import { generatePassword } from "../utils/passwordGenerator.js";
 
 export const getBanquet = async (req, res) => {
   try {

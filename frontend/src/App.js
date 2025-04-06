@@ -15,8 +15,7 @@ import DisplayBanquet from "./Components/Banquet/displayBanquet.jsx";
 import DisplayMenu from "./Components/Banquet/displayMenu.jsx";
 import BookBanquet from "./Components/Banquet/bookBanquet.jsx";
 import Menu from "./Components/Pages/menu.jsx";
-import Dbanquet from "./Components/Pages/Dbanquet.jsx";
-import { CreateBanquet, ChangePassword } from "./Components/index.js";
+import { CreateBanquet, ChangePassword, Blog } from "./Components/index.js";
 import Booking from "./Components/Pages/Booking.jsx";
 
 function App() {
@@ -64,7 +63,7 @@ const deleteLoginCookie = async () => {
         <NavBar checkLogin={checkLogin} deleteFun={deleteLoginCookie} />
         <Routes>
           <Route path="/" element={<Home checkLogin={checkLogin} />} />
-          <Route path="/banquets" element={<Dbanquet/>}/>
+          <Route path="/blogs" element={<Blog/>}/>
           <Route path="/about" element={<About />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/gallery" element={<Gallery />} />

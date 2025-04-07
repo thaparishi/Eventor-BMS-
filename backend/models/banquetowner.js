@@ -22,6 +22,10 @@ const banquetOwnerSchema = new mongoose.Schema({
     type: String,
     required: [true, "User ID is required"],
     trim: true,
+  },
+  banquetId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'banquet',
   }
 });
 
@@ -38,4 +42,4 @@ banquetOwnerSchema.methods.comparePassword = async function (candidatePassword) 
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-export default mongoose.model("BanquetOwner", banquetOwnerSchema);
+export default mongoose.model("banquetOwner", banquetOwnerSchema);

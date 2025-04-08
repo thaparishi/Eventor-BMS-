@@ -1,8 +1,10 @@
 .boddy{
-  margin-top: 85px;
+  margin-top: 70px;
+  background-color: #1e1e1e;
 }
 
 .banquetMenu-container {
+  background-color: #1e1e1e;
   margin-top: 30px;
   display: flex;
   flex-direction: column;

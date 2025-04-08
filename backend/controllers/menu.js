@@ -44,16 +44,25 @@ export const createMenu = async (req, res) => {
         userId: req.signedCookies.userId,
       });
 
-      // Generate a random password
-      const generatedPassword = generatePassword(10);
+      // Check if a BanquetOwner account with this email already exists
+      const existingOwner = await BanquetOwnerModel.findOne({ email: userData.email });
+      let generatedPassword;
       
-      // Create BanquetOwner account in the new BanquetOwnerModel instead of AdminModel
-      const banquetOwner = await BanquetOwnerModel.create({
-        email: userData.email,
-        password: generatedPassword, // This will be hashed by the pre-save hook
-        userId: req.signedCookies.userId,
-        name: userData.name
-      });
+      // Only create a new BanquetOwner if one doesn't already exist
+      if (!existingOwner) {
+        // Generate a random password
+        generatedPassword = generatePassword(10);
+        
+        // Create BanquetOwner account in the new BanquetOwnerModel instead of AdminModel
+        const banquetOwner = await BanquetOwnerModel.create({
+          email: userData.email,
+          password: generatedPassword, // This will be hashed by the pre-save hook
+          userId: req.signedCookies.userId,
+          name: userData.name
+        });
+      } else {
+        console.log(`BanquetOwner with email ${userData.email} already exists, skipping account creation`);
+      }
 
       // Creating a medium to send email.
       let transporter = nodemailer.createTransport({
@@ -86,7 +95,7 @@ export const createMenu = async (req, res) => {
         You can now access your banquet management dashboard with the following credentials:<br>
         URL: <a href="http://localhost:8000/admin">Admin Dashboard</a><br>
         Email: ${userData.email}<br>
-        Password: ${generatedPassword}<br>
+        ${existingOwner ? 'Please use your existing password to login.' : `Password: ${generatedPassword}`}<br>
         </p>
         <p><strong>Note:</strong> Please keep your credentials safe. You have limited access to manage only your banquet and menu details.</p>`,
       });

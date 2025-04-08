@@ -23,7 +23,7 @@ import menuRouter from "./routes/menu.js";
 import AdminModel from "./models/admin.js";
 import BanquetModel from "./models/banquet.js";
 import BanquetOwnerModel from "./models/banquetowner.js";
-import MenuModel from "./models/menu.js"
+import MenuModel from "./models/menu.js" 
 import BookModel from "./models/book.js";
 import BlogModel from "./models/blog.js";
 import blogRouter from "./routes/blog.js";

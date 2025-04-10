@@ -22,6 +22,13 @@ const banquetSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Please provide banquet location"],
   },
+  location_coordinates: {
+    type: {
+      lat: String,
+      lon: String
+    },
+    required: [true, "Please provide location coordinates"]
+  },
   banquet_price: {
     type: String,
     trim: true,

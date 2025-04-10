@@ -34,7 +34,7 @@ export const getBanquet = async (req, res) => {
 export const createBanquet = async (req, res) => {
   try {
     // Destructing the objects.
-    const { name, desc, location, price } = req.body;
+    const { name, desc, location, price, location_lat, location_lon } = req.body;
     const newName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
     const { path } = req.file;
 
@@ -51,8 +51,12 @@ export const createBanquet = async (req, res) => {
             banquet_name: newName,
             banquet_description: desc,
             banquet_location: location,
+            location_coordinates: {
+              lat: location_lat,
+              lon: location_lon
+            },
             banquet_price: price,
-            image_location: newPath,
+            image_location: filename,
           },
           "jwtsecret",
           {
@@ -67,6 +71,57 @@ export const createBanquet = async (req, res) => {
     console.log(error);
   }
 };
+
+// Add this new function to get nearby banquets
+export const getNearbyBanquets = async (req, res) => {
+  try {
+    const { lat, lon } = req.params;
+    
+    // Get all banquets
+    const banquets = await banquetModel.find({});
+    
+    // Calculate distance for each banquet
+    const banquetsWithDistance = banquets.map(banquet => {
+      // Calculate distance using Haversine formula
+      const distance = calculateDistance(
+        parseFloat(lat), 
+        parseFloat(lon),
+        parseFloat(banquet.location_coordinates.lat),
+        parseFloat(banquet.location_coordinates.lon)
+      );
+      
+      return {
+        ...banquet._doc,
+        distance: distance
+      };
+    });
+    
+    // Sort by distance
+    banquetsWithDistance.sort((a, b) => a.distance - b.distance);
+    
+    res.json(banquetsWithDistance);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to get nearby banquets" });
+  }
+};
+
+// Haversine formula to calculate distance between two points
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth radius in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const distance = R * c; // Distance in kilometers
+  
+  return distance;
+}
 
 export const filterBanquetName = async (req, res) => {
   try {

@@ -7,6 +7,7 @@ import {
   filterBanquetPrice,
   filterBanquetAscending,
   filterBanquetDescending,
+  getNearbyBanquets
 } from "../controllers/banquet.js";
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.route("/api/filterBanquetLocation/:name").get(filterBanquetLocation);
 router.route("/api/filterBanquetPrice/:range").get(filterBanquetPrice);
 router.route("/api/filterBanquetAscending").get(filterBanquetAscending);
 router.route("/api/filterBanquetDescending").get(filterBanquetDescending);
+router.route("/api/getNearbyBanquets/:lat/:lon").get(getNearbyBanquets);
 
 export default router;

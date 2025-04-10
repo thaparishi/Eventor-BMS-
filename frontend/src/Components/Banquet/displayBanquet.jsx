@@ -1,146 +1,278 @@
-import React, { useEffect, useState, fetchData} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Slider from "@mui/material/Slider";
-import {GiIndianPalace } from "react-icons/gi";
-import {AiOutlineSearch } from "react-icons/ai";
+import { GiIndianPalace } from "react-icons/gi";
+import { AiOutlineSearch } from "react-icons/ai";
+import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
 import "./displayBanquet.css";
 
 const DisplayBanquet = () => {
   const [banquetData, setBanquetData] = useState([]);
   const [searchBanquetValue, setSearchBanquetValue] = useState("");
+  const [locationSearchValue, setLocationSearchValue] = useState("");
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
   const { token } = useParams();
   const [noDataFound, setNoDataFound] = useState(false);
   const [range, setRange] = useState([100, 1000]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationLoading, setLocationLoading] = useState(true); // Start as true since we request location immediately
+  const [locationError, setLocationError] = useState(null);
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
 
-  async function handleChanges(event, newValue) {
-    setRange(newValue);
-    setNoDataFound(false);
-    const response = await axios.get(`/api/filterBanquetPrice/${range}`);
-    if (response.data === "unsucessful") {
+  // Fetch all banquets as fallback
+  const fetchAllBanquets = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/getBanquet/${token}`);
+      const data = await response.json();
+      setBanquetData(data);
+    } catch (error) {
+      console.error("Error fetching banquets:", error);
       setNoDataFound(true);
-      return;
     }
-    setBanquetData(response.data);
-  }
-
-  const fetchData = async () => {
-    fetch(`http://localhost:8000/api/getBanquet/${token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setBanquetData(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
+  // Fetch banquets near a location
+  const fetchNearbyBanquets = async (lat, lon) => {
+    try {
+      setLocationLoading(true);
+      const response = await axios.get(`/api/getNearbyBanquets/${lat}/${lon}`);
+      if (response.data && response.data.length > 0) {
+        setBanquetData(response.data);
+      } else {
+        // If no nearby banquets found, fall back to all banquets
+        await fetchAllBanquets();
+      }
+    } catch (error) {
+      console.error("Error fetching nearby banquets:", error);
+      // Fall back to all banquets on error
+      await fetchAllBanquets();
+    } finally {
+      setLocationLoading(false);
+    }
+  };
+
+  // Get user location
+  const getUserLocation = () => {
+    setLocationLoading(true);
+    setLocationError(null);
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ lat: latitude, lon: longitude });
+          fetchNearbyBanquets(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setLocationError("Unable to access your location. Showing all available banquets.");
+          fetchAllBanquets();
+          setLocationLoading(false);
+        },
+        { timeout: 10000, maximumAge: 60000 } // 10s timeout, 1min cache
+      );
+    } else {
+      setLocationError("Geolocation is not supported by your browser. Showing all available banquets.");
+      fetchAllBanquets();
+      setLocationLoading(false);
+    }
+  };
+
+  // Fetch location suggestions for search
+  const fetchLocationSuggestions = async (query) => {
+    if (query.length < 3) {
+      setLocationSuggestions([]);
+      return;
+    }
+    
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&limit=5&countrycodes=np`
+      );
+      const data = await response.json();
+      setLocationSuggestions(data);
+    } catch (error) {
+      console.error("Error fetching location suggestions:", error);
+      setLocationSuggestions([]);
+    }
+  };
+
+  // Handle selecting a location from suggestions
+  const handleSelectLocationSuggestion = (suggestion) => {
+    setLocationSearchValue(suggestion.display_name);
+    setShowLocationSuggestions(false);
+    
+    // Update user location and fetch banquets near this location
+    setUserLocation({ lat: suggestion.lat, lon: suggestion.lon });
+    fetchNearbyBanquets(suggestion.lat, suggestion.lon);
+  };
+
+  // Handle changes to banquet search input
   const handleInput = (e) => {
     setSearchBanquetValue(e.target.value);
     setNoDataFound(false);
     if (e.target.value === "") {
-      fetchData();
+      // If user clears search, return to location-based results or all banquets
+      if (userLocation) {
+        fetchNearbyBanquets(userLocation.lat, userLocation.lon);
+      } else {
+        fetchAllBanquets();
+      }
     }
   };
 
-  const handleSearchByLocationInput = async (e) => {
-    setNoDataFound(false);
-    const response = await axios.get(
-      `/api/filterBanquetLocation/${e.target.value}`
-    );
-    if (response.data === "unsucessful") {
-      setNoDataFound(true);
-      return;
-    }
-    setBanquetData(response.data);
-    if (e.target.value === "") {
-      fetchData();
-    }
+  // Handle changes to location search input
+  const handleLocationSearchInput = (e) => {
+    setLocationSearchValue(e.target.value);
+    setShowLocationSuggestions(true);
+    fetchLocationSuggestions(e.target.value);
   };
 
+  // Handle search for banquet by name
   const handleSearchBanquet = async (e) => {
     e.preventDefault();
-    const response = await axios.get(
-      `/api/filterBanquetName/${searchBanquetValue}`
-    );
-    if (response.data === "unsucessful") {
+    if (!searchBanquetValue.trim()) return;
+    
+    setLocationLoading(true);
+    try {
+      const response = await axios.get(
+        `/api/filterBanquetName/${searchBanquetValue}`
+      );
+      if (response.data === "unsucessful") {
+        setNoDataFound(true);
+      } else {
+        setBanquetData(response.data);
+        setNoDataFound(false);
+      }
+    } catch (error) {
+      console.error("Error searching for banquet:", error);
       setNoDataFound(true);
-      return;
+    } finally {
+      setLocationLoading(false);
     }
-    setBanquetData(response.data);
   };
 
+  // Handle price range changes
+  async function handleChanges(event, newValue) {
+    setRange(newValue);
+    setNoDataFound(false);
+    setLocationLoading(true);
+    
+    try {
+      const response = await axios.get(`/api/filterBanquetPrice/${newValue[0]},${newValue[1]}`);
+      if (response.data === "unsucessful") {
+        setNoDataFound(true);
+      } else {
+        setBanquetData(response.data);
+      }
+    } catch (error) {
+      console.error("Error filtering by price:", error);
+      setNoDataFound(true);
+    } finally {
+      setLocationLoading(false);
+    }
+  }
+
+  // Sort banquets by price (ascending)
   const sortAscending = async () => {
-    const response = await axios.get(`/api/filterBanquetAscending`);
-    setBanquetData(response.data);
+    setLocationLoading(true);
+    try {
+      const response = await axios.get(`/api/filterBanquetAscending`);
+      setBanquetData(response.data);
+    } catch (error) {
+      console.error("Error sorting banquets:", error);
+    } finally {
+      setLocationLoading(false);
+    }
   };
 
+  // Sort banquets by price (descending)
   const sortDescending = async () => {
-    const response = await axios.get(`/api/filterBanquetDescending`);
-    setBanquetData(response.data);
+    setLocationLoading(true);
+    try {
+      const response = await axios.get(`/api/filterBanquetDescending`);
+      setBanquetData(response.data);
+    } catch (error) {
+      console.error("Error sorting banquets:", error);
+    } finally {
+      setLocationLoading(false);
+    }
   };
 
+  // Request location and load banquets when component mounts
   useEffect(() => {
-    fetchData();
+    getUserLocation();
+    
+    // Click outside to close location suggestions
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.location-search-field')) {
+        setShowLocationSuggestions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
     <>
-    <div className="bodddy">
+      <div className="bodddy">
         <div className="book-banquet-container">
           <div className="display-banquet-container">
             <div className="select-hall">
               <GiIndianPalace className="hall-icon" />
               <h2>Select Banquet Hall</h2>
+              {locationLoading && <p className="location-status">Finding banquets near you...</p>}
+              {locationError && <p className="location-error">{locationError}</p>}
+              {userLocation && !locationError && !locationLoading && (
+                <p className="location-status">Showing banquets near your location</p>
+              )}
             </div>
             <div className="search-banquet-form">
-              <div className="location-field">
-                <select
-                  name="location"
-                  value={searchBanquetValue} // Control the value
-                  onChange={(e) => {
-                    handleSearchByLocationInput(e);
-                  }}
-                >
-                  <option value="" disabled>
-                    Location
-                  </option>
-                  <option value="Kathmandu">Kathmandu</option>
-                  <option value="Butwal">Butwal</option>
-                  <option value="Janakpur">Janakpur</option>
-                  <option value="Hetauda">Hetauda</option>
-                  <option value="Chitwan">Chitwan</option>
-                  <option value="Pokhara">Pokhara</option>
-                  <option value="Biratnagar">Biratnagar</option>
-                  <option value="Jhapa">Jhapa</option>
-                  <option value="Charikot">Charikot</option>
-                  <option value="Dharan">Dharan</option>
-                  <option value="Birtamod">Birtamod</option>
-                  <option value="Dhangadhi">Dhangadhi</option>
-                  <option value="Nepalgunj">Nepalgunj</option>
-                </select>
+              {/* Location search with autocomplete */}
+              <div className="location-search-field">
+                <input
+                  type="text"
+                  placeholder="Search by location..."
+                  value={locationSearchValue}
+                  onChange={handleLocationSearchInput}
+                  className="location-search-input"
+                />
+                <MdLocationOn className="location-icon" />
+                
+                {showLocationSuggestions && locationSuggestions.length > 0 && (
+                  <ul className="location-suggestions">
+                    {locationSuggestions.map((suggestion) => (
+                      <li
+                        key={suggestion.place_id}
+                        onClick={() => handleSelectLocationSuggestion(suggestion)}
+                      >
+                        {suggestion.display_name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <form onSubmit={handleSearchBanquet}>
-                  <input
-                    type="search"
-                    id="gsearch"
-                    name="gsearch"
-                    placeholder="Search for banquet"
-                    value={searchBanquetValue}
-                    onChange={(e) => {
-                      handleInput(e);
-                    }}
-
-                    
-                  />
-                  <button className="btnn" type="submit">
-                    <AiOutlineSearch />
-                  </button>
+                <input
+                  type="search"
+                  id="gsearch"
+                  name="gsearch"
+                  placeholder="Search for banquet"
+                  value={searchBanquetValue}
+                  onChange={handleInput}
+                />
+                <button className="btnn" type="submit">
+                  <AiOutlineSearch />
+                </button>
               </form>
 
               <div className="sliderr">
-                <h3>Please Select Range</h3>
+                <h3>Please Select Price Range</h3>
                 <Slider
                   value={range}
                   min={100}
@@ -148,25 +280,34 @@ const DisplayBanquet = () => {
                   onChange={handleChanges}
                   valueLabelDisplay="auto"
                 />
-                {range[1] === 1000 ? (
-                  <p>Please select a maximum value</p>
-                ) : (
-                  <p>
-                    The selected range is {range[0]} - {range[1]}
-                  </p>
-                )}
+                <p>
+                  The selected range is {range[0]} - {range[1]}
+                </p>
               </div>
+              
               <div className="button-asc-desc">
-                <button type="submit" onClick={() => sortAscending()}>
-                  Sort Ascending
+                <button type="button" onClick={sortAscending} disabled={locationLoading}>
+                  Sort by Price: Low to High
                 </button>
-                <button type="submit" onClick={() => sortDescending()}>
-                  Sort Descending
+                <button type="button" onClick={sortDescending} disabled={locationLoading}>
+                  Sort by Price: High to Low
                 </button>
               </div>
             </div>
 
-            {!noDataFound &&
+            {locationLoading && banquetData.length === 0 && (
+              <div className="loading-container">
+                <p>Loading banquets...</p>
+              </div>
+            )}
+
+            {!locationLoading && !noDataFound && banquetData.length === 0 && (
+              <div className="no-data-container">
+                <p>No banquets available. Try a different search or location.</p>
+              </div>
+            )}
+
+            {!locationLoading && banquetData.length > 0 && !noDataFound &&
               banquetData.map((item) => {
                 const {
                   _id,
@@ -175,10 +316,11 @@ const DisplayBanquet = () => {
                   image_location,
                   banquet_location,
                   banquet_price,
+                  distance
                 } = item;
                 return (
                   <div key={_id} className="banquet-container">
-                  <img src={`http://localhost:3000/banquet-Images/${image_location}`} alt="Banquet" />    
+                    <img src={`http://localhost:3000/banquet-Images/${image_location}`} alt="Banquet" />
                     <div className="banquet-content">
                       <h2>{banquet_name}</h2>
                       <p>
@@ -188,6 +330,11 @@ const DisplayBanquet = () => {
                       <p>
                         <strong>Location:</strong> {banquet_location}
                       </p>
+                      {distance && (
+                        <p>
+                          <strong>Distance:</strong> {distance.toFixed(1)} km from you
+                        </p>
+                      )}
                       <p>
                         <strong>Price: </strong>
                         {banquet_price}
@@ -216,7 +363,7 @@ const DisplayBanquet = () => {
             )}
           </div>
         </div>
-    </div>
+      </div>
     </>
   );
 };

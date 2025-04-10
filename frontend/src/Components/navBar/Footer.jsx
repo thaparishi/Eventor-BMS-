@@ -12,6 +12,7 @@ import "./Footer.css";
 import facebookLogo from'../Images/Facebook_Logo.png.webp';
 import instagramLogo from '../Images/Instagram_logo_2016.svg.webp';
 import twitterLogo from '../Images/twitter.png';
+import logo from '../Images/image.png';
 
 
 function Footer() {
@@ -23,7 +24,7 @@ function Footer() {
             <h2>Short Info</h2>
             <p>Get in Touch</p>
             <img
-              src={""}
+              src={logo}
               alt="img"
             />
           </div>
@@ -52,31 +53,6 @@ function Footer() {
                 <p>
                   <AiOutlineWhatsApp /> +977- 9800000000
                 </p>
-              </div>
-            </section>
-            <section className="opening-hour">
-              <div className="heading">
-                <h2>Opening Hour</h2>
-              </div>
-              <div className="opening-hour-content">
-                <div className="days">
-                  <h2>Monday</h2>
-                  <h2>Tuesday</h2>
-                  <h2>Wednessday</h2>
-                  <h2>Thursday</h2>
-                  <h2>Friday</h2>
-                  <h2>Saturday</h2>
-                  <h2>Sunday</h2>
-                </div>
-                <div className="time">
-                  <p>09am - 10pm</p>
-                  <p>09am - 10pm</p>
-                  <p>09am - 10pm</p>
-                  <p>09am - 10pm</p>
-                  <p>11am - 08pm</p>
-                  <p>10am - 11pm</p>
-                  <p>Closed</p>
-                </div>
               </div>
             </section>
             <section className="opening-hour">
@@ -174,7 +150,7 @@ function Footer() {
           <section className="footer-links">
             <a href="/">Home </a>
             <a href="About">About Us </a>
-            <a href="Login">Log in </a>
+            <a href="blogs">Blogs </a>
             <a href="Gallery">Our Gallery </a>
             <a href="Contact">Contact </a>
             <br />

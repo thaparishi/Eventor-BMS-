@@ -1,4 +1,4 @@
-import myKey from "./khaltiKey";
+import myKey from "./khaltiKey.jsx";
 import axios from "axios";
 let config = {
   // replace this key with yours

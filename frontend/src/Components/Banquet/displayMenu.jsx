@@ -11,7 +11,7 @@ import axios from "axios";
 import "./displayMenu.css";
 
 const DisplayMenu = () => {
-  const { userId, token, banquetName, banquetPrice } = useParams();
+  const { userId, banquetId, token, banquetName, banquetPrice } = useParams();
 
   const [menuData, setMenuData] = useState([]);
 
@@ -76,7 +76,7 @@ const DisplayMenu = () => {
     e.preventDefault();
     const menuData = { breakfast: breakfast, lunch: lunch, desert: desert };
     const response = await axios.post(
-      `/api/bookBanquet/${token}/${banquetName}/${adminUserId}/${price}`,
+      `/api/bookBanquet/${token}/${banquetName}/${adminUserId || "admin"}/${price || 0}`,
       menuData
     );
     console.log(response.data);
@@ -98,7 +98,7 @@ const DisplayMenu = () => {
 
   useEffect(() => {
     const fetchMenuData = async (e) => {
-      const menu = await axios.get(`/api/menu/${userId}/${token}`);
+      const menu = await axios.get(`/api/menu/${banquetId}/${token}`);
       setMenuData([menu.data.data]);
       setPrice(parseInt(menu.data.price) * parseInt(banquetPrice));
     };

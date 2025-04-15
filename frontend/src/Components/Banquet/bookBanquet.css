@@ -1,86 +1,94 @@
 .book-banquets-container {
-  width: 100;
+  width: 100%;
   height: 100vh;
   background-image: url("../Images/book3.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5%;
 }
 
 .book-banquet-heading h2 {
-  padding: 20px;
-  display: block;
+  padding: 20px 0;
   text-align: center;
-  color: #414141;
-  font-size: 50px;
+  color: #ffffff;
+  font-size: 48px;
   text-transform: uppercase;
+  font-weight: bold;
 }
 
 .book-banquet-content {
-  padding: 40px;
-  border: solid rgb(77, 77, 77);
-  border-radius: 20px;
-  background: linear-gradient(to top, #ffffff, #e9b947  );
-  position: absolute;
-  right: 5%;
-  top: 20%;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  background: rgba(52, 51, 51, 0.95);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  max-width: 450px;
+  width: 100%;
 }
 
 .book-banquet-form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
+  gap: 1.2rem;
 }
 
-.book-banquet-form input {
-  width: 300px;
-  height: 50px;
-  text-align: center;
-  background-color: transparent;
-  border: 2px solid #414141;
-}
-
+.book-banquet-form input,
 .book-banquet-form select {
-  width: 300px;
-  height: 50px;
-  text-align: center;
-  background-color: transparent;
-  border: 2px solid #414141;
+  width: 100%;
+  height: 45px;
+  padding: 0 10px;
+  background-color: #f9f9f9;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.book-banquet-form input:focus,
+.book-banquet-form select:focus {
+  border-color: #f0a500;
+  outline: none;
 }
 
 .book-banquet-form .online-booking-btn {
-  color: #414141;
-  width: 250px;
-  height: 40px;
-  font-size: 20px;
+  color: #fff;
+  background-color: #f0a500;
   border: none;
+  border-radius: 25px;
+  height: 45px;
+  font-size: 18px;
   cursor: pointer;
+  transition: background-color 0.3s;
   text-transform: uppercase;
-  background-color: rgb(166, 145, 110);
-  border-radius: 20px;
 }
-/* Add this to your bookBanquet.css file */
 
+.book-banquet-form .online-booking-btn:hover {
+  background-color: #d18e00;
+}
+
+/* Success Pop-Up Styling */
 .sucess-popUp {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #414141; /* Semi-transparent black background */
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it appears above other content */
+  z-index: 1000;
 }
 
 .pop-up-message {
-  background-color: rgb(66, 64, 64);
+  background-color: #fff;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px #414141;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   max-width: 400px;
   width: 90%;
   text-align: center;
@@ -90,19 +98,19 @@
 
 .pop-up-message p {
   font-size: 1.2rem;
+  color: #333;
   margin-bottom: 1.5rem;
-  color: #ffffff;
 }
 
 .X {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 20px;
   cursor: pointer;
-  color: #777;
+  color: #999;
   transition: color 0.2s;
 }
 
@@ -110,24 +118,14 @@
   color: #333;
 }
 
-/* Animation for the pop-up */
+/* Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.sucess-popUp::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
 }

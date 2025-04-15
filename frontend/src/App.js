@@ -14,13 +14,13 @@ import Pagenf from "./Components/Pages/Pagenf.jsx";
 import DisplayBanquet from "./Components/Banquet/displayBanquet.jsx";
 import DisplayMenu from "./Components/Banquet/displayMenu.jsx";
 import BookBanquet from "./Components/Banquet/bookBanquet.jsx";
+import DBanquet from "./Components/Pages/Dbanquet.jsx";
 import Menu from "./Components/Pages/menu.jsx";
 import { CreateBanquet, ChangePassword, Blog } from "./Components/index.js";
 import Booking from "./Components/Pages/Booking.jsx";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
-
   const [userId, setUserid] = useState(null);
 
   const getCookies = async () => {
@@ -35,18 +35,18 @@ function App() {
     }
   };
 
-const deleteLoginCookie = async () => {
-  try {
-    const response = await axios.get("/api/deleteLoginCookies", {
-      withCredentials: true // Crucial for cookie deletion
-    });
-    setCheckLogin(false);
-    setUserid(null);
-    window.location.reload(); // Force refresh to clear state
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const deleteLoginCookie = async () => {
+    try {
+      const response = await axios.get("/api/deleteLoginCookies", {
+        withCredentials: true
+      });
+      setCheckLogin(false);
+      setUserid(null);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleLogin = () => {
     setCheckLogin(true);
@@ -56,49 +56,49 @@ const deleteLoginCookie = async () => {
     getCookies();
   }, []);
 
-
   return (
     <BrowserRouter>
       <div className="App">
         <NavBar checkLogin={checkLogin} deleteFun={deleteLoginCookie} />
         <Routes>
           <Route path="/" element={<Home checkLogin={checkLogin} />} />
-          <Route path="/blogs" element={<Blog/>}/>
+          <Route path="/blogs" element={<Blog />} />
+          <Route path="/dbanquet" element={<DBanquet/>} />
           <Route path="/about" element={<About />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} /> {/* Pass onLogin prop */}
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/forgetPass" element={<ForgetPass />} />
           <Route path="/changePassword/:id" element={<ChangePassword />} />
 
-          {/* if user is logged in then only this route exists */}
+          {/* if user is logged in then only these routes exist */}
           {checkLogin && (
             <>
-              <Route path="/banquet/:token"element={<DisplayBanquet userId={userId} />}></Route>
+              {/* Start with display banquet route */}
+              <Route path="/banquets" element={<DisplayBanquet />} />
+              
+              {/* Then book the selected banquet */}
+              <Route path="/bookBanquet/:banquetId/:banquetName/:banquetPrice" element={<BookBanquet />} />
+              
+              {/* Create banquet for owners */}
               <Route path="/createBanquet" element={<CreateBanquet />} />
-              <Route path="/bookBanquet" element={<BookBanquet />} />
-              <Route path="/menu/:token" element={<Menu />}></Route>
+              <Route path="/menu/:token" element={<Menu />} />
             </>
           )}
 
-          {/* If user is not logged in then only this route exists */}
+          {/* If user is not logged in then only these routes exist */}
           {!checkLogin && (
             <>
-              <Route path="/register" element={<Register />}></Route>
-              <Route path="/forgetPass" element={<ForgetPass />}></Route>
-              <Route
-                path="/changePassword/:id"
-                element={<ChangePassword />}
-              ></Route>
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgetPass" element={<ForgetPass />} />
+              <Route path="/changePassword/:id" element={<ChangePassword />} />
             </>
           )}
 
-          <Route
-            path="/DisplayMenu/:userId/:token/:banquetName/:banquetPrice"
-            element={<DisplayMenu />}
-          ></Route>
+          {/* Final step - display menu after booking */}
+          <Route path="/DisplayMenu/:banquetId/:token/:banquetName/:banquetPrice" element={<DisplayMenu />} />
           <Route path="*" element={<Pagenf />} />
         </Routes>
         <Footer />

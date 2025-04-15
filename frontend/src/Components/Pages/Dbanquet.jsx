@@ -1,223 +1,317 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Slider from "@mui/material/Slider";
 import { GiIndianPalace } from "react-icons/gi";
 import { AiOutlineSearch } from "react-icons/ai";
+import { MdLocationOn } from "react-icons/md";
+import { FaSignInAlt } from "react-icons/fa";
 import axios from "axios";
 import "./Dbanquet.css";
 
-// Helper function to calculate distance between two coordinates (Haversine formula)
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Radius of the earth in km
-  const dLat = deg2rad(lat2 - lat1);
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = R * c; // Distance in km
-  return distance;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI / 180);
-}
-
-const Dbanquet = () => {
+const Dbanquet = ({ checkLogin }) => {
   const [banquetData, setBanquetData] = useState([]);
-  const [sortedBanquetData, setSortedBanquetData] = useState([]);
   const [searchBanquetValue, setSearchBanquetValue] = useState("");
+  const [locationSearchValue, setLocationSearchValue] = useState("");
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
   const { token } = useParams();
   const [noDataFound, setNoDataFound] = useState(false);
   const [range, setRange] = useState([100, 1000]);
   const [userLocation, setUserLocation] = useState(null);
+  const [locationLoading, setLocationLoading] = useState(true);
   const [locationError, setLocationError] = useState(null);
-  const [locationAsked, setLocationAsked] = useState(false);
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const navigate = useNavigate();
 
-  // Get user's current location
+
+  const handleBookNow = (banquetId, banquetName, banquetPrice) => {
+    // For debugging in the console
+    console.log("checkLogin:", checkLogin);
+    
+    // Handle all possible cases:
+    // 1. checkLogin is a function - use its return value
+    // 2. checkLogin is true/false - use directly
+    // 3. checkLogin is undefined/null - assume not logged in
+    let isLoggedIn = false;
+    
+    if (typeof checkLogin === 'function') {
+      isLoggedIn = checkLogin();
+    } else if (checkLogin === true) {
+      isLoggedIn = true;
+    } else {
+      isLoggedIn = false;
+    }
+    
+    console.log("isLoggedIn:", isLoggedIn);
+    
+    if (isLoggedIn) {
+      navigate(`/bookBanquet/${banquetId}/${banquetName}/${banquetPrice}`);
+    } else {
+      setShowLoginPrompt(true);
+    }
+  };
+  // Fetch all banquets as fallback
+  const fetchAllBanquets = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/getBanquet/${token || 'default'}`);
+      const data = await response.json();
+      setBanquetData(data);
+    } catch (error) {
+      console.error("Error fetching banquets:", error);
+      setNoDataFound(true);
+    }
+  };
+
+  // Fetch banquets near a location
+  const fetchNearbyBanquets = async (lat, lon) => {
+    try {
+      setLocationLoading(true);
+      const response = await axios.get(`/api/getNearbyBanquets/${lat}/${lon}`);
+      if (response.data && response.data.length > 0) {
+        setBanquetData(response.data);
+      } else {
+        // If no nearby banquets found, fall back to all banquets
+        await fetchAllBanquets();
+      }
+    } catch (error) {
+      console.error("Error fetching nearby banquets:", error);
+      // Fall back to all banquets on error
+      await fetchAllBanquets();
+    } finally {
+      setLocationLoading(false);
+    }
+  };
+
+  // Get user location
   const getUserLocation = () => {
+    setLocationLoading(true);
+    setLocationError(null);
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-          setLocationAsked(true);
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ lat: latitude, lon: longitude });
+          fetchNearbyBanquets(latitude, longitude);
         },
         (error) => {
-          setLocationError(error.message);
-          setLocationAsked(true);
-        }
+          console.error("Error getting location:", error);
+          setLocationError("Unable to access your location. Showing all available banquets.");
+          fetchAllBanquets();
+          setLocationLoading(false);
+        },
+        { timeout: 10000, maximumAge: 60000 }
       );
     } else {
-      setLocationError("Geolocation is not supported by this browser.");
-      setLocationAsked(true);
+      setLocationError("Geolocation is not supported by your browser. Showing all available banquets.");
+      fetchAllBanquets();
+      setLocationLoading(false);
     }
   };
 
-  // Sort banquet data by distance from user
-  const sortByDistance = (data) => {
-    if (!userLocation) return data;
-    
-    return [...data].sort((a, b) => {
-      // Some banquet halls might not have coordinates, we'll put them at the end
-      if (!a.latitude || !a.longitude) return 1;
-      if (!b.latitude || !b.longitude) return -1;
-      
-      const distanceA = getDistance(
-        userLocation.latitude,
-        userLocation.longitude,
-        a.latitude,
-        a.longitude
-      );
-      const distanceB = getDistance(
-        userLocation.latitude,
-        userLocation.longitude,
-        b.latitude,
-        b.longitude
-      );
-      return distanceA - distanceB;
-    });
-  };
-
-  async function handleChanges(event, newValue) {
-    setRange(newValue);
-    setNoDataFound(false);
-    const response = await axios.get(`/api/filterBanquetPrice/${range}`);
-    if (response.data === "unsucessful") {
-      setNoDataFound(true);
+  // Fetch location suggestions for search
+  const fetchLocationSuggestions = async (query) => {
+    if (query.length < 3) {
+      setLocationSuggestions([]);
       return;
     }
-    const sortedData = sortByDistance(response.data);
-    setBanquetData(response.data);
-    setSortedBanquetData(sortedData);
-  }
-
-  const fetchData = async () => {
-    fetch(`http://localhost:8000/api/getBanquet/${token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setBanquetData(data);
-        const sortedData = sortByDistance(data);
-        setSortedBanquetData(sortedData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&limit=5&countrycodes=np`
+      );
+      const data = await response.json();
+      setLocationSuggestions(data);
+    } catch (error) {
+      console.error("Error fetching location suggestions:", error);
+      setLocationSuggestions([]);
+    }
   };
 
+  // Handle selecting a location from suggestions
+  const handleSelectLocationSuggestion = (suggestion) => {
+    setLocationSearchValue(suggestion.display_name);
+    setShowLocationSuggestions(false);
+    
+    // Update user location and fetch banquets near this location
+    setUserLocation({ lat: parseFloat(suggestion.lat), lon: parseFloat(suggestion.lon) });
+    fetchNearbyBanquets(parseFloat(suggestion.lat), parseFloat(suggestion.lon));
+  };
+
+  // Handle changes to banquet search input
   const handleInput = (e) => {
     setSearchBanquetValue(e.target.value);
     setNoDataFound(false);
     if (e.target.value === "") {
-      fetchData();
+      // If user clears search, return to location-based results or all banquets
+      if (userLocation) {
+        fetchNearbyBanquets(userLocation.lat, userLocation.lon);
+      } else {
+        fetchAllBanquets();
+      }
     }
   };
 
-  const handleSearchByLocationInput = async (e) => {
-    setNoDataFound(false);
-    const response = await axios.get(
-      `/api/filterBanquetLocation/${e.target.value}`
-    );
-    if (response.data === "unsucessful") {
-      setNoDataFound(true);
-      return;
-    }
-    const sortedData = sortByDistance(response.data);
-    setBanquetData(response.data);
-    setSortedBanquetData(sortedData);
-    if (e.target.value === "") {
-      fetchData();
-    }
+  // Handle changes to location search input
+  const handleLocationSearchInput = (e) => {
+    setLocationSearchValue(e.target.value);
+    setShowLocationSuggestions(true);
+    fetchLocationSuggestions(e.target.value);
   };
 
+  // Handle search for banquet by name
   const handleSearchBanquet = async (e) => {
     e.preventDefault();
-    const response = await axios.get(
-      `/api/filterBanquetName/${searchBanquetValue}`
-    );
-    if (response.data === "unsucessful") {
+    if (!searchBanquetValue.trim()) return;
+    
+    setLocationLoading(true);
+    try {
+      const response = await axios.get(
+        `/api/filterBanquetName/${searchBanquetValue}`
+      );
+      if (response.data === "unsucessful") {
+        setNoDataFound(true);
+      } else {
+        setBanquetData(response.data);
+        setNoDataFound(false);
+      }
+    } catch (error) {
+      console.error("Error searching for banquet:", error);
       setNoDataFound(true);
-      return;
+    } finally {
+      setLocationLoading(false);
     }
-    const sortedData = sortByDistance(response.data);
-    setBanquetData(response.data);
-    setSortedBanquetData(sortedData);
   };
 
+  // Handle price range changes
+  async function handleChanges(event, newValue) {
+    setRange(newValue);
+    setNoDataFound(false);
+    setLocationLoading(true);
+    
+    try {
+      const response = await axios.get(`/api/filterBanquetPrice/${newValue[0]},${newValue[1]}`);
+      if (response.data === "unsucessful") {
+        setNoDataFound(true);
+      } else {
+        setBanquetData(response.data);
+      }
+    } catch (error) {
+      console.error("Error filtering by price:", error);
+      setNoDataFound(true);
+    } finally {
+      setLocationLoading(false);
+    }
+  }
+
+  // Sort banquets by price (ascending)
   const sortAscending = async () => {
-    const response = await axios.get(`/api/filterBanquetAscending`);
-    const sortedData = sortByDistance(response.data);
-    setBanquetData(response.data);
-    setSortedBanquetData(sortedData);
+    setLocationLoading(true);
+    try {
+      const response = await axios.get(`/api/filterBanquetAscending`);
+      setBanquetData(response.data);
+    } catch (error) {
+      console.error("Error sorting banquets:", error);
+    } finally {
+      setLocationLoading(false);
+    }
   };
 
+  // Sort banquets by price (descending)
   const sortDescending = async () => {
-    const response = await axios.get(`/api/filterBanquetDescending`);
-    const sortedData = sortByDistance(response.data);
-    setBanquetData(response.data);
-    setSortedBanquetData(sortedData);
+    setLocationLoading(true);
+    try {
+      const response = await axios.get(`/api/filterBanquetDescending`);
+      setBanquetData(response.data);
+    } catch (error) {
+      console.error("Error sorting banquets:", error);
+    } finally {
+      setLocationLoading(false);
+    }
   };
 
+  // Request location and load banquets when component mounts
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  // Display data to show - either filtered or sorted
-  const displayData = sortedBanquetData.length > 0 ? sortedBanquetData : banquetData;
+    if (token) {
+      fetchAllBanquets();
+    } else {
+      getUserLocation();
+    }
+    
+    // Click outside to close location suggestions
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.location-search-field')) {
+        setShowLocationSuggestions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [token]);
 
   return (
     <>
       <div className="bodddy">
+        {showLoginPrompt && (
+          <div className="login-prompt-modal">
+            <div className="login-prompt-content">
+              <h3>Please Login to Continue</h3>
+              <p>You need to be logged in to book a banquet.</p>
+              <div className="login-prompt-buttons">
+                <button 
+                  onClick={() => navigate('/login')}
+                  className="login-button"
+                >
+                  <FaSignInAlt /> Login
+                </button>
+                <button 
+                  onClick={() => setShowLoginPrompt(false)}
+                  className="cancel-button"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="book-banquet-container">
           <div className="display-banquet-container">
             <div className="select-hall">
               <GiIndianPalace className="hall-icon" />
               <h2>Select Banquet Hall</h2>
+              {locationLoading && <p className="location-status">Finding banquets near you...</p>}
+              {locationError && <p className="location-error">{locationError}</p>}
+              {userLocation && !locationError && !locationLoading && (
+                <p className="location-status">Showing banquets near your location</p>
+              )}
             </div>
-            
-            {/* Location access button */}
-            {!locationAsked && (
-              <div className="location-access-box">
-                <p>Get banquet halls near you</p>
-                <button onClick={getUserLocation}>Allow Location Access</button>
-              </div>
-            )}
-            
-            {locationError && (
-              <div className="location-error">
-                <p>{locationError}</p>
-              </div>
-            )}
-
             <div className="search-banquet-form">
-              <div className="location-field">
-                <select
-                  name="location"
-                  value={searchBanquetValue}
-                  onChange={(e) => {
-                    handleSearchByLocationInput(e);
-                  }}
-                >
-                  <option value="" disabled>
-                    Location
-                  </option>
-                  <option value="Kathmandu">Kathmandu</option>
-                  <option value="Butwal">Butwal</option>
-                  <option value="Janakpur">Janakpur</option>
-                  <option value="Hetauda">Hetauda</option>
-                  <option value="Chitwan">Chitwan</option>
-                  <option value="Pokhara">Pokhara</option>
-                  <option value="Biratnagar">Biratnagar</option>
-                  <option value="Jhapa">Jhapa</option>
-                  <option value="Charikot">Charikot</option>
-                  <option value="Dharan">Dharan</option>
-                  <option value="Birtamod">Birtamod</option>
-                  <option value="Dhangadhi">Dhangadhi</option>
-                  <option value="Nepalgunj">Nepalgunj</option>
-                </select>
+              {/* Location search with autocomplete */}
+              <div className="location-search-field">
+                <input
+                  type="text"
+                  placeholder="Search by location..."
+                  value={locationSearchValue}
+                  onChange={handleLocationSearchInput}
+                  className="location-search-input"
+                />
+                <MdLocationOn className="location-icon" />
+                
+                {showLocationSuggestions && locationSuggestions.length > 0 && (
+                  <ul className="location-suggestions">
+                    {locationSuggestions.map((suggestion) => (
+                      <li
+                        key={suggestion.place_id}
+                        onClick={() => handleSelectLocationSuggestion(suggestion)}
+                      >
+                        {suggestion.display_name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <form onSubmit={handleSearchBanquet}>
@@ -227,9 +321,7 @@ const Dbanquet = () => {
                   name="gsearch"
                   placeholder="Search for banquet"
                   value={searchBanquetValue}
-                  onChange={(e) => {
-                    handleInput(e);
-                  }}
+                  onChange={handleInput}
                 />
                 <button className="btnn" type="submit">
                   <AiOutlineSearch />
@@ -237,7 +329,7 @@ const Dbanquet = () => {
               </form>
 
               <div className="sliderr">
-                <h3>Please Select Range</h3>
+                <h3>Please Select Price Range</h3>
                 <Slider
                   value={range}
                   min={100}
@@ -245,26 +337,35 @@ const Dbanquet = () => {
                   onChange={handleChanges}
                   valueLabelDisplay="auto"
                 />
-                {range[1] === 1000 ? (
-                  <p>Please select a maximum value</p>
-                ) : (
-                  <p>
-                    The selected range is {range[0]} - {range[1]}
-                  </p>
-                )}
+                <p>
+                  The selected range is {range[0]} - {range[1]}
+                </p>
               </div>
+              
               <div className="button-asc-desc">
-                <button type="submit" onClick={() => sortAscending()}>
-                  Sort Ascending
+                <button type="button" onClick={sortAscending} disabled={locationLoading}>
+                  Sort by Price: Low to High
                 </button>
-                <button type="submit" onClick={() => sortDescending()}>
-                  Sort Descending
+                <button type="button" onClick={sortDescending} disabled={locationLoading}>
+                  Sort by Price: High to Low
                 </button>
               </div>
             </div>
 
-            {!noDataFound &&
-              displayData.map((item) => {
+            {locationLoading && banquetData.length === 0 && (
+              <div className="loading-container">
+                <p>Loading banquets...</p>
+              </div>
+            )}
+
+            {!locationLoading && !noDataFound && banquetData.length === 0 && (
+              <div className="no-data-container">
+                <p>No banquets available. Try a different search or location.</p>
+              </div>
+            )}
+
+            {!locationLoading && banquetData.length > 0 && !noDataFound &&
+              banquetData.map((item) => {
                 const {
                   _id,
                   banquet_name,
@@ -272,30 +373,13 @@ const Dbanquet = () => {
                   image_location,
                   banquet_location,
                   banquet_price,
-                  latitude,
-                  longitude,
+                  distance
                 } = item;
-                
-                // Calculate distance if we have user location and banquet coordinates
-                let distanceText = "";
-                if (userLocation && latitude && longitude) {
-                  const distance = getDistance(
-                    userLocation.latitude,
-                    userLocation.longitude,
-                    latitude,
-                    longitude
-                  );
-                  distanceText = ` (${distance.toFixed(1)} km away)`;
-                }
-                
                 return (
                   <div key={_id} className="banquet-container">
-                    <img 
-                      src={`http://localhost:3000/banquet-Images/${image_location}`} 
-                      alt="Banquet" 
-                    />    
+                    <img src={`http://localhost:3000/banquet-Images/${image_location}`} alt="Banquet" />
                     <div className="banquet-content">
-                      <h2>{banquet_name}{distanceText}</h2>
+                      <h2>{banquet_name}</h2>
                       <p>
                         <strong>Description: </strong>
                         {banquet_description}
@@ -303,15 +387,21 @@ const Dbanquet = () => {
                       <p>
                         <strong>Location:</strong> {banquet_location}
                       </p>
+                      {distance && (
+                        <p>
+                          <strong>Distance:</strong> {distance.toFixed(1)} km from you
+                        </p>
+                      )}
                       <p>
                         <strong>Price: </strong>
                         {banquet_price}
                       </p>
-                      <a
-                        href={`/DisplayMenu/${_id}/${token}/${banquet_name}/${banquet_price}`}
+                      <button 
+                        className="banquet-menu-btn" 
+                        onClick={() => handleBookNow(_id, banquet_name, banquet_price)}
                       >
-                        <button className="banquet-menu-btn">Continue</button>
-                      </a>
+                        Book Now
+                      </button>
                     </div>
                   </div>
                 );
@@ -336,4 +426,4 @@ const Dbanquet = () => {
   );
 };
 
-export default Dbanquet;
+export default Dbanquet;  

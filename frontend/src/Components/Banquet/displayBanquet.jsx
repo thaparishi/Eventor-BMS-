@@ -16,14 +16,14 @@ const DisplayBanquet = () => {
   const [noDataFound, setNoDataFound] = useState(false);
   const [range, setRange] = useState([100, 1000]);
   const [userLocation, setUserLocation] = useState(null);
-  const [locationLoading, setLocationLoading] = useState(true); // Start as true since we request location immediately
+  const [locationLoading, setLocationLoading] = useState(true);
   const [locationError, setLocationError] = useState(null);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
 
   // Fetch all banquets as fallback
   const fetchAllBanquets = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/getBanquet/${token}`);
+      const response = await fetch(`http://localhost:8000/api/getBanquet/${token || 'default'}`);
       const data = await response.json();
       setBanquetData(data);
     } catch (error) {
@@ -70,7 +70,7 @@ const DisplayBanquet = () => {
           fetchAllBanquets();
           setLocationLoading(false);
         },
-        { timeout: 10000, maximumAge: 60000 } // 10s timeout, 1min cache
+        { timeout: 10000, maximumAge: 60000 }
       );
     } else {
       setLocationError("Geolocation is not supported by your browser. Showing all available banquets.");
@@ -204,7 +204,11 @@ const DisplayBanquet = () => {
 
   // Request location and load banquets when component mounts
   useEffect(() => {
-    getUserLocation();
+    if (token) {
+      fetchAllBanquets();
+    } else {
+      getUserLocation();
+    }
     
     // Click outside to close location suggestions
     const handleClickOutside = (event) => {
@@ -215,7 +219,7 @@ const DisplayBanquet = () => {
     
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [token]);
 
   return (
     <>
@@ -339,10 +343,9 @@ const DisplayBanquet = () => {
                         <strong>Price: </strong>
                         {banquet_price}
                       </p>
-                      <a
-                        href={`/DisplayMenu/${_id}/${token}/${banquet_name}/${banquet_price}`}
-                      >
-                        <button className="banquet-menu-btn">Continue</button>
+                      {/* Modified this link to go to bookBanquet first */}
+                      <a href={`/bookBanquet/${_id}/${banquet_name}/${banquet_price}`}>
+                        <button className="banquet-menu-btn">Book Now</button>
                       </a>
                     </div>
                   </div>

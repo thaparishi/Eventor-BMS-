@@ -71,19 +71,19 @@ function Home({ checkLogin }) {
           <h1>Welcome to Eventor</h1>
           <p>Book your perfect banquet for any occasion with ease!</p>
           {checkLogin && (
-              <div className="bottom-middle-banquet">
-                <Link to="/createBanquet">
-                  <button className="bottom-banquet-btn create-banquet-btn">
-                    Register Your Banquet
-                  </button>
-                </Link>
-                <Link to="/BookBanquet">
-                  <button className="bottom-banquet-btn show-banquet-btn">
-                    Book Banquet for events
-                  </button>
-                </Link>
-              </div>
-            )}
+            <div className="bottom-middle-banquet">
+              <Link to="/createBanquet">
+                <button className="bottom-banquet-btn create-banquet-btn">
+                  Register Your Banquet
+                </button>
+              </Link>
+              <Link to="/banquets">
+                <button className="bottom-banquet-btn show-banquet-btn">
+                  Book Banquet for events
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="bottom-medall">

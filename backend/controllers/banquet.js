@@ -7,7 +7,6 @@ import nodemailer from "nodemailer";
 
 // Importing jwt to create a token.
 import jwt from "jsonwebtoken";
-import { generatePassword } from "../utils/passwordGenerator.js";
 
 export const getBanquet = async (req, res) => {
   try {
@@ -40,8 +39,9 @@ export const createBanquet = async (req, res) => {
 
     console.log(path);
     if (path) {
-      const splitedData = path.split("\\");
-      const newPath = splitedData[5];
+      const filename = path.split('\\').pop().split('/').pop();
+      // Define newPath before using it
+      const newPath = `/banquet-Images/${filename}`;
       console.log(newPath);
       if (name && desc) {
         // Creating a token.
@@ -56,7 +56,7 @@ export const createBanquet = async (req, res) => {
               lon: location_lon
             },
             banquet_price: price,
-            image_location: filename,
+            image_location: newPath, 
           },
           "jwtsecret",
           {

@@ -1,7 +1,6 @@
 import express from "express";
 const app = express();
 import cors from "cors";
-import path from "path";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session";
@@ -11,7 +10,8 @@ import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 import dotenv from "dotenv";
 import fs from "fs";
-import { fileURLToPath } from "url";
+import path from 'path';
+import { fileURLToPath } from 'url';
 import bcrypt from "bcryptjs";
 
 // Import routes and models
@@ -32,6 +32,7 @@ import registerModel from "./models/register.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 dotenv.config();
 
@@ -66,9 +67,9 @@ app.use(expressSession({
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   },
 }));
-app.use("/banquet-Images", express.static(path.join(__dirname, "../frontend/src/Components/banquet-Images/")));
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/Images", express.static(path.join(__dirname, "Images")));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/banquet-Images', express.static(path.join(__dirname, '../frontend/src/Components/banquet-Images')));
+console.log("Banquet images directory:", path.join(__dirname, '../frontend/src/Components/banquet-Images'));
 
 
 // Database connection

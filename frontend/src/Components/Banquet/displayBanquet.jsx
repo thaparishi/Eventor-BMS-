@@ -324,7 +324,14 @@ const DisplayBanquet = () => {
                 } = item;
                 return (
                   <div key={_id} className="banquet-container">
-                    <img src={`http://localhost:3000/banquet-Images/${image_location}`} alt="Banquet" />
+                    <img 
+                        src={image_location} 
+                        alt={`${banquet_name} Banquet`} 
+                        onError={(e) => {
+                          console.error("Failed to load image:", image_location);
+                          e.target.onerror = null; // Prevent infinite loop
+                        }}
+                      />
                     <div className="banquet-content">
                       <h2>{banquet_name}</h2>
                       <p>

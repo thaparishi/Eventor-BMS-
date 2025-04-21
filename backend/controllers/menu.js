@@ -1,6 +1,5 @@
 import banquetModel from "../models/banquet.js";
 import registerModel from "../models/register.js";
-import AdminModel from "../models/admin.js";
 import BanquetOwnerModel from "../models/banquetowner.js";
 import nodemailer from "nodemailer";
 import menuSchema from "../models/menu.js";
@@ -12,8 +11,15 @@ export const createMenu = async (req, res) => {
     // Destructuring array.
     const [breakfast, dinner, desert, price] = req.body.menu;
     const { token } = req.params;
+    
     // Decoding the token with secret key and token.
-    let decoded = await jwt.verify(token, "jwtsecret");
+    let decoded;
+    try {
+      decoded = await jwt.verify(token, "jwtsecret");
+    } catch (tokenError) {
+      console.log("Token verification error:", tokenError);
+      return res.status(401).json({ error: "Invalid token" });
+    }
     
     if (breakfast && dinner && desert && price) {
       // Creating banquet.
@@ -53,7 +59,7 @@ export const createMenu = async (req, res) => {
         // Generate a random password
         generatedPassword = generatePassword(10);
         
-        // Create BanquetOwner account in the new BanquetOwnerModel instead of AdminModel
+        // Create BanquetOwner account
         const banquetOwner = await BanquetOwnerModel.create({
           email: userData.email,
           password: generatedPassword, // This will be hashed by the pre-save hook
@@ -112,27 +118,92 @@ export const createMenu = async (req, res) => {
       
       return res.status(200).json("Sucess");
     }
-    res.json("Unsucessfull");
+    return res.status(400).json("Unsucessfull");
   } catch (error) {
-    console.log(error);
+    console.log("Error in createMenu:", error);
+    res.status(500).json({ error: "An error occurred while creating the menu" });
   }
 };
 
 export const getMenu = async (req, res) => {
   try {
     const { banquetId, token } = req.params;
+    console.log(`Getting menu for banquetId: ${banquetId}, token: ${token}`);
+
+    if (!banquetId || !token) {
+      return res.status(400).json({ 
+        error: "Missing required parameters",
+        data: {
+          userId: "admin",
+          breakfast: [],
+          dinner: [],
+          desert: []
+        },
+        price: 0
+      });
+    }
 
     // Decoding the token with secret key and token.
-    let decoded = await jwt.verify(token, "jwtsecret");
+    let decoded;
+    try {
+      decoded = await jwt.verify(token, "jwtsecret");
+    } catch (tokenError) {
+      console.log("Token verification error:", tokenError);
+      return res.status(401).json({ 
+        error: "Invalid token",
+        data: {
+          userId: "admin",
+          breakfast: [],
+          dinner: [],
+          desert: []
+        },
+        price: 0
+      });
+    }
 
     const { guest } = decoded;
+    const newPrice = parseInt(guest) || 0;
 
+    // Find menu for the provided banquet ID
     const menu = await menuSchema.findOne({ banquetId: banquetId });
+    console.log("Menu found:", menu);
 
-    const newPrice = parseInt(guest);
-
-    res.status(200).json({ data: menu, price: newPrice });
+    // Always return a properly structured response
+    if (menu) {
+      // Return actual menu data
+      return res.status(200).json({ 
+        data: {
+          userId: menu.userId,
+          breakfast: menu.breakfast || [],
+          dinner: menu.dinner || [],
+          desert: menu.desert || []
+        }, 
+        price: newPrice 
+      });
+    } else {
+      // Return empty menu structure with default values
+      console.log("No menu found for banquetId:", banquetId);
+      return res.status(200).json({ 
+        data: {
+          userId: "admin",
+          breakfast: [],
+          dinner: [],
+          desert: []
+        }, 
+        price: newPrice 
+      });
+    }
   } catch (error) {
-    console.log(error);
+    console.log("Error in getMenu:", error);
+    return res.status(500).json({ 
+      error: "Failed to retrieve menu",
+      data: {
+        userId: "admin",
+        breakfast: [],
+        dinner: [],
+        desert: []
+      },
+      price: 0
+    });
   }
 };

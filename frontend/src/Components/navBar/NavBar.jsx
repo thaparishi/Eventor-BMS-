@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import "./NavBar.css";
-import { FaHome, FaInfoCircle, FaConciergeBell, FaSignInAlt, FaBars, FaTimes } from "react-icons/fa";
+import { FaHome, FaInfoCircle, FaConciergeBell, FaSignInAlt, FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import { IoPeopleCircleOutline } from "react-icons/io5";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
@@ -10,6 +10,8 @@ function NavBar({ checkLogin, deleteFun }) {
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,13 +24,25 @@ function NavBar({ checkLogin, deleteFun }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  useEffect(() => {
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const toggleNav = () => setIsNavOpen(!isNavOpen);
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
 
   const handleLogout = () => {
+    setShowDropdown(false);
     deleteFun(); // Call the delete function passed from parent to clear cookies
   };
-
-  console.log("checkLogin in NavBar:", checkLogin); // Debugging
 
   return (
     <nav className={`navbar ${isHidden ? "hidden" : ""}`}>
@@ -52,10 +66,21 @@ function NavBar({ checkLogin, deleteFun }) {
             <li><NavLink to="/login"><FaSignInAlt className="navbar-icon" /> Login</NavLink></li>
           </>
         ) : (
-          <li>
-            <NavLink to="#" className="link btn-logout" onClick={handleLogout}>
-              <BiLogOut className="fa fa-sign-out" aria-hidden="true" /> Logout
-            </NavLink>
+          <li className="dropdown-container" ref={dropdownRef}>
+            <button className="user-menu-btn" onClick={toggleDropdown}>
+              <FaUserCircle className="navbar-icon" /> My Account <span className="dropdown-arrow">▼</span>
+            </button>
+            
+            {showDropdown && (
+              <div className="dropdown-menu">
+                <NavLink to="/profile" onClick={() => setShowDropdown(false)}>
+                  <FaUserCircle /> Profile
+                </NavLink>
+                <button onClick={handleLogout} className="dropdown-item">
+                  <BiLogOut /> Logout
+                </button>
+              </div>
+            )}
           </li>
         )}
       </ul>

@@ -18,6 +18,7 @@ import DBanquet from "./Components/Pages/Dbanquet.jsx";
 import Menu from "./Components/Pages/menu.jsx";
 import { CreateBanquet, ChangePassword, Blog } from "./Components/index.js";
 import Booking from "./Components/Pages/Booking.jsx";
+import Profile from "./Components/Pages/Profile.jsx";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
@@ -85,6 +86,7 @@ function App() {
               {/* Create banquet for owners */}
               <Route path="/createBanquet" element={<CreateBanquet />} />
               <Route path="/menu/:token" element={<Menu />} />
+              <Route path="/profile" element={<Profile />} />
             </>
           )}
 

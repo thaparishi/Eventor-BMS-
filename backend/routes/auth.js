@@ -8,6 +8,8 @@ import {
   changePassword,
   checkLoginCookie,
   deleteLoginCookie,
+  getUserProfile, 
+  updateUserProfile
 } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -21,5 +23,7 @@ router.route("/api/deleteLoginCookies").get(deleteLoginCookie);
 router.route("/api/sendResetPasswordLink").post(sendResetPasswordLink);
 router.route("/api/verifyEmail/:id").get(verifyEmail);
 router.route("/api/changePassword").post(changePassword);
+router.route("/api/getUserProfile").get(getUserProfile);
+router.route("/api/updateUserProfile").post(updateUserProfile);
 
 export default router;

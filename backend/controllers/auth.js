@@ -13,6 +13,9 @@ import jwt from "jsonwebtoken";
 // Importing nodemailer for sending mail.
 import nodemailer from "nodemailer";
 
+// Import BookModel for getUserBookings function
+import BookModel from "../models/book.js";
+
 const register = async (req, res) => {
   try {
     // Destructuring the object.check
@@ -234,6 +237,7 @@ const deleteLoginCookie = async (req, res) => {
     res.status(500).json({ success: false });
   }
 };
+
 const verifyEmail = async (req, res) => {
   try {
     // Destructuring the object.
@@ -283,6 +287,125 @@ const changePassword = async (req, res) => {
   }
 };
 
+// Get user profile data
+const getUserProfile = async (req, res) => {
+  try {
+    const { userId } = req.signedCookies;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not authenticated" });
+    }
+    const user = await registerModel.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    // Return user data without sensitive information
+    res.json({
+      success: true,
+      user: {
+        name: user.name,
+        email: user.email,
+        number: user.number
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Update user profile
+const updateUserProfile = async (req, res) => {
+  try {
+    const { userId } = req.signedCookies;
+    const { name, email, number, currentPassword, newPassword } = req.body;
+    
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not authenticated" });
+    }
+    
+    const user = await registerModel.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    const updateData = {};
+    
+    // Update name if provided
+    if (name && name !== user.name) {
+      updateData.name = name;
+    }
+    
+    // Update number if provided
+    if (number && number !== user.number) {
+      updateData.number = number;
+    }
+    
+    // Update email if it's different
+    if (email && email !== user.email) {
+      // Check if the new email is already in use
+      const emailExists = await registerModel.findOne({ email, userId: { $ne: userId } });
+      if (emailExists) {
+        return res.status(400).json({ success: false, message: "Email is already in use" });
+      }
+      updateData.email = email;
+    }
+    
+    // Update password if provided
+    if (newPassword) {
+      // Verify current password
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).json({ success: false, message: "Current password is incorrect" });
+      }
+      // Hash new password
+      const salt = await bcrypt.genSalt(10);
+      updateData.password = await bcrypt.hash(newPassword, salt);
+    }
+    
+    // Only update if there are changes
+    if (Object.keys(updateData).length > 0) {
+      await registerModel.findOneAndUpdate({ userId }, updateData);
+    }
+    
+    res.json({ success: true, message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Get user bookings
+const getUserBookings = async (req, res) => {
+  try {
+    const { userId } = req.signedCookies;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Not authenticated" });
+    }
+    
+    // Find bookings for the user
+    const bookings = await BookModel.find({ userId })
+      .sort({ createdAt: -1 }) // Most recent first
+      .populate('banquetId', 'name'); // Get banquet name
+    
+    // Format the bookings for the frontend
+    const formattedBookings = bookings.map(booking => ({
+      _id: booking._id,
+      banquetName: booking.banquetId ? booking.banquetId.name : 'Unknown Venue',
+      date: booking.date,
+      eventType: booking.eventType,
+      guests: booking.guests,
+      status: booking.status,
+      totalAmount: booking.totalAmount,
+      createdAt: booking.createdAt
+    }));
+    
+    res.json({ success: true, bookings: formattedBookings });
+  } catch (error) {
+    console.error("Error fetching user bookings:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 // Exporting all functions
 export {
   register,
@@ -293,4 +416,7 @@ export {
   changePassword,
   checkLoginCookie,
   deleteLoginCookie,
+  getUserProfile,
+  updateUserProfile,
+  getUserBookings
 };

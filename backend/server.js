@@ -29,6 +29,8 @@ import BlogModel from "./models/blog.js";
 import blogRouter from "./routes/blog.js";
 import contactModel from "./models/contact.js";
 import registerModel from "./models/register.js";
+import reviewRouter from "./routes/review.js";
+import ReviewModel from "./models/review.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -304,6 +306,35 @@ const setupAdminJS = () => {
             delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
             // Only admins can create new bookings directly through AdminJS
             new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+          }
+        }
+      },
+
+      {
+        resource: ReviewModel,
+        options: {
+          properties: {
+            image: {
+              isVisible: { list: true, filter: false, show: true, edit: true },
+            },
+            quote: {
+              type: 'textarea',
+              isVisible: { list: false, filter: false, show: true, edit: true }
+            },
+            createdAt: {
+              isVisible: { list: true, filter: true, show: true, edit: false }
+            },
+            _id: { 
+              isVisible: { list: false, filter: false, show: true, edit: false }
+            }
+          },
+          actions: {
+            // Only admins can manage reviews
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' }
           }
         }
       },

@@ -1,14 +1,21 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 import "./Pagenf.css";
 
 const Pagenf = () => {
+  const navigate = useNavigate();
+
+  const goToHome = () => {
+    navigate("/");
+  };
+
   return (
-    <main>
-      <div className="pagenff">
-        <h2>Page not Found</h2>
-      </div>
-    </main>
+    <div className="mainn">
+      <h1 className="pnf">Page Not Found</h1>
+      <button onClick={goToHome} className="home-button">
+        Go Back to Home
+      </button>
+    </div>
   );
 };
 

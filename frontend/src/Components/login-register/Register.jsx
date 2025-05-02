@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useRef } from "react";
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,6 +6,7 @@ import "./login-register.css";
 
 const Register = () => {
   const navigate = useNavigate();
+  const formRef = useRef(null);
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -28,8 +29,38 @@ const Register = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check if any field contains only whitespace
+    const trimmedFields = {};
+    let hasOnlyWhitespace = false;
+    
+    Object.keys(user).forEach(field => {
+      const value = user[field];
+      trimmedFields[field] = value.trim();
+      
+      // If field has content but it's only whitespace
+      if (value && !trimmedFields[field]) {
+        hasOnlyWhitespace = true;
+        // Set the field value to empty to trigger the default HTML validation
+        document.getElementById(field).value = "";
+        document.getElementById(field).focus();
+      }
+    });
+    
+    if (hasOnlyWhitespace) {
+      return; // Stop form submission
+    }
+    
+    // If we get here, form is valid
     try {
-      const response = await axios.post("http://localhost:8000/api/register", user);
+      const response = await axios.post("http://localhost:8000/api/register", {
+        ...user,
+        // Use trimmed values for submission
+        name: trimmedFields.name,
+        email: trimmedFields.email,
+        number: trimmedFields.number,
+        password: trimmedFields.password
+      });
 
       if (response.data === "UnSuccessful") {
         setResponseMessage({ msg: "Cannot Register", unSuccess: true });
@@ -59,7 +90,7 @@ const Register = () => {
 
             <section className="register-form">
               <h1 id="register-text">Register Account</h1>
-              <form className="register" onSubmit={handleSubmit}>
+              <form className="register" ref={formRef} onSubmit={handleSubmit}>
                 <div className="name-field">
                   <span className="login-icon">
                     <i className="fa-solid fa-user"></i>
@@ -68,7 +99,7 @@ const Register = () => {
                     type="text"
                     id="name"
                     name="name"
-                    placeholder="Username"
+                    placeholder="Full Name"
                     value={user.name}
                     onChange={handleChange}
                     required

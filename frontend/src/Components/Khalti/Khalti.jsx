@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Khalti = ({ payment }) => {
+const Khalti = ({ payment, bookingId }) => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const initiatePayment = async () => {
@@ -11,10 +11,11 @@ const Khalti = ({ payment }) => {
       const bookingCharge = Math.round(payment * 0.15);
       
       const data = {
-        return_url: "http://localhost:3000/booking",
+        // Using lowercase 'booking' to match the route in App.js
+        return_url: `http://localhost:3000/booking/${bookingId}`,
         website_url: "http://localhost:3000/",
         amount: bookingCharge * 100, 
-        purchase_order_id: "test12",
+        purchase_order_id: bookingId || "test12",
         purchase_order_name: "Booking Charge",
         customer_info: {
           name: "Rishi Thapa",
@@ -29,7 +30,7 @@ const Khalti = ({ payment }) => {
         ],
         product_details: [
           {
-            identity: "1234567890",
+            identity: bookingId || "1234567890",
             name: "Banquet Booking",
             total_price: bookingCharge * 100,
             quantity: 1,
@@ -47,6 +48,12 @@ const Khalti = ({ payment }) => {
         data,
         { headers }
       );
+      
+      // Store booking ID in local storage to use on return
+      localStorage.setItem('pendingBookingId', bookingId);
+      
+      // Also store transaction data from the request for verification
+      localStorage.setItem('paymentAmount', bookingCharge * 100);
       
       // Immediately redirect to payment URL
       window.location.href = response.data.payment_url;

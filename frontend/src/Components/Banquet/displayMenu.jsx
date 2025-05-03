@@ -1,32 +1,22 @@
 import React, { useEffect, useState } from "react";
-
 import { AiFillCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-
 import { useParams } from "react-router-dom";
-
 import Khalti from "../Khalti/Khalti";
-
 import axios from "axios";
-
 import "./displayMenu.css";
 
 const DisplayMenu = () => {
   const { userId, banquetId, token, banquetName, banquetPrice } = useParams();
 
   const [menuData, setMenuData] = useState([]);
-
   const [price, setPrice] = useState(null);
-
   const [breakfast, setBreakfast] = useState([]);
-
   const [lunch, setLunch] = useState([]);
-
   const [desert, setDesert] = useState([]);
-
+  const [bookingId, setBookingId] = useState(null);
   let adminUserId;
 
   const [isOpen, setIsOpen] = useState(false);
-
   const [responseMessage, setResponseMessage] = useState({
     msg: "",
     sucess: false,
@@ -81,8 +71,21 @@ const DisplayMenu = () => {
     );
     console.log(response.data);
     if (response.data === "Sucess") {
+      // Get the booking ID from the latest booking
+      try {
+        const bookingsResponse = await axios.get("/api/getUserBookings", {
+          withCredentials: true
+        });
+        if (bookingsResponse.data.success && bookingsResponse.data.bookings.length > 0) {
+          // Assume the latest booking is the first in the array (sorted by date)
+          setBookingId(bookingsResponse.data.bookings[0]._id);
+        }
+      } catch (err) {
+        console.error("Error fetching booking ID:", err);
+      }
+
       setResponseMessage({
-        msg: "Sucessfully, Booked the Banquet, Please Proceed to Payment",
+        msg: "Successfully Booked the Banquet, Please Proceed to Payment",
         sucess: true,
       });
       setTimeout(() => {
@@ -90,7 +93,7 @@ const DisplayMenu = () => {
       }, 2000);
     } else if (response.data === "Unsucessfull") {
       setResponseMessage({
-        msg: "UnSucessfull, Please Check Empty Fields",
+        msg: "Unsuccessful, Please Check Empty Fields",
         unSucess: true,
       });
     }
@@ -103,7 +106,7 @@ const DisplayMenu = () => {
       setPrice(parseInt(menu.data.price) * parseInt(banquetPrice));
     };
     fetchMenuData();
-  }, [userId, token]);
+  }, [userId, token, banquetId, banquetPrice]);
 
   useEffect(() => {
     const Timer = setTimeout(() => {
@@ -115,6 +118,10 @@ const DisplayMenu = () => {
     };
   }, [responseMessage]);
 
+  const closePaymentModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="boody">
       <form onSubmit={handleSubmit}>
@@ -122,7 +129,7 @@ const DisplayMenu = () => {
           const { userId, breakfast, desert, dinner, price } = item;
           adminUserId = userId;
           return (
-            <>
+            <React.Fragment key={userId}>
               <div className="menu-price">
                 <div>
                   <h2>Our Menu</h2>
@@ -133,7 +140,7 @@ const DisplayMenu = () => {
                   <p>Maximum Capacity {price}</p>
                 </div>
               </div>
-              <div className="menu" key={userId}>
+              <div className="menu">
                 <div className="form-menus">
                   <div className="heading-menu">
                     <h2>STARTERS</h2>
@@ -154,14 +161,14 @@ const DisplayMenu = () => {
                               <div>
                                 <input
                                   type="checkbox"
-                                  id={item}
+                                  id={`breakfast-${index}`}
                                   name="breakfast"
                                   value={item}
                                   onChange={(e) => {
                                     handleChange(e);
                                   }}
                                 />
-                                <label htmlFor="breakfast">{item}</label>
+                                <label htmlFor={`breakfast-${index}`}>{item}</label>
                                 <br />
                               </div>
                               <div className="underline-dotted"></div>
@@ -191,31 +198,30 @@ const DisplayMenu = () => {
                           <div key={index} className="display-all-menu">
                             <div className="breakfast-image">
                               <img
-                                src={require("../Images/menu/dinner.jpg")}
+                                src={require("../Images/menu/breakfast.jpg")}
                                 alt=""
-                                width="500"
                               />
                             </div>
                             <div>
                               <div>
                                 <input
                                   type="checkbox"
-                                  id={item}
+                                  id={`dinner-${index}`}
                                   name="dinner"
                                   value={item}
                                   onChange={(e) => {
                                     handleChange(e);
                                   }}
                                 />
-                                <label htmlFor="dinner">{item}</label>
+                                <label htmlFor={`dinner-${index}`}>{item}</label>
                                 <br />
                               </div>
                               <div className="underline-dotted"></div>
                               <div className="menu-text">
                                 <p>
-                                  The main course, also known as the entree, is
-                                  the central dish of the meal, usually
-                                  consisting of a protein source.
+                                  The main course is the featured or primary dish in a meal
+                                  consisting of several courses. It is the most substantial
+                                  course of the meal.
                                 </p>
                               </div>
                             </div>
@@ -228,9 +234,8 @@ const DisplayMenu = () => {
 
                 <div className="form-menus">
                   <div className="heading-menu">
-                    <h2>DESSERT</h2>
+                    <h2>DESSERTS</h2>
                   </div>
-
                   <div className="menu-items">
                     <div className="menu-content-form">
                       {desert.map((item, index) => {
@@ -238,31 +243,29 @@ const DisplayMenu = () => {
                           <div key={index} className="display-all-menu">
                             <div className="breakfast-image">
                               <img
-                                src={require("../Images/menu/dinner.jpg")}
+                                src={require("../Images/menu/breakfast.jpg")}
                                 alt=""
-                                width="500"
                               />
                             </div>
                             <div>
                               <div>
                                 <input
                                   type="checkbox"
-                                  id={item}
+                                  id={`desert-${index}`}
                                   name="desert"
                                   value={item}
                                   onChange={(e) => {
                                     handleChange(e);
                                   }}
                                 />
-                                <label htmlFor="desert">{item}</label>
+                                <label htmlFor={`desert-${index}`}>{item}</label>
                                 <br />
                               </div>
                               <div className="underline-dotted"></div>
                               <div className="menu-text">
                                 <p>
-                                  Dessert is a sweet dish, often served at the
-                                  end of the meal, which may include fruit,
-                                  cakes, pastries, ice cream.
+                                  Dessert is the sweet course eaten at the end of a meal,
+                                  such as cake, pastry, ice cream, pudding, or fruit.
                                 </p>
                               </div>
                             </div>
@@ -273,66 +276,47 @@ const DisplayMenu = () => {
                   </div>
                 </div>
               </div>
-            </>
+            </React.Fragment>
           );
         })}
-        <button
-          className={
-            isOpen ? "submit-menu-btn display-none" : "submit-menu-btn"
-          }
-          type="submit"
-        >
-          Submit Menu
-        </button>
+
+        <div className="book-form-btn">
+          <button type="submit">Book Now</button>
+        </div>
       </form>
+
+      <div className="sucess-message">
+        {responseMessage.sucess && (
+          <div className="sucess-message-inner">
+            <AiFillCheckCircle className="sucess-message-icon" />
+            <h3>{responseMessage.msg}</h3>
+          </div>
+        )}
+        {responseMessage.unSucess && (
+          <div className="unsucess-message-inner">
+            <AiOutlineCloseCircle className="unsucess-message-icon" />
+            <h3>{responseMessage.msg}</h3>
+          </div>
+        )}
+      </div>
+
       {isOpen && (
-        <div className="display-menu-modal">
-          <div className="display-modal">
-          <article className="Calculated-Price">
-            <p>
-              <b>Total Cost: </b>Rs. {price}
-            </p>
-            <p>
-              <b>Booking Charge (15%): </b>Rs. {Math.round(price * 0.15)}
-            </p>
-          </article>
-            <article className="PayNow">
-              <Khalti payment={price} />
-            </article>
-            <article className="back-to-home-pg">
-              <a href="/" style={{ fontSize: "15px" }}>
-                {" "}   
-                Back to Home
-              </a>
-            </article>
+        <div className="payment-modal">
+          <div className="payment-modal-content">
+            <div className="payment-modal-header">
+              <h2>Payment Details</h2>
+              <span className="close" onClick={closePaymentModal}>&times;</span>
+            </div>
+            <div className="payment-modal-body">
+              <p>Total Amount: Rs. {price}</p>
+              <p>Booking ID: {bookingId || "Loading..."}</p>
+              <p>Please note: A 15% booking charge will be collected now to confirm your reservation.</p>
+              <div className="payment-buttons">
+                <Khalti payment={price} bookingId={bookingId} />
+              </div>
+            </div>
           </div>
         </div>
-      )}
-
-      {responseMessage.sucess && (
-        <>
-          <article className="pop-up">
-            <AiFillCheckCircle size={100} color="lime" />
-            <h2>{responseMessage.msg}.</h2>
-          </article>
-        </>
-      )}
-      {responseMessage.unSucess && (
-        <>
-          <article
-            className="pop-up"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "2rem",
-              flexDirection: "column",
-            }}
-          >
-            <AiOutlineCloseCircle size={100} color="red" />
-            <h2 style={{ color: "red" }}>{responseMessage.msg}</h2>
-          </article>
-        </>
       )}
     </div>
   );

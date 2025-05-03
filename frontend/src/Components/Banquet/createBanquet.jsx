@@ -2,15 +2,58 @@ import React, { useState, useEffect } from "react";
 import "./createBanquet.css";
 
 function Banquet() {
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    desc: "",
+  });
   const [locationInput, setLocationInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [showSuggestions, setShowSuggestions] = useState(true);
+
+  // Form validation function
+  const validateForm = () => {
+    let formErrors = {};
+    let isValid = true;
+
+    // Validate banquet name - no spaces allowed
+    if (formData.name.includes(" ")) {
+      formErrors.name = "Banquet name cannot contain spaces";
+      isValid = false;
+    }
+
+    // Validate price - must be positive
+    if (formData.price <= 0) {
+      formErrors.price = "Price must be a positive number";
+      isValid = false;
+    }
+
+    // Validate location - must be selected
+    if (!selectedLocation) {
+      formErrors.location = "Please select a location";
+      isValid = false;
+    }
+
+    setErrors(formErrors);
+    return isValid;
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   // Search for location suggestions as user types
   useEffect(() => {
     const fetchSuggestions = async () => {
-      if (locationInput.length < 3) {
+      if (locationInput.length < 3 || !showSuggestions) {
         setSuggestions([]);
         return;
       }
@@ -36,7 +79,7 @@ function Banquet() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [locationInput]);
+  }, [locationInput, showSuggestions]);
 
   const handleLocationSelect = (suggestion) => {
     setLocationInput(suggestion.display_name);
@@ -47,6 +90,21 @@ function Banquet() {
       lon: suggestion.lon
     });
     setSuggestions([]);
+    setShowSuggestions(false); // Stop showing suggestions after selection
+    setErrors({...errors, location: ""});
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // If validation passes, submit the form
+      e.target.submit();
+    }
+  };
+
+  const handleLocationFocus = () => {
+    // Re-enable suggestions when user focuses on the input again
+    setShowSuggestions(true);
   };
 
   return (
@@ -58,15 +116,19 @@ function Banquet() {
           method="POST"
           action="/api/createBanquet"
           encType="multipart/form-data"
+          onSubmit={handleSubmit}
         >
           <div className="email-field">
             <input
-              type="name"
+              type="text"
               id="name"
               name="name"
               placeholder="Banquet Name"
+              value={formData.name}
+              onChange={handleInputChange}
               required
             />
+            {errors.name && <div className="error-message">{errors.name}</div>}
           </div>
 
           <div className="email-field">
@@ -75,22 +137,22 @@ function Banquet() {
               id="price"
               name="price"
               placeholder="Price Per Plate"
+              value={formData.price}
+              onChange={handleInputChange}
+              min="1"
               max="1000"
               required
-              onChange={(e) => {
-                if (e.target.value > 1000) {
-                  e.target.value = 1000;
-                }
-              }}
             />
+            {errors.price && <div className="error-message">{errors.price}</div>}
           </div>
 
           <div className="password-field">
             <textarea
-              type="desc"
               id="desc"
               name="desc"
               placeholder="Description"
+              value={formData.desc}
+              onChange={handleInputChange}
               minLength={50}
               required
             />
@@ -103,6 +165,7 @@ function Banquet() {
               placeholder="Search location..."
               value={locationInput}
               onChange={(e) => setLocationInput(e.target.value)}
+              onFocus={handleLocationFocus}
               autoComplete="off"
               required
             />
@@ -113,8 +176,9 @@ function Banquet() {
             <input type="hidden" name="location_lon" value={selectedLocation?.lon || ""} />
             
             {loading && <div className="loading-spinner">Loading...</div>}
+            {errors.location && <div className="error-message">{errors.location}</div>}
             
-            {suggestions.length > 0 && (
+            {suggestions.length > 0 && showSuggestions && (
               <ul className="location-suggestions">
                 {suggestions.map((suggestion) => (
                   <li
@@ -149,4 +213,4 @@ function Banquet() {
   );
 }
 
-export default Banquet;
+export default Banquet; 

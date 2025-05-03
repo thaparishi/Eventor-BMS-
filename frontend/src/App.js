@@ -17,7 +17,7 @@ import BookBanquet from "./Components/Banquet/bookBanquet.jsx";
 import DBanquet from "./Components/Pages/Dbanquet.jsx";
 import Menu from "./Components/Pages/menu.jsx";
 import { CreateBanquet, ChangePassword, Blog } from "./Components/index.js";
-import Booking from "./Components/Pages/Booking.jsx";
+import PaymentSuccess from "./Components/Pages/PaymentSuccess.jsx";
 import Profile from "./Components/Pages/Profile.jsx";
 
 function App() {
@@ -66,7 +66,11 @@ function App() {
           <Route path="/blogs" element={<Blog />} />
           <Route path="/dbanquet" element={<DBanquet/>} />
           <Route path="/about" element={<About />} />
-          <Route path="/booking" element={<Booking />} />
+          
+          {/* Updated booking routes to handle parameters */}
+          <Route path="/booking" element={<PaymentSuccess />} />
+          <Route path="/booking/:bookingId" element={<PaymentSuccess />} />
+          
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
@@ -101,6 +105,8 @@ function App() {
 
           {/* Final step - display menu after booking */}
           <Route path="/DisplayMenu/:banquetId/:token/:banquetName/:banquetPrice" element={<DisplayMenu />} />
+          
+          {/* Catch all for page not found */}
           <Route path="*" element={<Pagenf />} />
         </Routes>
         <Footer />

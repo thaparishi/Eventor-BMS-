@@ -12,10 +12,19 @@
 }
 
 .book-banquet-heading h2 {
-  padding: 20px 0;
+  padding: 10px 0;
   text-align: center;
   color: #ffffff;
   font-size: 48px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.book-banquet-heading p {
+  padding: 10px 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: 20px;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -41,17 +50,49 @@
   width: 100%;
   height: 45px;
   padding: 0 10px;
-  background-color: #f9f9f9;
-  border: 2px solid #ccc;
+  background-color: rgba(52, 51, 51, 0.95) !important;
+  border: 2px solid #ccc !important;
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 0.2s;
+  color: white !important;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.book-banquet-form input[type="date"] {
+  border: 2px solid #ccc !important; 
+  color: white !important;
+  background-color: rgba(52, 51, 51, 0.95) !important;
+}
+
+.book-banquet-form input[type="number"] {
+  border: 2px solid #ccc !important;
+  color: white !important;
+  background-color: rgba(52, 51, 51, 0.95) !important;
 }
 
 .book-banquet-form input:focus,
 .book-banquet-form select:focus {
   border-color: #f0a500;
   outline: none;
+}
+
+.book-banquet-form input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.book-banquet-form input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.book-banquet-form input:focus,
+.book-banquet-form select:focus {
+  border-color: #f0a500 !important;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(240, 165, 0, 0.2);
 }
 
 .book-banquet-form .online-booking-btn {
@@ -128,4 +169,119 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Form group styling */
+.form-group {
+  width: 100%;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.input-error {
+  border: 1px solid #ff3333 !important;
+  background-color: rgba(255, 51, 51, 0.2) !important;
+}
+
+.error-message {
+  color: #ff3333;
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.form-error {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: #ff3333;
+}
+
+.availability-message {
+  color: #ff6600;
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.book-banquet-form button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Add these styles to your bookBanquet.css file */
+
+.availability-status {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.availability-status.available {
+  background-color: rgba(0, 128, 0, 0.1);
+  border: 1px solid #4CAF50;
+  color: #2e7d32;
+}
+
+.availability-status.not-available {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid #f44336;
+  color: #c62828;
+}
+
+.availability-message {
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Improve button styling when disabled */
+.online-booking-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Add hover explanation for disabled button */
+.online-booking-btn:disabled::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.online-booking-btn:disabled:hover::after {
+  visibility: visible;
+  opacity: 1;
 }

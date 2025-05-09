@@ -310,7 +310,7 @@ const DisplayMenu = () => {
             <div className="payment-modal-body">
               <p>Total Amount: Rs. {price}</p>
               <p>Booking ID: {bookingId || "Loading..."}</p>
-              <p>Please note: A 15% booking charge will be collected now to confirm your reservation.</p>
+              <p>Please note: A 10% booking charge will be collected now to confirm your reservation.</p>
               <div className="payment-buttons">
                 <Khalti payment={price} bookingId={bookingId} />
               </div>

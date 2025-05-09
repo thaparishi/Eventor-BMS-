@@ -16,7 +16,6 @@ const bookedSchema = mongoose.Schema({
     trim: true,
     required: [true, "Please provide shift"],
   },
-
   date: [
     {
       type: String,
@@ -24,7 +23,6 @@ const bookedSchema = mongoose.Schema({
       required: [true, "Please provide date"],
     },
   ],
-
   guest: [
     {
       type: String,
@@ -32,7 +30,6 @@ const bookedSchema = mongoose.Schema({
       required: [true, "Please provide guest"],
     },
   ],
-
   type: [
     {
       type: String,
@@ -40,7 +37,6 @@ const bookedSchema = mongoose.Schema({
       required: [true, "Please provide type of wedding"],
     },
   ],
-
   starters: [
     {
       type: String,
@@ -48,7 +44,6 @@ const bookedSchema = mongoose.Schema({
       required: [true, "Please provide break fast"],
     },
   ],
-
   mainCourse: [
     {
       type: String,
@@ -56,7 +51,6 @@ const bookedSchema = mongoose.Schema({
       required: [true, "Please provide dinner"],
     },
   ],
-
   desert: [
     {
       type: String,
@@ -64,6 +58,20 @@ const bookedSchema = mongoose.Schema({
       required: [true, "Please provide desert"],
     },
   ],
+  status: {
+    type: String,
+    enum: ["booked", "confirmed", "cancelled"],
+    default: "booked",
+  },
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "paid"],
+    default: "pending",
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 export default mongoose.model("bookDetail", bookedSchema);

@@ -29,8 +29,6 @@ import BlogModel from "./models/blog.js";
 import blogRouter from "./routes/blog.js";
 import contactModel from "./models/contact.js";
 import registerModel from "./models/register.js";
-import reviewRouter from "./routes/review.js";
-import ReviewModel from "./models/review.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,8 +76,6 @@ console.log("Banquet images directory:", path.join(__dirname, '../frontend/src/C
 const connectDB = async (mongoUrl) => {
   try {
     await mongoose.connect(mongoUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     });
     console.log("MongoDB connected");
   } catch (error) {
@@ -144,7 +140,7 @@ const setupAdminJS = () => {
             },
           },
           actions: {
-            // Only admins can see or edit admins
+            // Only admins can see or edit contacts
             list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
             show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
             edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
@@ -169,7 +165,7 @@ const setupAdminJS = () => {
             },
           },
           actions: {
-            // Only admins can see or edit admins
+            // Only admins can see or edit registrations
             list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
             show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
             edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
@@ -214,15 +210,20 @@ const setupAdminJS = () => {
           actions: {
             // Admins can do everything
             list: { isAccessible: ({ currentAdmin }) => currentAdmin },
-            // For banquet owners, filter only their banquets
             show: { 
-              isAccessible: ({ currentAdmin }) => currentAdmin,
+              isAccessible: ({ currentAdmin, record }) => {
+                // Admins can see any banquet
+                if (currentAdmin.role === 'admin') return true;
+                // Banquet owners can only see their own banquets
+                return currentAdmin.role === 'banquetOwner' && 
+                       currentAdmin.userId === record.params.userId;
+              },
               before: async (request, context) => {
                 // If it's a banquet owner, filter to show only their banquets
-                if (currentAdmin.role === 'banquetOwner') {
+                if (context.currentAdmin.role === 'banquetOwner') {
                   request.query = { 
                     ...request.query,
-                    'filters.userId': currentAdmin.userId 
+                    'filters.userId': context.currentAdmin.userId 
                   };
                 }
                 return request;
@@ -233,7 +234,8 @@ const setupAdminJS = () => {
                 // Admins can edit any banquet
                 if (currentAdmin.role === 'admin') return true;
                 // Banquet owners can only edit their own banquets
-                return currentAdmin.userId === record.params.userId;
+                return currentAdmin.role === 'banquetOwner' && 
+                       currentAdmin.userId === record.params.userId;
               }
             },
             // Only admins can delete banquets
@@ -250,13 +252,19 @@ const setupAdminJS = () => {
           actions: {
             list: { isAccessible: ({ currentAdmin }) => currentAdmin },
             show: { 
-              isAccessible: ({ currentAdmin }) => currentAdmin,
+              isAccessible: ({ currentAdmin, record }) => {
+                // Admins can see any menu
+                if (currentAdmin.role === 'admin') return true;
+                // Banquet owners can only see their own menus
+                return currentAdmin.role === 'banquetOwner' && 
+                       currentAdmin.userId === record.params.userId;
+              },
               before: async (request, context) => {
                 // If it's a banquet owner, filter to show only their menus
-                if (currentAdmin.role === 'banquetOwner') {
+                if (context.currentAdmin.role === 'banquetOwner') {
                   request.query = { 
                     ...request.query,
-                    'filters.userId': currentAdmin.userId 
+                    'filters.userId': context.currentAdmin.userId 
                   };
                 }
                 return request;
@@ -267,7 +275,8 @@ const setupAdminJS = () => {
                 // Admins can edit any menu
                 if (currentAdmin.role === 'admin') return true;
                 // Banquet owners can only edit their own menus
-                return currentAdmin.userId === record.params.userId;
+                return currentAdmin.role === 'banquetOwner' && 
+                       currentAdmin.userId === record.params.userId;
               }
             },
             // Only admins can delete menus
@@ -284,11 +293,24 @@ const setupAdminJS = () => {
           actions: {
             list: { isAccessible: ({ currentAdmin }) => currentAdmin },
             show: { 
-              isAccessible: ({ currentAdmin }) => currentAdmin,
-              before: async (request, context) => {
+              isAccessible: async ({ currentAdmin, record }) => {
+                // Admins can see any booking
+                if (currentAdmin.role === 'admin') return true;
+                
+                // Banquet owners can only see bookings for their banquets
                 if (currentAdmin.role === 'banquetOwner') {
+                  // Find the banquet for this booking
+                  const banquet = await BanquetModel.findById(record.params.banquetId);
+                  // Check if this banquet belongs to the current owner
+                  return banquet && banquet.userId === currentAdmin.userId;
+                }
+                
+                return false;
+              },
+              before: async (request, context) => {
+                if (context.currentAdmin.role === 'banquetOwner') {
                   // Find the banquets owned by this owner
-                  const ownedBanquets = await BanquetModel.find({ userId: currentAdmin.userId });
+                  const ownedBanquets = await BanquetModel.find({ userId: context.currentAdmin.userId });
                   const banquetIds = ownedBanquets.map(b => b._id.toString());
                   
                   // Filter bookings to only show those for the owner's banquets
@@ -306,35 +328,6 @@ const setupAdminJS = () => {
             delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
             // Only admins can create new bookings directly through AdminJS
             new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
-          }
-        }
-      },
-
-      {
-        resource: ReviewModel,
-        options: {
-          properties: {
-            image: {
-              isVisible: { list: true, filter: false, show: true, edit: true },
-            },
-            quote: {
-              type: 'textarea',
-              isVisible: { list: false, filter: false, show: true, edit: true }
-            },
-            createdAt: {
-              isVisible: { list: true, filter: true, show: true, edit: false }
-            },
-            _id: { 
-              isVisible: { list: false, filter: false, show: true, edit: false }
-            }
-          },
-          actions: {
-            // Only admins can manage reviews
-            list: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
-            show: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
-            edit: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
-            delete: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' },
-            new: { isAccessible: ({ currentAdmin }) => currentAdmin && currentAdmin.role === 'admin' }
           }
         }
       },
@@ -381,7 +374,7 @@ const setupAdminJS = () => {
       }
     ]
   });
-
+  
   // Authenticate using both Admin and BanquetOwner models
   const router = AdminJSExpress.buildAuthenticatedRouter(
     adminJs,

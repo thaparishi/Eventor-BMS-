@@ -1,30 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Khalti = ({ payment, bookingId }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: ""
+  });
+  
+  useEffect(() => {
+    // Fetch user data when component mounts
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/getUserProfile", {
+          withCredentials: true
+        });
+        
+        if (response.data.success) {
+          setUserData(prevUserData => ({
+            ...prevUserData,
+            name: response.data.user.name,
+            email: response.data.user.email,
+            phone: response.data.user.number
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const initiatePayment = async () => {
     setIsProcessing(true);
     
+    let currentUserData = {...userData};
+    
     try {
-      const bookingCharge = Math.round(payment * 0.15);
+      const bookingCharge = Math.round(payment * 0.10);
       
       const data = {
-        // Using lowercase 'booking' to match the route in App.js
         return_url: `http://localhost:3000/booking/${bookingId}`,
         website_url: "http://localhost:3000/",
         amount: bookingCharge * 100, 
         purchase_order_id: bookingId || "test12",
         purchase_order_name: "Booking Charge",
         customer_info: {
-          name: "Rishi Thapa",
-          email: "Rishithpa@gmail.com",
-          phone: "9813444724",
+          name: currentUserData.name,
+          email: currentUserData.email,
+          phone: currentUserData.phone,
         },
         amount_breakdown: [
           {
-            label: "Booking Charge (15%)",
+            label: "Booking Charge (10%)",
             amount: bookingCharge * 100,
           },
         ],
@@ -70,7 +100,7 @@ const Khalti = ({ payment, bookingId }) => {
       <button
         style={{
           backgroundColor: "purple",
-          padding: "15px 40px",
+          padding: "10px 40px",
           color: "white",
           cursor: "pointer",
           fontWeight: "bold",
@@ -80,7 +110,7 @@ const Khalti = ({ payment, bookingId }) => {
         onClick={initiatePayment}
         disabled={isProcessing}
       >
-        {isProcessing ? "Processing..." : "Pay Booking Charge (15%)"}
+        {isProcessing ? "Processing..." : "Pay Booking Charge (10%)"}
       </button>
     </div>
   );

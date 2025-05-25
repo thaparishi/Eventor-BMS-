@@ -113,13 +113,7 @@ const Login = ({onLogin}) => {
                   </a>
                 </div>
               </form>
-              {/* {
-        error && (
-         <article className="error-message">
-          <p>Sorry! Email or Password did not match</p>
-         </article>
-        )
-       } */}
+
             </section>
           </section>
           {responseMessage.sucess && (

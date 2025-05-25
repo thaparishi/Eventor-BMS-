@@ -25,13 +25,8 @@ const Dbanquet = ({ checkLogin }) => {
 
 
   const handleBookNow = (banquetId, banquetName, banquetPrice) => {
-    // For debugging in the console
     console.log("checkLogin:", checkLogin);
     
-    // Handle all possible cases:
-    // 1. checkLogin is a function - use its return value
-    // 2. checkLogin is true/false - use directly
-    // 3. checkLogin is undefined/null - assume not logged in
     let isLoggedIn = false;
     
     if (typeof checkLogin === 'function') {

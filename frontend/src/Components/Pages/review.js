@@ -1,9 +1,9 @@
-import rabiImage from "../Images/rabi.png"; // Import the image
+import rabiImage from "../Images/rabi.png";
 
 const people = [
   {
     id: 1,
-    image: rabiImage, // Use the imported image
+    image: rabiImage,
     name: "Ananya Rai",
     title: "Event Planner",
     quote:
@@ -11,7 +11,7 @@ const people = [
   },
   {
     id: 2,
-    image: rabiImage, // Use the imported image
+    image: rabiImage, 
     name: "Sanjay Kumar",
     title: "Videographer",
     quote:
@@ -19,7 +19,7 @@ const people = [
   },
   {
     id: 3,
-    image: rabiImage, // Use the imported image
+    image: rabiImage, 
     name: "Priya Thapa",
     title: "Interior Designer",
     quote:
@@ -27,7 +27,7 @@ const people = [
   },
   {
     id: 4,
-    image: rabiImage, // Use the imported image
+    image: rabiImage,
     name: "Rohit Verma",
     title: "Chef",
     quote:

@@ -20,8 +20,8 @@ function Banquet() {
     let isValid = true;
 
     // Validate banquet name - no spaces allowed
-    if (formData.name.includes(" ")) {
-      formErrors.name = "Banquet name cannot contain spaces";
+    if (formData.name.startsWith(" ")) {
+      formErrors.name = "Banquet name cannot start with a space";
       isValid = false;
     }
 

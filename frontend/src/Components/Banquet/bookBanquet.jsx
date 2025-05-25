@@ -97,7 +97,7 @@ const BookBanquet = () => {
     } catch (error) {
       console.error("Error checking availability:", error);
       setDateAvailability({
-        isAvailable: true, // Default to available in case of error
+        isAvailable: true,
         message: ""
       });
     } finally {

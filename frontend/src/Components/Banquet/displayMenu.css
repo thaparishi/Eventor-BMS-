@@ -215,7 +215,6 @@
   }
 }
 
-/* Payment Modal Styles */
 .payment-modal {
   position: fixed;
   top: 0;
@@ -323,7 +322,6 @@
   justify-content: center;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .payment-modal-content {
     width: 95%;

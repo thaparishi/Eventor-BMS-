@@ -91,34 +91,16 @@
   position: fixed; 
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
-  background: green;
+  transform: translate(-50%, -50%);
   color: white;
   padding: 20px;
   border-radius: 8px;
   z-index: 1000; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.pop-up-message {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  position: relative;
-}
-
-.X {
-  background: rgb(181, 37, 37);
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-  top: -10px;
-  right: -10px;
+  min-width: 300px;
 }
 
 .success-popUp::before {
-  padding: 10px;
   content: "";
   position: fixed;
   top: 0;
@@ -129,7 +111,36 @@
   z-index: -1;
 }
 
-/* Responsive Design */
+.pop-up-message {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+.pop-up-message p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.X {
+  background: rgb(181, 37, 37);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.X:hover {
+  background: rgb(150, 20, 20);
+}
+
 @media (max-width: 768px) {
   .contact-page-container {
     flex-direction: column;

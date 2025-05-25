@@ -32,15 +32,9 @@ const Menu = () => {
   const validateInput = (value) => {
     // Check for numbers
     const hasNumbers = /\d/.test(value);
-    // Check for spaces
-    const hasSpaces = /\s/.test(value);
     
-    if (hasNumbers && hasSpaces) {
-      return "Numbers and spaces are not allowed";
-    } else if (hasNumbers) {
+    if (hasNumbers) {
       return "Numbers are not allowed";
-    } else if (hasSpaces) {
-      return "Spaces are not allowed";
     }
     
     return ""; // No error
@@ -241,7 +235,7 @@ const Menu = () => {
           </h1>
           <section className="banquet-menu-display-flex">
             <section className="breakfast-section menu-section">
-              <label htmlFor="breakfast">Breakfast</label>
+              <label htmlFor="breakfast">Starter</label>
               {breakfast.map((item, index) => {
                 return (
                   <div key={index}>
@@ -249,7 +243,7 @@ const Menu = () => {
                       type="text"
                       id={`breakfast-${index}`}
                       name="breakfast"
-                      placeholder="breakfast"
+                      placeholder="Starter"
                       value={item}
                       onChange={(e) => handleChange(e, index)}
                       className={validationErrors.breakfast[index] ? "input-error" : ""}
@@ -276,7 +270,7 @@ const Menu = () => {
                   handleAddMenu(e);
                 }}
               >
-                Add Breakfast
+                Add Starter
               </button>
             </section>
 

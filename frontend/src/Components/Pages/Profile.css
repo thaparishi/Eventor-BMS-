@@ -10,6 +10,9 @@
   overflow: hidden;
 }
 
+body{
+  background-color: #1e1e1e;
+}
 .profile-container::before {
   content: '';
   position: absolute;
@@ -46,7 +49,6 @@
   border-radius: 3px;
 }
 
-/* Tabs Navigation */
 .profile-tabs {
   display: flex;
   margin-bottom: 2.5rem;
@@ -100,7 +102,6 @@
   transform: scaleX(1);
 }
 
-/* Tab Content */
 .tab-content {
   min-height: 400px;
 }
@@ -127,7 +128,6 @@
   border-radius: 3px;
 }
 
-/* Loading spinner */
 .loading-spinner {
   display: flex;
   flex-direction: column;
@@ -148,7 +148,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* No bookings message */
 .no-bookings {
   text-align: center;
   padding: 3rem;
@@ -187,7 +186,6 @@
   transform: translateY(0);
 }
 
-/* Booking cards grid */
 .bookings-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -233,7 +231,6 @@
   justify-content: space-between;
 }
 
-/* Status badges */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -281,7 +278,6 @@
   color: #fff;
 }
 
-/* Booking actions */
 .booking-actions {
   display: flex;
   justify-content: flex-end;
@@ -308,7 +304,6 @@
   border-color: rgba(217, 83, 79, 0.5);
 }
 
-/* Edit Profile Form */
 .edit-form {
   max-width: 600px;
   margin: 0 auto;
@@ -457,7 +452,6 @@
   font-weight: 500;
 }
 
-/* Cancel Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -644,7 +638,6 @@
   box-shadow: none;
 }
 
-/* Message banner */
 .message-banner {
   padding: 1rem 1.25rem;
   margin-bottom: 1.75rem;
@@ -665,7 +658,6 @@
   border-left: 4px solid #721c24;
 }
 
-/* Responsive styles */
 @media (max-width: 768px) {
   .profile-container {
     width: 95%;
@@ -716,7 +708,6 @@
   }
 }
 
-/* Smooth scrollbar for webkit browsers */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

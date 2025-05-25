@@ -74,11 +74,13 @@ const bookBanquet = async (req, res) => {
         paymentStatus: "pending"
       });
 
-      const createdBanquetData = await registerModel.findOne({
+      // Get user data for the person who booked
+      const userData = await registerModel.findOne({ userId: userId });
+      
+      // Get banquet owner data
+      const banquetOwnerData = await registerModel.findOne({
         userId: adminUserId,
       });
-
-      const adminData = await registerModel.findOne({ userId: userId });
 
       // Creating a medium to send email.
       let transporter = nodemailer.createTransport({
@@ -92,42 +94,82 @@ const bookBanquet = async (req, res) => {
         },
       });
 
-      // Contents of email.
-      let mailConfiguration = await transporter.sendMail({
+      // Contents of email for the user
+      let userMailConfig = await transporter.sendMail({
         from: `${process.env.EMAIL}`,
-        to: [`${adminData.email}, ${createdBanquetData?.email || process.env.EMAIL}`],
-        subject: " The Banquet is Booked Successfully",
-        html: `<h3>Hello sir, The ${banquetName} is booked on ${date}. Further Details are Below. </h3>
+        to: `${userData.email}`,
+        subject: "Your Banquet Booking Confirmation",
+        html: `<h3>Hello ${userData.name}, Your booking for ${banquetName} is confirmed!</h3>
          <p>
-        BanquetName: ${banquetName}
+        Booking Details:
+         <br>
+         Banquet Name: ${banquetName}
          <br>
          Shift: ${shift}
          <br>
          Date: ${date}
          <br>
-         Guest: ${guest}
+         Guest Count: ${guest}
          <br>
-         Type: ${type}
+         Event Type: ${type}
          <br>
          Starters: ${breakfast}
          <br>
-        Main Course: ${lunch}
-        <br>
+         Main Course: ${lunch}
+         <br>
          Desert: ${desert}
-        <br>
-         Total Cost of Event : ${price}
-        <br>
+         <br>
+         Total Cost of Event: ${price}
+         <br>
+         </p>
+         <p>Thank you for choosing our service!</p>`,
+      });
+
+      // Contents of email for the banquet owner
+      let ownerMailConfig = await transporter.sendMail({
+        from: `${process.env.EMAIL}`,
+        to: `${banquetOwnerData?.email || process.env.EMAIL}`,
+        subject: `New Booking: ${banquetName} is booked!`,
+        html: `<h3>Hello, Your banquet ${banquetName} has been booked by ${userData.name} for ${date}.</h3>
+         <p>
+         Booking Details:
+         <br>
+         Banquet Name: ${banquetName}
+         <br>
+         Booked By: ${userData.name} (${userData.email})
+         <br>
+         Shift: ${shift}
+         <br>
+         Date: ${date}
+         <br>
+         Guest Count: ${guest}
+         <br>
+         Event Type: ${type}
+         <br>
+         Starters: ${breakfast}
+         <br>
+         Main Course: ${lunch}
+         <br>
+         Desert: ${desert}
+         <br>
+         Total Cost of Event: ${price}
+         <br>
          </p>`,
       });
 
-      // Sending message to user email for verification.
-      transporter.sendMail(mailConfiguration, function (error, info) {
-        // If not successful.
+      // Sending emails
+      transporter.sendMail(userMailConfig, function (error, info) {
         if (error) {
           console.log("Email sending error:", error);
         }
-        // If successful.
-        console.log("Sent: " + info.response);
+        console.log("User email sent: " + info.response);
+      });
+      
+      transporter.sendMail(ownerMailConfig, function (error, info) {
+        if (error) {
+          console.log("Email sending error:", error);
+        }
+        console.log("Owner email sent: " + info.response);
       });
 
       return res.json("Sucess");
@@ -209,7 +251,7 @@ const updatePaymentStatus = async (req, res) => {
   }
 };
 
-// New function to cancel booking
+// Updated function to cancel booking (allowing cancellation of paid bookings)
 const cancelBooking = async (req, res) => {
   try {
     const { bookingId } = req.params;
@@ -226,20 +268,18 @@ const cancelBooking = async (req, res) => {
       return res.status(403).json({ success: false, message: "Unauthorized to cancel this booking" });
     }
     
-    // Don't allow cancellation if the booking is already confirmed (payment completed)
-    if (booking.status === "confirmed" && booking.paymentStatus === "paid") {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Cannot cancel a confirmed booking. Please contact customer support." 
-      });
-    }
+    // Get the banquet owner information
+    // First find any banquet owner with the banquet name
+    const banquetOwners = await registerModel.find({ 
+      banquets: { $elemMatch: { name: booking.banquetName } } 
+    });
+    
+    // Get user data
+    const userData = await registerModel.findOne({ userId: booking.bookUserId });
     
     // Update booking status to cancelled
     booking.status = "cancelled";
     await booking.save();
-    
-    // Send cancellation email
-    const adminData = await registerModel.findOne({ userId: booking.bookUserId });
     
     // Creating a medium to send email.
     let transporter = nodemailer.createTransport({
@@ -250,12 +290,12 @@ const cancelBooking = async (req, res) => {
       },
     });
 
-    // Contents of email.
-    let mailConfiguration = await transporter.sendMail({
+    // Contents of email for the user
+    let userMailConfig = {
       from: `${process.env.EMAIL}`,
-      to: `${adminData.email}`,
+      to: `${userData.email}`,
       subject: "Booking Cancellation Confirmation",
-      html: `<h3>Hello ${adminData.name}, Your booking for ${booking.banquetName} has been cancelled.</h3>
+      html: `<h3>Hello ${userData.name}, Your booking for ${booking.banquetName} has been cancelled.</h3>
        <p>
        Booking Details:
        <br>
@@ -266,18 +306,62 @@ const cancelBooking = async (req, res) => {
        Event Type: ${booking.type}
        <br>
        </p>
+       <p>If you paid for this booking, a refund of 80% will be processed within 3 working days.</p>
        <p>If you did not request this cancellation, please contact our customer support immediately.</p>`,
-    });
+    };
 
-    // Sending message to user email for verification.
-    transporter.sendMail(mailConfiguration, function (error, info) {
+    // Sending email to user
+    transporter.sendMail(userMailConfig, function (error, info) {
       if (error) {
         console.log("Email sending error:", error);
+      } else {
+        console.log("User cancel email sent: " + info.response);
       }
-      console.log("Sent: " + info.response);
     });
     
-    res.status(200).json({ success: true, message: "Booking cancelled successfully" });
+    // Send cancellation notification to all banquet owners
+    if (banquetOwners && banquetOwners.length > 0) {
+      banquetOwners.forEach(owner => {
+        // Contents of email for the banquet owner
+        let ownerMailConfig = {
+          from: `${process.env.EMAIL}`,
+          to: `${owner.email}`,
+          subject: `Booking Cancellation: ${booking.banquetName}`,
+          html: `<h3>Hello, A booking for your banquet ${booking.banquetName} has been cancelled.</h3>
+           <p>
+           Cancellation Details:
+           <br>
+           Banquet Name: ${booking.banquetName}
+           <br>
+           Cancelled By: ${userData.name} (${userData.email})
+           <br>
+           Date: ${booking.date}
+           <br>
+           Event Type: ${booking.type}
+           <br>
+           Original Guest Count: ${booking.guest}
+           <br>
+           </p>
+           <p>This time slot is now available for new bookings.</p>`,
+        };
+        
+        // Send email to banquet owner
+        transporter.sendMail(ownerMailConfig, function (error, info) {
+          if (error) {
+            console.log("Email sending error:", error);
+          } else {
+            console.log("Owner cancel email sent: " + info.response);
+          }
+        });
+      });
+    }
+    
+    res.status(200).json({ 
+      success: true, 
+      message: booking.paymentStatus === "paid" ? 
+        "Booking cancelled successfully. A refund of 80% will be processed within 3 working days." : 
+        "Booking cancelled successfully." 
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Server error" });

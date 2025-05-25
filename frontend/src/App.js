@@ -19,6 +19,7 @@ import Menu from "./Components/Pages/menu.jsx";
 import { CreateBanquet, ChangePassword, Blog } from "./Components/index.js";
 import PaymentSuccess from "./Components/Pages/PaymentSuccess.jsx";
 import Profile from "./Components/Pages/Profile.jsx";
+import ReviewPage from "./Components/Pages/ReviewPage.jsx";
 
 function App() {
   const [checkLogin, setCheckLogin] = useState(false);
@@ -66,8 +67,7 @@ function App() {
           <Route path="/blogs" element={<Blog />} />
           <Route path="/dbanquet" element={<DBanquet/>} />
           <Route path="/about" element={<About />} />
-          
-          {/* Updated booking routes to handle parameters */}
+          <Route path="/reviews" element={<ReviewPage />} />
           <Route path="/booking" element={<PaymentSuccess />} />
           <Route path="/booking/:bookingId" element={<PaymentSuccess />} />
           
@@ -78,23 +78,18 @@ function App() {
           <Route path="/forgetPass" element={<ForgetPass />} />
           <Route path="/changePassword/:id" element={<ChangePassword />} />
 
-          {/* if user is logged in then only these routes exist */}
           {checkLogin && (
             <>
-              {/* Start with display banquet route */}
               <Route path="/banquets" element={<DisplayBanquet />} />
               
-              {/* Then book the selected banquet */}
               <Route path="/bookBanquet/:banquetId/:banquetName/:banquetPrice" element={<BookBanquet />} />
               
-              {/* Create banquet for owners */}
               <Route path="/createBanquet" element={<CreateBanquet />} />
               <Route path="/menu/:token" element={<Menu />} />
               <Route path="/profile" element={<Profile />} />
             </>
           )}
 
-          {/* If user is not logged in then only these routes exist */}
           {!checkLogin && (
             <>
               <Route path="/register" element={<Register />} />
@@ -103,10 +98,8 @@ function App() {
             </>
           )}
 
-          {/* Final step - display menu after booking */}
           <Route path="/DisplayMenu/:banquetId/:token/:banquetName/:banquetPrice" element={<DisplayMenu />} />
           
-          {/* Catch all for page not found */}
           <Route path="*" element={<Pagenf />} />
         </Routes>
         <Footer />

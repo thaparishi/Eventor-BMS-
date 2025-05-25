@@ -48,7 +48,7 @@ const Register = () => {
     });
     
     if (hasOnlyWhitespace) {
-      return; // Stop form submission
+      return;
     }
     
     // If we get here, form is valid

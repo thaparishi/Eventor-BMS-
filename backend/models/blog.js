@@ -11,7 +11,7 @@ const BlogSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  auther: { // Note: keeping original spelling for consistency with your data
+  auther: { 
     type: String,
     required: true,
     trim: true

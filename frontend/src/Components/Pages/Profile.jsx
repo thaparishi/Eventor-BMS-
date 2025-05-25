@@ -154,6 +154,7 @@ function Profile() {
   const openCancelModal = (bookingId) => {
     setCancelBookingId(bookingId);
     setCancelConfirmation("");
+    setCancelMessage({ type: "", message: "" });
     setShowCancelModal(true);
   };
 
@@ -189,7 +190,7 @@ function Profile() {
         // Show success message
         setCancelMessage({ 
           type: "success", 
-          message: "Booking cancelled successfully. If you've already paid, a refund of 80% will be processed within 3 working days." 
+          message: response.data.message || "Booking cancelled successfully." 
         });
         // Refresh bookings list
         fetchBookings();
@@ -214,9 +215,9 @@ function Profile() {
   };
 
   // Helper to determine if the booking is cancellable
+  // Updated to allow cancellation of paid/confirmed bookings
   const isBookingCancellable = (booking) => {
     // Allow cancellation if the booking status is not "cancelled"
-    // If the booking is confirmed and paid, the backend will handle that case
     return booking.status !== "cancelled";
   };
 

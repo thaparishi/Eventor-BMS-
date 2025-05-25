@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 // Configure multer for blog images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "../../frontend/src/Images/gallery");
+    const uploadPath = path.join(__dirname, "../../frontend/src/Components/Images/gallery");
     fs.mkdirSync(uploadPath, { recursive: true });
     cb(null, uploadPath);
   },

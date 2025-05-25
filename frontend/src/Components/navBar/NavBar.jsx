@@ -41,7 +41,7 @@ function NavBar({ checkLogin, deleteFun }) {
 
   const handleLogout = () => {
     setShowDropdown(false);
-    deleteFun(); // Call the delete function passed from parent to clear cookies
+    deleteFun(); 
   };
 
   return (

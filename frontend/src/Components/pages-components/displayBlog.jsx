@@ -28,7 +28,6 @@ const DisplayBlog = ({ _id, title, text, auther, read, desc, image, postedDate }
           </div>
         </div>
         <div className="blog-left">
-          {/* Update image path handling to work with backend */}
           <img 
             src={image.startsWith('http') ? image : `${process.env.PUBLIC_URL}${image}`} 
             alt={title} 

@@ -1,4 +1,3 @@
-/* Global Styles */
 * {
   margin: 0;
   padding: 0;
@@ -6,15 +5,15 @@
 }
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #EAEAEA; /* Light Gray background */
+  background-color: #EAEAEA;
 }
-/* Home Container */
+
 .home-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
-/* Header Section (Full-screen with Sliding Image) */
+
 .home-header {
   height: 100vh;
   background-size: cover;
@@ -28,7 +27,7 @@ body {
   padding: 20px;
 }
 .home-header .header-content {
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  background-color: rgba(0, 0, 0, 0.5); 
   padding: 20px;
   border-radius: 10px;
 }
@@ -45,7 +44,6 @@ body {
 }
 
 
-/* Container for banquet buttons */
 .bottom-middle-banquet {
   display: flex;
   justify-content: center; 
@@ -53,7 +51,6 @@ body {
   margin-top: 20px; 
 }
 
-/* Common button styling */
 .bottom-banquet-btn {
   padding: 12px 24px;
   font-size: 16px;
@@ -66,25 +63,21 @@ body {
   text-transform: uppercase;
 }
 
-/* "Register Your Banquet" button */
 .create-banquet-btn {
   background-color: #FF2E63 ; 
 }
 
 .create-banquet-btn:hover {
-  background-color: #d9534f; /* Darker red on hover */
+  background-color: #d9534f; 
 }
 
-/* "Book Banquet for Events" button */
 .show-banquet-btn {
-  background-color: #076dd2; /* Blue color */
+  background-color: #076dd2;
 }
 
 .show-banquet-btn:hover {
-  background-color: #0073e6; /* Darker blue on hover */
+  background-color: #0073e6; 
 }
-
-
 
 .bottom-medall {
   color: #FFD700;
@@ -129,7 +122,6 @@ body {
   min-height: 90vh;
 }
 
-/* Styling for the banquet information */
 .banquet-info {
   flex: 1;
   text-align: left;
@@ -140,7 +132,6 @@ body {
   margin: 0 auto;
 }
 
-/* Heading styles */
 #h-h1 {
   font-size: 60px;
   font-weight: bold;
@@ -150,7 +141,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Paragraph styles */
 .banquet-info p {
   font-size: 1.2rem;
   line-height: 1.8;
@@ -158,14 +148,12 @@ body {
   margin-bottom: 20px;
 }
 
-/* Flex container for the two sections */
 .bqt-flx {
   display: flex;
   gap: 2rem;
   margin-top: 30px;
 }
 
-/* Each banquet item */
 .about-bqt-items,
 .choose-item {
   flex: 1;
@@ -190,7 +178,6 @@ body {
   padding-left: 40px;
 }
 
-/* Icon positioning */
 .about-bqt-items h2 i,
 .choose-item h2 i {
   font-size: 30px;
@@ -200,7 +187,6 @@ body {
   color: #e9b947;
 }
 
-/* Paragraph styles inside items */
 .about-bqt-items p,
 .choose-item p {
   font-size: 1rem;
@@ -208,12 +194,10 @@ body {
   line-height: 1.6;
 }
 
-/* Button container */
 .about-link {
   margin-top: 15px;
 }
 
-/* Read More Button */
 .read-more-btn {
   padding: 10px 20px;
   font-size: 16px;
@@ -232,7 +216,6 @@ body {
   color: black;
 }
 
-/* Animations for button */
 .read-more-btn span {
   position: absolute;
   display: block;
@@ -276,7 +259,6 @@ body {
   animation: slide4 2s linear infinite;
 }
 
-/* Keyframes for button animations */
 @keyframes slide1 {
   0% {
     left: -100%;
@@ -313,7 +295,6 @@ body {
   }
 }
 
-/* Image section */
 .heading-img {
   flex: 1;
   display: flex;
@@ -327,7 +308,6 @@ body {
   opacity: 0.9;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .about-bqt {
     flex-direction: column;
@@ -386,15 +366,13 @@ body {
 
 
 
-/* Styling for the entire third section */
 .third-sec {
-  background-color: #000000; /* Dark background */
+  background-color: #000000; 
   color: white;
   padding: 60px 10%;
   min-height: 100vh;
 }
 
-/* Styling for the section */
 .section {
   width: 90vw;
   margin: 5rem auto;
@@ -423,11 +401,10 @@ body {
   margin-bottom: 1rem;
 }
 
-/* Title styling */
 .section .title h2 {
   font-size: 50px;
   font-weight: 400;
-  color: #e9b947; /* Gold accent */
+  color: #e9b947; 
 }
 
 .title span {
@@ -436,7 +413,6 @@ body {
   color: rgba(241, 150, 90, 1);
 }
 
-/* Button styling */
 .prev-btn,
 .next-btn {
   color: #fff;
@@ -465,14 +441,12 @@ body {
   right: 0%;
 }
 
-/* Quote icon */
 .home-quote-icon {
   margin-top: 20px;
   font-size: 40px;
   color: rgba(241, 150, 90, 1);
 }
 
-/* Slide transitions */
 .section-center article {
   transition: all 0.3s linear;
   position: absolute;
@@ -496,7 +470,6 @@ body {
   transform: translateX(-100%);
 }
 
-/* Styling for review text */
 .third-sec * h4 {
   color: rgba(241, 150, 90, 1);
   font-weight: 600;
@@ -511,7 +484,6 @@ body {
   margin: 2rem auto 0;
 }
 
-/* Flexbox for responsive design */
 @media (max-width: 1024px) {
   .third-sec {
     padding: 40px 5%;
@@ -572,3 +544,90 @@ body {
 }
 
 
+.leave-review-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.leave-review-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.leave-review-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.leave-review-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loading, .error, .no-reviews {
+  text-align: center;
+  padding: 2rem;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.leave-review-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.leave-review-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.leave-review-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.leave-review-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loading, .error, .no-reviews {
+  text-align: center;
+  padding: 2rem;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.section-center {
+  min-height: 350px; 
+}

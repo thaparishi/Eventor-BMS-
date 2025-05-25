@@ -1,7 +1,6 @@
 import myKey from "./khaltiKey.jsx";
 import axios from "axios";
 let config = {
-  // replace this key with yours
   publicKey: "eaa5a89bbe2f49d19e0a66d75818c5b7",
   productIdentity: "123766",
   productName: "Eventor - Banquet Management System",

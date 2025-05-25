@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
-import review from "./review";
+import axios from "axios";
 import img11 from '../Images/11.jpg';
 import img22 from '../Images/22.jpg';
 import img33 from '../Images/33.jpg';
@@ -20,7 +20,9 @@ function Home({ checkLogin }) {
 
   const [sliderIndex, setSliderIndex] = useState(0);
 
-  const [reviewData] = useState(review);
+  const [reviewData, setReviewData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const totalDataLength = reviewData.length - 1;
@@ -63,6 +65,34 @@ function Home({ checkLogin }) {
     }, 5000); // Change image every 5 seconds
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [images.length]);
+
+  useEffect(() => {
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/approved-reviews");
+      console.log("Approved reviews response:", response.data);
+      if (response.data.reviews && response.data.reviews.length > 0) {
+        setReviewData(response.data.reviews);
+      } else {
+        // Fallback to default review data if no approved reviews in database
+        import("./review").then((defaultReviews) => {
+          setReviewData(defaultReviews.default);
+        });
+      }
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+      setError("Failed to load reviews");
+      // Fallback to default review data on error
+      import("./review").then((defaultReviews) => {
+        setReviewData(defaultReviews.default);
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchReviews();
+}, []);
 
   return (
     <div className="home-container">
@@ -175,8 +205,7 @@ function Home({ checkLogin }) {
           <img src={require("../Images/s3.jpg")} alt="buddha " />
         </section>
       </section>
-
-       {/* Start of third section*/}
+      
        <section className="third-sec" data-aos="fade-up">
             <div className="section">
               <div className="title">
@@ -186,32 +215,46 @@ function Home({ checkLogin }) {
               </div>
 
               <div className="section-center">
-                {reviewData.map((item, personIndex) => {
-                  const { id, image, name, title, quote } = item;
-
-                  let position = "lastSlide";
-
-                  if (personIndex === index) {
-                    position = "activeSlide";
-                  }
-                  if (
-                    personIndex === index - 1 ||
-                    (personIndex === reviewData.length - 1 && index === 0)
-                  ) {
-                    position = "nextSlide";
-                  }
-
-                  return (
-                    <article key={id} className={position}>
-                      <img src={image} alt="" className="review-img" />
-                      <h4>{name}</h4>
-                      <p>{title}</p>
-                      <p className="text">{quote}</p>
-                      <FaQuoteRight className="home-quote-icon" />
-                    </article>
-                  );
-                })}
-
+                {loading ? (
+                  <div className="loading">Loading reviews...</div>
+                ) : error ? (
+                  <div className="error">{error}</div>
+                ) : reviewData.length === 0 ? (
+                  <div className="no-reviews">No reviews available yet</div>
+                ) : (
+                  reviewData.map((item, personIndex) => {
+                    const { _id, image, name, title, quote } = item;
+                    
+                    let position = "lastSlide";
+                    
+                    if (personIndex === index) {
+                      position = "activeSlide";
+                    }
+                    if (
+                      personIndex === index - 1 ||
+                      (personIndex === reviewData.length - 1 && index === 0)
+                    ) {
+                      position = "nextSlide";
+                    }
+                    
+                    return (
+                      <article key={_id || personIndex} className={position}>
+                        <img 
+                          src={image && image.startsWith('http') ? image : 
+                              image && image.startsWith('/') ? `http://localhost:8000${image}` : 
+                              image ? require(`../Images/${image}`) : require('../Images/rabi.png')} 
+                          alt={name} 
+                          className="review-img" 
+                        />
+                        <h4>{name}</h4>
+                        <p>{title}</p>
+                        <p className="text">{quote}</p>
+                        <FaQuoteRight className="home-quote-icon" />
+                      </article>
+                    );
+                  })
+                )}
+                
                 <button
                   className="prev-btn"
                   onClick={() => {
@@ -229,9 +272,16 @@ function Home({ checkLogin }) {
                   <FiChevronRight />
                 </button>
               </div>
+              
+              <div className="leave-review-container">
+                <Link to="/reviews">
+                  <button className="leave-review-btn">
+                    Leave a Review
+                  </button>
+                </Link>
+              </div>
             </div>
           </section>
-          {/* End of third section*/}
     </div>
   );
 }

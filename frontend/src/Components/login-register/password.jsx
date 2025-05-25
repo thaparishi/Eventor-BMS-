@@ -7,7 +7,6 @@ import "./login-register.css"
 const url = "http://localhost:8000/api/changePassword"
 
 const ForgetPass = () => {
- // const [changeHeader,] = useState(true);
  const [user, setUser] = useState({ email: "", password: "", re_password: "" })
 
  const { id } = useParams();
@@ -94,7 +93,6 @@ const ForgetPass = () => {
      </section>
     </div>
    </main>
-   {/* <Footer /> */}
   </>
  )
 }
